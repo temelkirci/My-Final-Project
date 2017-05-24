@@ -14,7 +14,14 @@ public:
 
 	string enemy_array[16];
 	int index;
+
+	struct Meteor
+	{
+		
+	} _mMeteor[10];
+
 	int meteor_health;
+	int meteor_range;
 	int meteor_x;
 	int meteor_y;
 	Uint32 delay_time;

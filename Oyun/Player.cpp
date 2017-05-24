@@ -39,9 +39,9 @@ Player :: Player()
 	information.w = 200;
 	information.h = 300;
 
-	playerColor.r = 255;
-	playerColor.g = 248;
-	playerColor.b = 220;
+	playerColor.r = 0;
+	playerColor.g = 0;
+	playerColor.b = 0;
 	playerColor.a = 150;
 
 	playerPoint.x = 50;
@@ -139,7 +139,7 @@ void Player :: barbaros_çiz(SDL_Renderer* render_barbaros , string barbaros_gun 
 	{
 		health = health - 20;
 		meteor_x = -100;
-		meteor_y = 200;
+		meteor_y = rand() % 500;
 	}
 	// Y EKSENÝ ÝÇÝN SINIR BELÝRLEME
 	if(player_barbaros.y <= 0)

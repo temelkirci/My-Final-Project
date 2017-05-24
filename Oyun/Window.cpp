@@ -87,7 +87,7 @@ void Window :: crafting(SDL_Renderer* rend)
 
 void Window :: load_inf(SDL_Renderer* ren)
 {
-	SDL_Surface* surface_cr = IMG_Load("assets/craft.jpg");
+	SDL_Surface* surface_cr = IMG_Load("assets/crafting.png");
 	SDL_Texture* texture_cr = SDL_CreateTextureFromSurface(ren , surface_cr);	// yüzeyi renderleyerek texture oluþtur	
 	SDL_FreeSurface(surface_cr);
 	

@@ -9,9 +9,10 @@ Fonts :: Fonts()
 {
 	toplam = 0;
 
-	backColor.r = 255;
-	backColor.g = 255;
-	backColor.b = 255;
+	backColor.r = 0;
+	backColor.g = 0;
+	backColor.b = 0;
+	backColor.a = 150;
 
 	backRect.x = 0;
 	backRect.y = 0;

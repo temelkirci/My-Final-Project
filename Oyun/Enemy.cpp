@@ -1,18 +1,23 @@
 #include <iostream>
 #include "SDL/SDL.h"
 #include "Enemy.h"
+#include <cstdlib>
+#include <ctime>
 #include <SDL/SDL_image.h>
 
 Enemy :: Enemy()
 {
+	srand ((unsigned int)time(0));
+
 	meteor_rect.x = -100;
-	meteor_rect.y = 200;
+	meteor_rect.y = rand() % 500;
 	meteor_rect.w = 50;
 	meteor_rect.h = 50;
 
-	meteor_x = -100;
-	meteor_y = 200;
+	meteor_x = meteor_rect.x;
+	meteor_y = meteor_rect.y;
 
+	meteor_range = rand() % 500;
 	meteor_health = 100;
 	delay_time = 200;
 	current_time = 0;
@@ -64,7 +69,7 @@ void Enemy :: load_enemy(string file_path, char* enemy_picture , SDL_Renderer* r
 // düþman L þeklinde hareket edecek
 void Enemy :: draw_enemy(SDL_Renderer* rend , Uint32 real_time , int camx , int camy)
 {
-	if((meteor_health > 0) && (meteor_rect.x <= 1000))
+	if((meteor_health > 0) && (meteor_rect.x <= meteor_range))
 	{
 		meteor_rect.x = (meteor_x + camx);
 		meteor_rect.y = (meteor_y + camy);
@@ -102,29 +107,31 @@ void Enemy :: draw_enemy(SDL_Renderer* rend , Uint32 real_time , int camx , int 
 		meteor_health = 100;
 
 		meteor_rect.x = -100;
-		meteor_rect.y = 500;
+		meteor_rect.y = rand() % 500;
 
 		meteor_x = -100;
-		meteor_y = 500;
+		meteor_y = rand() % 500;
+
+		meteor_range = rand() % 500 + 700;
 	}
 	
 }
 void Enemy :: enemy_load(SDL_Renderer* renderer)
 {
-	load_enemy("assets/a10000.png", "small_meteor_1", renderer);
-	load_enemy("assets/a10001.png", "small_meteor_2", renderer);
-	load_enemy("assets/a10002.png", "small_meteor_3", renderer);
-	load_enemy("assets/a10003.png", "small_meteor_4", renderer);
-	load_enemy("assets/a10004.png", "small_meteor_5", renderer);
-	load_enemy("assets/a10005.png", "small_meteor_6", renderer);
-	load_enemy("assets/a10006.png", "small_meteor_7", renderer);
-	load_enemy("assets/a10007.png", "small_meteor_8", renderer);
-	load_enemy("assets/a10008.png", "small_meteor_9", renderer);
-	load_enemy("assets/a10009.png", "small_meteor_10", renderer);
-	load_enemy("assets/a10010.png", "small_meteor_11", renderer);
-	load_enemy("assets/a10011.png", "small_meteor_12", renderer);
-	load_enemy("assets/a10012.png", "small_meteor_13", renderer);
-	load_enemy("assets/a10013.png", "small_meteor_14", renderer);
-	load_enemy("assets/a10014.png", "small_meteor_15", renderer);
-	load_enemy("assets/a10015.png", "small_meteor_16", renderer);
+	load_enemy("assets/small_meteor/a10000.png", "small_meteor_1", renderer);
+	load_enemy("assets/small_meteor/a10001.png", "small_meteor_2", renderer);
+	load_enemy("assets/small_meteor/a10002.png", "small_meteor_3", renderer);
+	load_enemy("assets/small_meteor/a10003.png", "small_meteor_4", renderer);
+	load_enemy("assets/small_meteor/a10004.png", "small_meteor_5", renderer);
+	load_enemy("assets/small_meteor/a10005.png", "small_meteor_6", renderer);
+	load_enemy("assets/small_meteor/a10006.png", "small_meteor_7", renderer);
+	load_enemy("assets/small_meteor/a10007.png", "small_meteor_8", renderer);
+	load_enemy("assets/small_meteor/a10008.png", "small_meteor_9", renderer);
+	load_enemy("assets/small_meteor/a10009.png", "small_meteor_10", renderer);
+	load_enemy("assets/small_meteor/a10010.png", "small_meteor_11", renderer);
+	load_enemy("assets/small_meteor/a10011.png", "small_meteor_12", renderer);
+	load_enemy("assets/small_meteor/a10012.png", "small_meteor_13", renderer);
+	load_enemy("assets/small_meteor/a10013.png", "small_meteor_14", renderer);
+	load_enemy("assets/small_meteor/a10014.png", "small_meteor_15", renderer);
+	load_enemy("assets/small_meteor/a10015.png", "small_meteor_16", renderer);
 }

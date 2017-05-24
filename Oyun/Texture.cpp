@@ -396,8 +396,8 @@ void Texture :: draw_bullet(SDL_Renderer* rend)
 					}
 					else if(bullet_angle >= 180 && bullet_angle < 270) // sol üst
 					{
-						Uncollectible_Items[98].item_rect.x = (Uncollectible_Items[98].item_rect.x) - (int)(10*cos(((270-bullet_angle)*PI)/180));
-						Uncollectible_Items[98].item_rect.y = (Uncollectible_Items[98].item_rect.y) - (int)(10*sin(((270-bullet_angle)*PI)/180));
+						Uncollectible_Items[98].item_rect.x = (Uncollectible_Items[98].item_rect.x) - (int)(10*cos(((bullet_angle-180)*PI)/180));
+						Uncollectible_Items[98].item_rect.y = (Uncollectible_Items[98].item_rect.y) - (int)(10*sin(((bullet_angle-180)*PI)/180));
 
 					}
 					else if(bullet_angle >= 90 && bullet_angle < 180) // sol alt
