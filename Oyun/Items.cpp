@@ -16,7 +16,8 @@ Items :: Items()
 
 		inf = "";
 
-	// toplanabilir nesneler
+	////////   Collectible_Items   ////////
+
 		temp_rect.x = 800;
 		temp_rect.y = 300;
 		temp_rect.w = 50;
@@ -59,12 +60,12 @@ Items :: Items()
 		Collectible_Items[2].item_rect = temp_rect;
 		Collectible_Items[2].item_texture = NULL;
 
-		temp_rect.x = 1200;
-		temp_rect.y = 300;
-		temp_rect.w = 50;
-		temp_rect.h = 50;
+		temp_rect.x = 1000;
+		temp_rect.y = 200;
+		temp_rect.w = 35;
+		temp_rect.h = 45;
 
-		Collectible_Items[3].item_name = "full_bag";
+		Collectible_Items[3].item_name = "water";
 		Collectible_Items[3].item_blendmode = "blend";
 		Collectible_Items[3].item_id = 3;
 		Collectible_Items[3].number_item = 1;
@@ -72,6 +73,92 @@ Items :: Items()
 		Collectible_Items[3].item_active = true;
 		Collectible_Items[3].item_rect = temp_rect;
 		Collectible_Items[3].item_texture = NULL;
+
+		temp_rect.x = 1200;
+		temp_rect.y = 300;
+		temp_rect.w = 50;
+		temp_rect.h = 50;
+
+		Collectible_Items[4].item_name = "full_bag";
+		Collectible_Items[4].item_blendmode = "blend";
+		Collectible_Items[4].item_id = 4;
+		Collectible_Items[4].number_item = 1;
+		Collectible_Items[4].item_health = 100;
+		Collectible_Items[4].item_active = true;
+		Collectible_Items[4].item_rect = temp_rect;
+		Collectible_Items[4].item_texture = NULL;
+
+		temp_rect.x = 900;
+		temp_rect.y = 300;
+		temp_rect.w = 50;
+		temp_rect.h = 50;
+
+		Collectible_Items[5].item_name = "soup";
+		Collectible_Items[5].item_blendmode = "blend";
+		Collectible_Items[5].item_id = 5;
+		Collectible_Items[5].number_item = 1;
+		Collectible_Items[5].item_health = 100;
+		Collectible_Items[5].item_active = true;
+		Collectible_Items[5].item_rect = temp_rect;
+		Collectible_Items[5].item_texture = NULL;
+
+		temp_rect.x = 400;
+		temp_rect.y = 700;
+		temp_rect.w = 50;
+		temp_rect.h = 50;
+
+		Collectible_Items[6].item_name = "12_bag";
+		Collectible_Items[6].item_blendmode = "blend";
+		Collectible_Items[6].item_id = 6;
+		Collectible_Items[6].number_item = 1;
+		Collectible_Items[6].item_health = 100;
+		Collectible_Items[6].item_active = true;
+		Collectible_Items[6].item_rect = temp_rect;
+		Collectible_Items[6].item_texture = NULL;
+
+		temp_rect.x = 1000;
+		temp_rect.y = 800;
+		temp_rect.w = 70;
+		temp_rect.h = 40;
+
+		Collectible_Items[7].item_name = "rifle";
+		Collectible_Items[7].item_blendmode = "blend";
+		Collectible_Items[7].item_id = 7;
+		Collectible_Items[7].number_item = 1;
+		Collectible_Items[7].item_health = 100;
+		Collectible_Items[7].item_active = true;
+		Collectible_Items[7].item_rect = temp_rect;
+		Collectible_Items[7].item_texture = NULL;
+
+		temp_rect.x = 1000;
+		temp_rect.y = 700;
+		temp_rect.w = 70;
+		temp_rect.h = 30;
+
+		Collectible_Items[8].item_name = "shotgun";
+		Collectible_Items[8].item_blendmode = "blend";
+		Collectible_Items[8].item_id = 8;
+		Collectible_Items[8].number_item = 1;
+		Collectible_Items[8].item_health = 100;
+		Collectible_Items[8].item_active = true;
+		Collectible_Items[8].item_rect = temp_rect;
+		Collectible_Items[8].item_texture = NULL;
+
+		temp_rect.x = 800;
+		temp_rect.y = 600;
+		temp_rect.w = 50;
+		temp_rect.h = 50;
+
+		Collectible_Items[9].item_name = "health_bag";
+		Collectible_Items[9].item_blendmode = "blend";
+		Collectible_Items[9].item_id = 9;
+		Collectible_Items[9].number_item = 1;
+		Collectible_Items[9].item_health = 100;
+		Collectible_Items[9].item_active = true;
+		Collectible_Items[9].item_rect = temp_rect;
+		Collectible_Items[9].item_texture = NULL;
+
+		////////  UnCollectible_Items    ////////
 
 		temp_rect.x = 900;
 		temp_rect.y = 300;
@@ -114,6 +201,9 @@ Items :: Items()
 		Uncollectible_Items[97].item_active = false;
 		Uncollectible_Items[97].item_rect = temp_rect;
 		Uncollectible_Items[97].item_texture = NULL;
+
+		////////   Solid_Items   ////////
+
 }
 
 Items :: ~Items()

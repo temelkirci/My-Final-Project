@@ -48,7 +48,10 @@ void Render :: render(SDL_Renderer* rend , bool menu)
 		draw_texture(rend);
 
 	barbaros_çiz(rend , barbaros_guns , &xpoz , &ypoz , camera.x , camera.y , barbaros_durum , current_time); // ana karakteri çiz
+
 	draw_enemy(rend , current_time , camera.x , camera.y);
+	draw_trex(rend , current_time , &xpoz , &ypoz , angle , camera.x , camera.y);
+
 	gece_gündüz(rend , current_time); // gece gündüz döngüsü
 	
 	barbaros_güncelle(rend , current_time); // susuzluk durumu , saðlýk durumu , mermi durumu , açlýk durumunu güncelle

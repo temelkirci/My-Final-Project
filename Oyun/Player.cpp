@@ -238,26 +238,26 @@ void Player :: barbaros_çiz(SDL_Renderer* render_barbaros , string barbaros_gun 
 		
 		if(player_time == 0 && barbaros_durum == "attack")
 		{
-			player_time = 50 + süre;
+			player_time = 100 + süre;
 		}
 		
 		if(current_time <= player_time && barbaros_durum == "attack") // 50 ms sayarsa
 		{
 			SDL_RenderCopyEx(render_barbaros , barbaros_weapon["knife1"] , NULL , &player_barbaros , angle , &playerPoint , SDL_FLIP_NONE);
 		}
-		else if((current_time > player_time) && (current_time <= (player_time + 50)) && barbaros_durum == "attack") 
+		else if((current_time > player_time) && (current_time <= (player_time + 100)) && barbaros_durum == "attack") 
 		{
 			SDL_RenderCopyEx(render_barbaros , barbaros_weapon["knife2"] , NULL , &player_barbaros , angle , &playerPoint , SDL_FLIP_NONE);
 		}
-		else if((current_time > player_time + 50) && (current_time <= (player_time + 100)) && barbaros_durum == "attack")
+		else if((current_time > player_time + 100) && (current_time <= (player_time + 200)) && barbaros_durum == "attack")
 		{
 			SDL_RenderCopyEx(render_barbaros , barbaros_weapon["knife3"] , NULL , &player_barbaros , angle , &playerPoint , SDL_FLIP_NONE);
 		}
-		else if((current_time > player_time + 100) && (current_time <= (player_time + 150)) && barbaros_durum == "attack")
+		else if((current_time > player_time + 200) && (current_time <= (player_time + 300)) && barbaros_durum == "attack")
 		{
 			SDL_RenderCopyEx(render_barbaros , barbaros_weapon["knife4"] , NULL , &player_barbaros , angle , &playerPoint , SDL_FLIP_NONE);
 		}
-		else if((current_time > player_time + 150) && (current_time <= (player_time + 200)) && barbaros_durum == "attack")
+		else if((current_time > player_time + 300) && (current_time <= (player_time + 400)) && barbaros_durum == "attack")
 		{
 			SDL_RenderCopyEx(render_barbaros , barbaros_weapon["knife5"] , NULL , &player_barbaros , angle , &playerPoint , SDL_FLIP_NONE);
 		}

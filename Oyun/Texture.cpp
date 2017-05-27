@@ -335,21 +335,69 @@ void Texture :: draw_bullet(SDL_Renderer* rend)
 	{
 		if(z >= 0 && z < 50)
 		{		
-				if(barbaros_guns == "rifle")
-				{
-					if(z == 0)
-					{
-						Uncollectible_Items[99].item_rect.x = xpoz+50;
-						Uncollectible_Items[99].item_rect.y = ypoz+50;
-						Uncollectible_Items[99].item_rect.w = 30;
-						Uncollectible_Items[99].item_rect.h = 10;
+			if(barbaros_guns == "rifle")
+			{
+			if(z == 0)
+					{	
+						bullet_angle = angle;
+
+						if(bullet_angle >= 0 && bullet_angle <90)
+						{
+							Uncollectible_Items[99].item_rect.x = xpoz + 90 - (int)(30*cos((bullet_angle*PI)/180));
+							Uncollectible_Items[99].item_rect.y = ypoz + 70 - (int)(30*sin((bullet_angle*PI)/180));
+						}
+						else if(bullet_angle >= 90 && bullet_angle <180)
+						{
+							Uncollectible_Items[99].item_rect.x = xpoz + 20 + (int)(30*cos((90-bullet_angle*PI)/180));
+							Uncollectible_Items[99].item_rect.y = ypoz + 70 - (int)(30*sin((90-bullet_angle*PI)/180));
+						}
+						else if(bullet_angle >= 180 && bullet_angle <270)
+						{
+							Uncollectible_Items[99].item_rect.x = xpoz + 20 + (int)(30*cos((180-bullet_angle*PI)/180));
+							Uncollectible_Items[99].item_rect.y = ypoz + 25 + (int)(30*sin((180-bullet_angle*PI)/180));
+						}
+						else if(bullet_angle >= 270 && bullet_angle <360)
+						{
+							Uncollectible_Items[99].item_rect.x = xpoz + 70 - (int)(30*cos((270-bullet_angle*PI)/180));
+							Uncollectible_Items[99].item_rect.y = ypoz + 20 + (int)(30*sin((270-bullet_angle*PI)/180));
+						}
+						
+						Uncollectible_Items[99].item_rect.w = 20;
+						Uncollectible_Items[99].item_rect.h = 5;
 						Uncollectible_Items[99].item_active = true;
 						Uncollectible_Items[99].item_name = "bullet_rifle";
-						bullet_angle = angle;
+						
 					}
+					if(bullet_angle == 270)
+					{
+						Uncollectible_Items[99].item_rect.y = (Uncollectible_Items[99].item_rect.y) - 1;
+					}
+					
+					if(bullet_angle >= 270) // sað üst
+					{
+						Uncollectible_Items[99].item_rect.x = (Uncollectible_Items[99].item_rect.x) + (int)(10*cos(((360-bullet_angle)*PI)/180));
+						Uncollectible_Items[99].item_rect.y = (Uncollectible_Items[99].item_rect.y) - (int)(10*sin(((360-bullet_angle)*PI)/180));
+					}
+					else if(bullet_angle >= 180 && bullet_angle < 270) // sol üst
+					{
+						Uncollectible_Items[99].item_rect.x = (Uncollectible_Items[99].item_rect.x) - (int)(10*cos(((bullet_angle-180)*PI)/180));
+						Uncollectible_Items[99].item_rect.y = (Uncollectible_Items[99].item_rect.y) - (int)(10*sin(((bullet_angle-180)*PI)/180));
+
+					}
+					else if(bullet_angle >= 90 && bullet_angle < 180) // sol alt
+					{
+						Uncollectible_Items[99].item_rect.x = (Uncollectible_Items[99].item_rect.x) - (int)(10*cos(((180-bullet_angle)*PI)/180));
+						Uncollectible_Items[99].item_rect.y = (Uncollectible_Items[99].item_rect.y) + (int)(10*sin(((180-bullet_angle)*PI)/180));
+					}
+					else if(bullet_angle >= 0 && bullet_angle < 90) // sað alt
+					{
+						Uncollectible_Items[99].item_rect.x = (Uncollectible_Items[99].item_rect.x) + (int)(10*cos(((bullet_angle)*PI)/180));
+						Uncollectible_Items[99].item_rect.y = (Uncollectible_Items[99].item_rect.y) + (int)(10*sin(((bullet_angle)*PI)/180));
+					}
+					
 					draw_texture(rend);
-					Uncollectible_Items[99].item_rect.x = (Uncollectible_Items[99].item_rect.x) + 1;
-					z++;				
+					z++;		
+			
 				}
 				else if(barbaros_guns == "handgun")
 				{
@@ -418,19 +466,67 @@ void Texture :: draw_bullet(SDL_Renderer* rend)
 				else if(barbaros_guns == "shotgun")
 				{
 					if(z == 0)
-					{
-						Uncollectible_Items[97].item_rect.x = xpoz+50;
-						Uncollectible_Items[97].item_rect.y = ypoz+50;
-						Uncollectible_Items[97].item_rect.w = 30;
-						Uncollectible_Items[97].item_rect.h = 10;
+					{	
+						bullet_angle = angle;
+
+						if(bullet_angle >= 0 && bullet_angle <90)
+						{
+							Uncollectible_Items[97].item_rect.x = xpoz + 90 - (int)(30*cos((bullet_angle*PI)/180));
+							Uncollectible_Items[97].item_rect.y = ypoz + 70 - (int)(30*sin((bullet_angle*PI)/180));
+						}
+						else if(bullet_angle >= 90 && bullet_angle <180)
+						{
+							Uncollectible_Items[97].item_rect.x = xpoz + 20 + (int)(30*cos((90-bullet_angle*PI)/180));
+							Uncollectible_Items[97].item_rect.y = ypoz + 70 - (int)(30*sin((90-bullet_angle*PI)/180));
+						}
+						else if(bullet_angle >= 180 && bullet_angle <270)
+						{
+							Uncollectible_Items[97].item_rect.x = xpoz + 20 + (int)(30*cos((180-bullet_angle*PI)/180));
+							Uncollectible_Items[97].item_rect.y = ypoz + 25 + (int)(30*sin((180-bullet_angle*PI)/180));
+						}
+						else if(bullet_angle >= 270 && bullet_angle <360)
+						{
+							Uncollectible_Items[97].item_rect.x = xpoz + 70 - (int)(30*cos((270-bullet_angle*PI)/180));
+							Uncollectible_Items[97].item_rect.y = ypoz + 20 + (int)(30*sin((270-bullet_angle*PI)/180));
+						}
+						
+						Uncollectible_Items[97].item_rect.w = 20;
+						Uncollectible_Items[97].item_rect.h = 5;
 						Uncollectible_Items[97].item_active = true;
 						Uncollectible_Items[97].item_name = "bullet_shotgun";
-						bullet_angle = angle;
+						
 					}
+					if(bullet_angle == 270)
+					{
+						Uncollectible_Items[97].item_rect.y = (Uncollectible_Items[97].item_rect.y) - 1;
+					}
+					
+					if(bullet_angle >= 270) // sað üst
+					{
+						Uncollectible_Items[97].item_rect.x = (Uncollectible_Items[97].item_rect.x) + (int)(10*cos(((360-bullet_angle)*PI)/180));
+						Uncollectible_Items[97].item_rect.y = (Uncollectible_Items[97].item_rect.y) - (int)(10*sin(((360-bullet_angle)*PI)/180));
+					}
+					else if(bullet_angle >= 180 && bullet_angle < 270) // sol üst
+					{
+						Uncollectible_Items[97].item_rect.x = (Uncollectible_Items[97].item_rect.x) - (int)(10*cos(((bullet_angle-180)*PI)/180));
+						Uncollectible_Items[97].item_rect.y = (Uncollectible_Items[97].item_rect.y) - (int)(10*sin(((bullet_angle-180)*PI)/180));
+
+					}
+					else if(bullet_angle >= 90 && bullet_angle < 180) // sol alt
+					{
+						Uncollectible_Items[97].item_rect.x = (Uncollectible_Items[97].item_rect.x) - (int)(10*cos(((180-bullet_angle)*PI)/180));
+						Uncollectible_Items[97].item_rect.y = (Uncollectible_Items[97].item_rect.y) + (int)(10*sin(((180-bullet_angle)*PI)/180));
+					}
+					else if(bullet_angle >= 0 && bullet_angle < 90) // sað alt
+					{
+						Uncollectible_Items[97].item_rect.x = (Uncollectible_Items[97].item_rect.x) + (int)(10*cos(((bullet_angle)*PI)/180));
+						Uncollectible_Items[97].item_rect.y = (Uncollectible_Items[97].item_rect.y) + (int)(10*sin(((bullet_angle)*PI)/180));
+					}
+					
 					draw_texture(rend);
-					Uncollectible_Items[97].item_rect.x = (Uncollectible_Items[97].item_rect.x) + 1;
 					z++;	
 				}
+					
 		}
 		else if(z >= 50) // menzili aþtýysa çizmeyi býrak
 		{
@@ -456,6 +552,7 @@ void Texture :: load_textures(SDL_Renderer* renderer)
 {
 	load("assets/guns/health_bag.png", "health_bag", renderer);
 	load("assets/guns/full_bag.png", "full_bag", renderer);
+	load("assets/guns/12_bag.png", "12_bag", renderer);
 	load("assets/guns/handgun_mermi.png", "handgun_mermi", renderer);
 	load("assets/guns/shotgun_mermi.png", "shotgun_mermi", renderer);
 	load("assets/guns/rifle.png", "rifle", renderer);
@@ -467,12 +564,16 @@ void Texture :: load_textures(SDL_Renderer* renderer)
 	load("assets/stone_wall.png", "stone_wall", renderer);
 	load("assets/shoot.png", "shoot", renderer);
 	load("assets/Sepia.png", "sepia", renderer);
-
+	load("assets/su.png", "water", renderer);
+	load("assets/guns/soup.png", "soup", renderer);
+	load("assets/guns/rifle.png", "rifle", renderer);
 	load("assets/guns/energy water.png", "energy_water", renderer);
 	load("assets/crater1.png", "krater1", renderer);
+
 	load("assets/guns/bullet_handgun.png", "bullet_handgun", renderer);
 	load("assets/guns/bullet_shotgun.png", "bullet_shotgun", renderer);
-	
+	load("assets/guns/bullet_rifle.png", "bullet_rifle", renderer);
+
 	Envanter_Yukle("assets/18_envanter.png", "full_envanter", renderer);
 	Envanter_Yukle("assets/12_envanter.png", "12_envanter", renderer);
 	Envanter_Yukle("assets/9_envanter.png", "9_envanter", renderer);

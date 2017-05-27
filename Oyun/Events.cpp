@@ -742,6 +742,11 @@ void Events :: klavye(SDL_Renderer* rend , int camx , int camy)
 						
 						cout<<xpoz<<endl<<ypoz<<endl<<endl;
 						break;
+
+					case SDLK_t:
+						trex_health = 0;
+						trex_dead = true;
+						break;
 						
 				} // switch sonu
 			
