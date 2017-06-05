@@ -5,6 +5,7 @@
 #include <ctime>
 #include <cmath>
 #include <SDL/SDL_image.h>
+#include "SDL/SDL_mixer.h"
 
 #define PI 3.14159265
 
@@ -13,37 +14,44 @@ Enemy :: Enemy()
 	srand ((unsigned int)time(0));
 
 	meteor_rect.x = -100;
-	meteor_rect.y = rand() % 500;
+	meteor_rect.y = rand() % 1400;
 	meteor_rect.w = 50;
 	meteor_rect.h = 50;
 
 	meteor_x = meteor_rect.x;
 	meteor_y = meteor_rect.y;
 
-	trex_rect.x = 1000;
-	trex_rect.y = 300;
+	trex_speed = 10;
+
+	trex_rect.x = rand() % 5000;
+	trex_rect.y = rand() % 1200;
 	trex_rect.w = 200;
-	trex_rect.h = 50;
+	trex_rect.h = 70;
 
 	trex_x = trex_rect.x;
 	trex_y = trex_rect.y;
 
-	trex_health = 100;
+	trex_health = 300.0;
 	trex_current_time = 0;
 	trex_delay_time = 700;
-	trex_dead_time = 3000; // yerde ölü bekleme süresi
+	trex_dead_time = 0; // yerde ölü bekleme süresi
 	trex_walk_delay_time = 100;
 	trex_walk_time = 0;
 
-	trex_angle = 0;
+	if(Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, 3072) < 0 )
+						cout<<"Mix_OpenAudio yüklenemedi "<<Mix_GetError()<<endl;
+	trex_roar = Mix_LoadWAV("assets/sounds/trex_roar.mp3");
+
+	walk_angle = 0;
+	real_angle = 0;
 	trex_dead = false;
-	index_trex = 0;
+	index_trex = 2;
 	trex_direction = "";
-	meteor_range = rand() % 500;
+	meteor_range = rand() % 1000;
 	meteor_health = 100;
 	delay_time = 200;
 	current_time = 0;
-
+	trex_status = "move";
 	index = 0;
 	
 	enemy_array[0] = "small_meteor_1";
@@ -134,185 +142,245 @@ void Enemy :: draw_enemy(SDL_Renderer* rend , Uint32 real_time , int camx , int 
 		meteor_health = 100;
 
 		meteor_rect.x = -100;
-		meteor_rect.y = rand() % 500;
+		meteor_rect.y = rand() % 1200;
 
-		meteor_x = -100;
-		meteor_y = rand() % 500;
+		meteor_x = rand() % 5000;
+		meteor_y = rand() % 1400;
 
-		meteor_range = rand() % 500 + 700;
+		meteor_range = rand() % 500 + 500;
 	}
 	
 }
 
 void Enemy :: draw_trex(SDL_Renderer* rend , Uint32 real_time , int *pozx , int *pozy , double barbaoros_angle , int camx , int camy)
 {
-	if(trex_health > 0)
-	{
+	SDL_Rect player_rect;
+	player_rect.x = *pozx + camx;
+	player_rect.y = *pozy + camy;
+	player_rect.w = 100;
+	player_rect.h = 100;
 
+	if(trex_health > 0.0)
+	{
+		
 		if(trex_current_time == 0)
 			trex_current_time = real_time + trex_delay_time;
 
 		if(real_time <= trex_current_time)
 		{
 			///// TREX AÇI /////
-			if((*pozx+50) > (trex_rect.x + 100)) // trex solda
+			if((player_rect.x+50) >= (trex_rect.x + 100)) // trex solda
 			{
-				if((*pozy + 50) > (trex_rect.y + 25)) // sol-üst
+				if((player_rect.y + 50) >= (trex_rect.y + 25)) // sol-üst
 				{
-					double x_dis = abs((*pozx+50) - (trex_rect.x + 100));
-					double y_dis = abs((*pozy+50) - (trex_rect.y + 25));
-
+					x_dis = abs((player_rect.x+50) - (trex_rect.x + 100));
+					y_dis = abs((player_rect.y+50) - (trex_rect.y + 25));
+				
 					if(x_dis == 0)
-						x_dis = 1;
-					if(y_dis == 0)
-						y_dis = 1;
-
-					double tanjant = y_dis / x_dis;
-					trex_angle = (atan(tanjant) * 180) / PI ;
+					{
+						real_angle = 90;
+						walk_angle = 0;
+					}
+					else if(y_dis == 0)
+					{
+						real_angle = 0;
+						walk_angle = 0;
+					}
+					else
+					{
+						trex_tanjant = y_dis / x_dis;
+						walk_angle = (atan(trex_tanjant) * 180) / PI ;
+						real_angle = walk_angle;
+					}
 					
-					trex_direction = "sol-üst";
+					trex_direction = "sol ust";
 				}
 				else // sol-alt
 				{
-					double x_dis = abs((*pozx+50) - (trex_rect.x + 100));
-					double y_dis = abs((trex_rect.y + 25) - (*pozx + 50));
+					x_dis = abs((player_rect.x+50) - (trex_rect.x + 100));
+					y_dis = abs((trex_rect.y + 25) - (player_rect.x + 50));
 
 					if(x_dis == 0)
-						x_dis = 1;
-					if(y_dis == 0)
-						y_dis = 1;
-
-					double tanjant = y_dis / x_dis;
-					trex_angle = (atan(tanjant) * 180) / PI ;
-
-					trex_direction = "sol-alt";
+					{
+						walk_angle = 0;
+						real_angle = 270;
+					}
+					else if(y_dis == 0)
+					{
+						walk_angle = 0;
+						real_angle = 0;
+					}
+					else
+					{
+						trex_tanjant = y_dis / x_dis;
+						walk_angle = (atan(trex_tanjant) * 180) / PI ;
+						real_angle = 360 - walk_angle;
+					}
+					trex_direction = "sol alt";
 				}
 			}
-			else
+			else // trex saðda
 			{
-				if((*pozy + 50) > (trex_rect.y + 25)) // sað-üst
+				if((player_rect.y + 50) >= (trex_rect.y + 25)) // sað-üst
 				{
-					double x_dis = abs((*pozx+50) - (trex_rect.x + 100));
-					double y_dis = abs((*pozy+50) - (trex_rect.y + 25));
+					x_dis = abs((player_rect.x+50) - (trex_rect.x + 100));
+					y_dis = abs((player_rect.y+50) - (trex_rect.y + 25));
 
 					if(x_dis == 0)
-						x_dis = 1;
+					{
+						walk_angle = 0;
+						real_angle = 90;
+					}
 					if(y_dis == 0)
-						y_dis = 1;
-
-					double tanjant = y_dis / x_dis;
-					trex_angle = (atan(tanjant) * 180) / PI ;
-
-					trex_direction = "sað-üst";
+					{
+						walk_angle = 0;
+						real_angle = 180;
+					}
+					else
+					{
+						trex_tanjant = y_dis / x_dis;
+						walk_angle = (atan(trex_tanjant) * 180) / PI ;
+						real_angle = 180 - walk_angle;
+					}
+					trex_direction = "sag ust";
 				}
 				else // sað-alt
 				{
-					double x_dis = abs((*pozx+50) - (trex_rect.x + 100));
-					double y_dis = abs((*pozy+50) - (trex_rect.y + 25));
-
-					if(x_dis == 0)
-						x_dis = 1;
-					if(y_dis == 0)
-						y_dis = 1;
-
-					double tanjant = y_dis / x_dis;
+					x_dis = abs((player_rect.x+50) - (trex_rect.x + 100));
+					y_dis = abs((player_rect.y+50) - (trex_rect.y + 25));
 					
-					trex_angle = (atan(tanjant) * 180) / PI ;
-
-					trex_direction = "sað-alt";
+					if(x_dis == 0)
+					{
+						walk_angle = 0;
+						real_angle = 270;
+					}
+					else if(y_dis == 0)
+					{
+						walk_angle = 0;
+						real_angle = 180;
+					}
+					else
+					{
+						trex_tanjant = y_dis / x_dis;
+						walk_angle = (atan(trex_tanjant) * 180) / PI ;
+						real_angle = 180 + walk_angle ;
+					}
+					trex_direction = "sag alt";
 				}
 			}
 			
 			///// TREX KOORDÝNAT /////
-			if(trex_walk_time == 0)
-				trex_walk_time = real_time + trex_walk_delay_time ;
-
-			if(real_time >= trex_walk_time)
+			if((!SDL_HasIntersection(&trex_rect , &player_rect)))
 			{
-				if(trex_direction == "sað-alt") // sað-alt
+				trex_speed = 10;
+				if(trex_walk_time == 0)
+					trex_walk_time = real_time + trex_walk_delay_time ;
+
+				if(real_time >= trex_walk_time)
 				{
+					if(trex_direction == "sag alt") // sað-alt
+					{	
+						trex_x = trex_x - (int)(trex_speed*cos(((walk_angle)*PI)/180));
+						trex_y = trex_y - (int)(trex_speed*sin(((walk_angle)*PI)/180));
+						trex_walk_time = 0;
+					}
+					else if(trex_direction == "sol alt") // sol-alt
+					{
+						trex_x = trex_x + (int)(trex_speed*cos(((walk_angle)*PI)/180));
+						trex_y = trex_y - (int)(trex_speed*sin(((walk_angle)*PI)/180));
+						trex_walk_time = 0;
+					}
+					else if(trex_direction == "sol ust") // sol-üst
+					{
+						trex_x = trex_x + (int)(trex_speed*cos(((walk_angle)*PI)/180));
+						trex_y = trex_y + (int)(trex_speed*sin(((walk_angle)*PI)/180));
+						trex_walk_time = 0;
+					}
+					else if(trex_direction == "sag ust") // sað-üst
+					{	
+						trex_x = trex_x - (int)(trex_speed*cos(((walk_angle)*PI)/180));
+						trex_y = trex_y + (int)(trex_speed*sin(((walk_angle)*PI)/180));
+						trex_walk_time = 0;
+					}
 					
-					trex_x = trex_x - (int)(10*cos(((trex_angle - 180)*PI)/180));
-					trex_y = trex_y - (int)(10*sin(((trex_angle - 180)*PI)/180));
-					trex_walk_time = 0;
-					//cout<<trex_direction<<endl;
 				}
-				else if(trex_direction == "sol-alt") // sol-alt
+				
+			}
+			else
+			{
+				trex_speed = 0;
+				if(!Mix_Playing(3))
 				{
-					
-					trex_x = trex_x + (int)(10*cos(((360 - trex_angle)*PI)/180));
-					trex_y = trex_y - (int)(10*sin(((360 - trex_angle)*PI)/180));
-					trex_walk_time = 0;
-					//cout<<trex_direction<<endl;
-				}
-				else if(trex_direction == "sol-üst") // sol-üst
-				{
-					
-					trex_x = trex_x + (int)(10*cos(((trex_angle)*PI)/180));
-					trex_y = trex_y + (int)(10*sin(((trex_angle)*PI)/180));
-					trex_walk_time = 0;
-					//cout<<trex_direction<<endl;
-				}
-				else if(trex_direction == "sað-üst") // sað-üst
-				{
-					
-					trex_x = trex_x - (int)(10*cos(((180 - trex_angle)*PI)/180));
-					trex_y = trex_y + (int)(10*sin(((180 - trex_angle)*PI)/180));
-					trex_walk_time = 0;
-					//cout<<trex_direction<<endl;
+					Mix_PlayChannel(3 , trex_roar , 0);
 				}
 			}
-		
-
+			
 			trex_rect.x = (trex_x + camx);
 			trex_rect.y = (trex_y + camy);
-			SDL_RenderCopyEx(rend , enemy_map[trex_array[index_trex]] , NULL , &trex_rect , trex_angle , 0 , SDL_FLIP_NONE);
+
+			SDL_RenderCopyEx(rend , enemy_map[trex_array[index_trex]] , NULL , &trex_rect , real_angle , 0 , SDL_FLIP_NONE);
 		}
+
 		else // bir sonraki resmi çiz
 		{
+			trex_rect.x = (trex_x + camx);
+			trex_rect.y = (trex_y + camy);
 
 			trex_current_time = real_time + trex_delay_time;
 			index_trex++;
 
 			if(index_trex == 4)
+			{
 				index_trex = 0;
+			}
 
-			SDL_RenderCopyEx(rend , enemy_map[trex_array[index_trex]] , NULL , &trex_rect , trex_angle , 0 , SDL_FLIP_NONE);
+			SDL_RenderCopyEx(rend , enemy_map[trex_array[index_trex]] , NULL , &trex_rect , real_angle , 0 , SDL_FLIP_NONE);
 		}
-
-		//cout<<trex_angle<<endl;
 
 	}
 
-	else if(trex_health <= 0) // eðer trex ölmüþse
+	else if(trex_health <= 0.0) // eðer trex ölmüþse
 	{
 		trex_rect.x = (trex_x + camx);
 		trex_rect.y = (trex_y + camy);
 		
 		if(trex_dead == true)
 		{
-			if(trex_dead_time == 3000)
-				trex_dead_time = real_time + trex_dead_time ;
+			if(trex_dead_time == 0)
+			{
+				trex_dead_time = real_time + 10000 ;
+				trex_rect.h = 100;
+			}
 			if(real_time <= trex_dead_time)
 			{
-				trex_rect.h = 100;
 				SDL_RenderCopyEx(rend , enemy_map[trex_array[4]] , NULL , &trex_rect , 0 , 0 , SDL_FLIP_NONE);
 			}
 			else
 			{
+				trex_dead_time = 0;
 				trex_dead = false;
-				trex_health = 100;
-				trex_angle = 0;
-				index_trex = 0;
-				trex_rect.x = 1000;
-				trex_rect.y = 300;
-				trex_rect.w = 200;
-				trex_rect.h = 50;
 			}
+		
 		}
-	
+		
+		else
+		{
+				trex_dead = false;
+
+				trex_health = 300.0;
+
+				real_angle = 0;
+				walk_angle = 0;
+
+				index_trex = 0;
+
+				trex_x = -100;
+				trex_y = rand() % 1200;
+
+				trex_rect.h = 70;
+			
+		}
 	}
-	
 }
 
 void Enemy :: enemy_load(SDL_Renderer* renderer)
@@ -334,10 +402,10 @@ void Enemy :: enemy_load(SDL_Renderer* renderer)
 	load_enemy("assets/small_meteor/a10014.png", "small_meteor_15", renderer);
 	load_enemy("assets/small_meteor/a10015.png", "small_meteor_16", renderer);
 
-	load_enemy("assets/trex/trex1.png", "trex_a_1", renderer);
-	load_enemy("assets/trex/trex2.png", "trex_a_2", renderer);
-	load_enemy("assets/trex/trex3.png", "trex_a_3", renderer);
-	load_enemy("assets/trex/trex4.png", "trex_a_4", renderer);
-	load_enemy("assets/trex/trex_dead.png", "trex_a_5", renderer);
+	load_enemy("assets/trex/trex1.png", "trex_a_1", renderer); // attack	indice = 0
+	load_enemy("assets/trex/trex2.png", "trex_a_2", renderer); // attack	indice = 1
+	load_enemy("assets/trex/trex3.png", "trex_a_3", renderer); // move		indice = 2
+	load_enemy("assets/trex/trex4.png", "trex_a_4", renderer); // move		indice = 3
+	load_enemy("assets/trex/trex_dead.png", "trex_a_5", renderer); // dead  indice = 4
 	
 }

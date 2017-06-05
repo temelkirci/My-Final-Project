@@ -76,8 +76,44 @@ void Window :: crafting(SDL_Renderer* rend)
 	{
 		if((get<0>(Slot2) == "rock_1" || get<0>(Slot1) == "rock_1") && (get<3>(Slot1) == 1))
 		{
-			get<0>(finalSlot) = "stone_wall";
-			get<1>(finalSlot) = all_textures["stone_wall"];
+			get<0>(finalSlot) = "brick_block";
+			get<1>(finalSlot) = all_textures["brick_block"];
+			get<2>(finalSlot) = true;
+			get<3>(finalSlot) = 2;
+			SDL_RenderCopyEx(rend , get<1>(finalSlot) , NULL , &final_rect , 0 , 0 , SDL_FLIP_NONE);
+		}
+
+		else if((get<0>(Slot2) == "stone" || get<0>(Slot1) == "stone") && (get<3>(Slot1) == 1))
+		{
+			get<0>(finalSlot) = "stone_block";
+			get<1>(finalSlot) = all_textures["stone_block"];
+			get<2>(finalSlot) = true;
+			get<3>(finalSlot) = 2;
+			SDL_RenderCopyEx(rend , get<1>(finalSlot) , NULL , &final_rect , 0 , 0 , SDL_FLIP_NONE);
+		}
+
+		else if((get<0>(Slot2) == "wood" || get<0>(Slot1) == "wood") && (get<3>(Slot1) == 1))
+		{
+			get<0>(finalSlot) = "wood_block";
+			get<1>(finalSlot) = all_textures["wood_block"];
+			get<2>(finalSlot) = true;
+			get<3>(finalSlot) = 2;
+			SDL_RenderCopyEx(rend , get<1>(finalSlot) , NULL , &final_rect , 0 , 0 , SDL_FLIP_NONE);
+		}
+
+		else if((get<0>(Slot2) == "iron" || get<0>(Slot1) == "iron") && (get<3>(Slot1) == 1))
+		{
+			get<0>(finalSlot) = "iron_block";
+			get<1>(finalSlot) = all_textures["iron_block"];
+			get<2>(finalSlot) = true;
+			get<3>(finalSlot) = 2;
+			SDL_RenderCopyEx(rend , get<1>(finalSlot) , NULL , &final_rect , 0 , 0 , SDL_FLIP_NONE);
+		}
+
+		else if((get<0>(Slot2) == "steel" || get<0>(Slot1) == "steel") && (get<3>(Slot1) == 1))
+		{
+			get<0>(finalSlot) = "steel_block";
+			get<1>(finalSlot) = all_textures["steel_block"];
 			get<2>(finalSlot) = true;
 			get<3>(finalSlot) = 2;
 			SDL_RenderCopyEx(rend , get<1>(finalSlot) , NULL , &final_rect , 0 , 0 , SDL_FLIP_NONE);

@@ -11,8 +11,8 @@ public:
 	~Events();
 	
 	void klavye(SDL_Renderer*,int,int);
-	int xpoz;
-	int ypoz;
+	//int xpoz;
+	//int ypoz;
 	char* mevcut_resim;
 	char* mevcut_mermi;
 	bool pause;

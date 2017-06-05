@@ -20,6 +20,9 @@ public:
 	Mix_Chunk *minigun_shot;
 	Mix_Chunk *shotgun_shot;
 	Mix_Chunk *rifle_shot;
+	Mix_Chunk *water_drink;
+	Mix_Chunk *soup;
+	Mix_Chunk *food;
 
 	void load_sounds(SDL_Renderer*);
 private:

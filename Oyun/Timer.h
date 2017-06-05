@@ -10,7 +10,7 @@ public:
 	~Timer();
 
 	Uint32 süre_hesapla(Uint32,Uint32);
-	void Write(SDL_Renderer*  , Uint32 , string);
+	void Write(SDL_Renderer*  , Uint32 , string , Uint32);
 	void fonts_yükle();
 	void gece_gündüz(SDL_Renderer* , Uint32);
 	int day;
@@ -23,6 +23,7 @@ public:
 	SDL_Texture* yazii_texture;
 	TTF_Font* timer_font;
 	SDL_Color timer_textColor;
+	SDL_Color textColor;
 	bool active;
 	SDL_Texture* texture_background;
 	SDL_Rect world;

@@ -11,9 +11,9 @@ using namespace std;
 
 Inventory :: Inventory()
 {
-	inventory_size = 1; // envanterde sadece býçak olacak
+	inventory_size = 0; // envanterde sadece býçak olacak
 	
-	for(int i=2;i<18;i++)
+	for(int i=0;i<18;i++)
 	{
 		get<0>(envanter[i]) = "";
 		get<2>(envanter[i]) = 0; // eþya sayýsý 0 olsun
@@ -26,7 +26,7 @@ Inventory :: Inventory()
 	inventory_color.g = 0;
 	inventory_color.b = 0;
 
-	rect_inventory.y=665;
+	rect_inventory.y=670;
 }
 
 Inventory :: ~Inventory()
@@ -136,7 +136,7 @@ void Inventory :: Envanter_Güncelle(SDL_Renderer* rend)
 	{
 		
 		esya.x = x+a;
-		esya.y = 665;
+		esya.y = 685;
 		esya.w = 40;
 		esya.h = 30;
 							

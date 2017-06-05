@@ -36,9 +36,13 @@ public:
 	SDL_Rect slot1_rect;
 	SDL_Rect slot2_rect;
 
+	SDL_Rect death_rect;
+
 	SDL_Texture* window_texture;
 	SDL_Texture* crafting_texture;
+
 	SDL_Rect crafting_coord;
+
 	void information_window(SDL_Renderer* , Uint32);
 	void crafting(SDL_Renderer*);
 	void load_inf(SDL_Renderer*);

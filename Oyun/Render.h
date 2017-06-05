@@ -15,7 +15,7 @@ public:
 	
 	Uint32 currentFPS;
 	Uint32 oldFPS;
-	
+	SDL_Rect viewport;
 	int world_x;
 	int world_y;
 	int world_w;

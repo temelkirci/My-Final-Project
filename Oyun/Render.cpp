@@ -16,6 +16,11 @@ Render :: Render()
 	world_w = 3000;
 	world_h = 1500;
 	z=0;
+
+	viewport.x = 1200;
+	viewport.y = 400;
+	viewport.w = 100;
+	viewport.h = 100;
 }
 
 Render :: ~Render()
@@ -33,29 +38,35 @@ void Render :: render(SDL_Renderer* rend , bool menu)
 	
 	// BACKGROUND
 	draw_camera(rend, &xpoz , &ypoz , 1350, 700);
-	
-	draw_bullet(rend); // mermi çizer
 
 	// ITEMS
 
 		// toplanabilir nesneleri çizeceğiz
-		draw_object(rend); 
-
-		// toplanamaz ve içinden geçilemez nesneleri çizeceğiz -> dağ , ağaç kaya
-		draw_solid_texture(rend);
+		draw_object(rend , current_time); 
 
 		// toplanamaz ve içinden geçilebilir nesneleri çizeceğiz -> mermi , su , taş , ot , diğer yer şekilleri
 		draw_texture(rend);
 
-	barbaros_çiz(rend , barbaros_guns , &xpoz , &ypoz , camera.x , camera.y , barbaros_durum , current_time); // ana karakteri çiz
+		// toplanamaz ve içinden geçilemez nesneleri çizeceğiz -> dağ , ağaç kaya
+		draw_solid_texture(rend);
 
-	draw_enemy(rend , current_time , camera.x , camera.y);
-	draw_trex(rend , current_time , &xpoz , &ypoz , angle , camera.x , camera.y);
+	if(health > 0)
+	{
+		draw_bullet(rend); // mermi çizer
 
-	gece_gündüz(rend , current_time); // gece gündüz döngüsü
+		barbaros_çiz(rend , barbaros_guns , &xpoz , &ypoz , camera.x , camera.y , barbaros_durum , current_time); // ana karakteri çiz
+	}
+
+	if(health > 0)
+	{
+		draw_enemy(rend , current_time , camera.x , camera.y);
+		draw_trex(rend , current_time , &xpoz , &ypoz , angle , camera.x , camera.y);
 	
-	barbaros_güncelle(rend , current_time); // susuzluk durumu , sağlık durumu , mermi durumu , açlık durumunu güncelle
-	//Lamp(rend , camera.x , camera.y);
+		gece_gündüz(rend , current_time); // gece gündüz döngüsü
+	}
+
+		barbaros_güncelle(rend , current_time); // susuzluk durumu , sağlık durumu , mermi durumu , açlık durumunu güncelle
+
 	// Karakter bilgilerini çiz ve güncelle
 	if(barbaros_guns == "handgun")
 	{
@@ -73,26 +84,27 @@ void Render :: render(SDL_Renderer* rend , bool menu)
 	{
 		barbaros_status(rend , 15 , 15 , 20 , 20 , health , 0 , hunger , thirtsy); // knife için mermi sayısı 0
 	}
-
-	item_information(rend , inf);
-	item_bilgi(rend , inf);
-
+	if(health > 0)
+	{
+		item_information(rend , inf);
+		item_bilgi(rend , inf);
+	}
 	// Crafting Menüsü
 	
-	if(statu_crafting)
+	if(statu_crafting && health > 0)
 		crafting(rend);
 	
 	player_information(rend);
 
 	// ENVANTER 
 	if(envanter_durum == "full_envanter")
-		Envanter_Çiz("full_envanter", 100 , 650 , 1150 , 50 , rend); // 18 birimlik envanter çizer
+		Envanter_Çiz("full_envanter", 100 , 670 , 1150 , 50 , rend); // 18 birimlik envanter çizer
 
 	if(envanter_durum == "12_envanter")
-		Envanter_Çiz("12_envanter", 292 , 650 , 765 , 50 , rend); // 12 birimlik envanter çizer
+		Envanter_Çiz("12_envanter", 292 , 670 , 765 , 50 , rend); // 12 birimlik envanter çizer
 
 	if(envanter_durum == "9_envanter")
-		Envanter_Çiz("9_envanter", 387 , 650 , 575 , 50 , rend); // 9 birimlik envanter çizer
+		Envanter_Çiz("9_envanter", 387 , 670 , 575 , 50 , rend); // 9 birimlik envanter çizer
 	
 	Envanter_Güncelle(rend); // envanterdeki tüm nesneleri çizer
 	
@@ -103,14 +115,12 @@ void Render :: render(SDL_Renderer* rend , bool menu)
 	// write FPS
 	if((current_time / 1000)%2 == 0)
 		cout<<endl<<currentFPS<<endl;
-	
 	*/
-
+	
 	// Toplam süreyi hesapla
 	deltaclock = SDL_GetTicks() - start;
 	total = total + deltaclock;
 	current_time = current_time + deltaclock;
-	
 	SDL_RenderCopyEx(rend, map_texture[current_cursor] , NULL , &solid_mouse , 0 , 0 , SDL_FLIP_NONE);
 	// EKRANI GÜNCELLE
 	SDL_RenderPresent(rend); 

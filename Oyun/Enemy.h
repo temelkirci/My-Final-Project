@@ -1,5 +1,6 @@
 #pragma once
 #include "SDL/SDL.h"
+#include "SDL/SDL_mixer.h"
 #include <map>
 #include <string>
 
@@ -17,22 +18,26 @@ public:
 	string trex_direction;
 	int index;
 
-	struct Meteor
-	{
-		
-	} _mMeteor[10];
+	string trex_status;
 
-	int trex_health;
+	double trex_health;
 	int trex_x;
 	int trex_y;
 	SDL_Rect trex_rect;
-	double trex_angle;
+	Mix_Chunk *trex_roar;
+	double walk_angle;
+	double real_angle;
+
+	double x_dis;
+	double y_dis;
+	double trex_tanjant;
 
 	int meteor_health;
 	int meteor_range;
 	int meteor_x;
 	int meteor_y;
 	int index_trex;
+	int trex_speed;
 
 	Uint32 delay_time;
 	Uint32 current_time;

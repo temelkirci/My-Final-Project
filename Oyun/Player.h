@@ -21,6 +21,7 @@ public:
 	void barbaros_güncelle(SDL_Renderer* , Uint32);
 	void load_barbaros(SDL_Renderer*);
 	void player_information(SDL_Renderer*);
+	void death_information(SDL_Renderer*);
 
 	Uint32 player_time;
 	Uint32 hunger_time;
@@ -39,6 +40,7 @@ public:
 	int shotgun_mermi;
 	
 	bool oyun_baslat;
+	bool trex_attack;
 
 	int arti_x_speed;
 	int eksi_x_speed;
@@ -55,7 +57,21 @@ public:
 	int speed;
 
 	bool active_bullet;
+	SDL_Texture* dead_texture;
+	SDL_Rect death_rect;
 
+	//
+
+	int total_survival_day; // hayatta kalýnan gün sayýsý
+	int number_trex; // öldürülen t-rex sayýsý
+	int number_meteor; // parçalanmýþ meteor sayýsý
+	int last_thirtsy; // susuzluk miktarý
+	int last_hunger; // açlýk miktarý
+	Uint32 total_game_time; // toplam oyun süresi (dakika cinsinden)
+	
+	//
+
+	Uint32 trex_attack_time;
 	SDL_Color playerColor;
 	SDL_Rect player_barbaros;
 	SDL_Rect information;

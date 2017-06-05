@@ -10,8 +10,10 @@ using namespace std;
 
 Menu :: Menu()
 {
-	back = Mix_LoadMUS("assets/sounds/background.mp3");
+	back = Mix_LoadMUS("assets/sounds/menu.ogg");
 	
+	SDL_ShowCursor(SDL_DISABLE);
+
 	text_color.r = 0;
 	text_color.g = 0;
 	text_color.b = 0;
@@ -102,7 +104,7 @@ bool Menu :: load_buttons(string dosya_adi , string texture_adi , SDL_Renderer* 
 
 void Menu :: menu_goster(SDL_Renderer* render_menu , int x , int y , int genislik , int yukseklik )
 {
-	
+	SDL_ShowCursor(SDL_DISABLE);
 	SDL_RenderClear(render_menu); // renderi temizle
 
 	SDL_Rect menu_background;
@@ -118,6 +120,8 @@ void Menu :: menu_goster(SDL_Renderer* render_menu , int x , int y , int genisli
 	SDL_RenderCopyEx(render_menu , map_button["LOAD"] , NULL , &load_button , 0 , 0 , SDL_FLIP_NONE);
 	SDL_RenderCopyEx(render_menu , map_button["CREDITS"] , NULL , &credits_button , 0 , 0 , SDL_FLIP_NONE);
 	SDL_RenderCopyEx(render_menu , map_button["EXIT"] , NULL , &exit_button , 0 , 0 , SDL_FLIP_NONE);
+
+	SDL_RenderCopyEx(render_menu, map_button["sepia"] , NULL , &menü_mouse , 0 , 0 , SDL_FLIP_NONE);
 
 	SDL_RenderPresent(render_menu);
 }
@@ -191,5 +195,6 @@ void Menu :: load_buttonss(SDL_Renderer* renderer)
 	load_buttons("assets/buttons/LOAD.png", "LOAD",renderer);
 	load_buttons("assets/buttons/CREDITS.png", "CREDITS",renderer);
 	load_buttons("assets/buttons/EXIT.png", "EXIT",renderer);
+	load_buttons("assets/Sepia.png", "sepia", renderer);
 	
 }

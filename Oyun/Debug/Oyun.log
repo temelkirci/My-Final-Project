@@ -1,4 +1,4 @@
-﻿Build started 27.05.2017 00:18:20.
+﻿Build started 2.06.2017 15:17:05.
      1>Project "C:\Users\TEMEL\Documents\GitHub\Oyun-master\Oyun\Oyun.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt Enemy.cpp
@@ -25,4 +25,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:03.69
+Time Elapsed 00:00:01.58

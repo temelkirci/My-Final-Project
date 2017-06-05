@@ -17,7 +17,7 @@ public:
 	void arkaplan_yükle(string , SDL_Renderer*);
 	bool load(string , string , SDL_Renderer*);
 	void item_bilgi(SDL_Renderer* , string);
-	void draw_object(SDL_Renderer*); 
+	void draw_object(SDL_Renderer* , Uint32); 
 	void draw_texture(SDL_Renderer*); 
 	void draw_solid_texture(SDL_Renderer*);
 	void draw_camera(SDL_Renderer* , int* ,int* ,int ,int);
@@ -31,6 +31,12 @@ public:
 	int mermi_y;
 	string mevcut_mermi;
 	int z;
+	int map_row;
+	int map_column;
+	int map_x;
+	int map_y;
+
+	SDL_Rect map;
 private:
 	SDL_Surface* surface_background;
 	SDL_Texture* load_texture;

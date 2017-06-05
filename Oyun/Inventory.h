@@ -28,7 +28,7 @@ public:
 		SDL_Texture* , // eşya texture
 		int, // eşya sayısı
 		int , // esya çizim koordinatı x ekseni
-		int > // esya çizim koordinatı y ekseni
+		int> // esya çizim koordinatı y ekseni
 	envanter[18];
 	
 	map<string , SDL_Texture*> envanter_draw;

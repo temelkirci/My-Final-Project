@@ -20,14 +20,15 @@ void Sounds :: load_sounds(SDL_Renderer* render)
 						cout<<"Mix_OpenAudio yüklenemedi "<<Mix_GetError()<<endl;
 
 
-	tap = Mix_LoadMUS("assets/sounds/darth_vader.wav"); // menü müziði
+	tap = Mix_LoadMUS("assets/sounds/menu.ogg"); // menü müziði
 					
-	Mix_VolumeMusic(50);	
+	Mix_VolumeMusic(100);	
 	Mix_PlayMusic(tap, -1 );
 					
 	minigun_shot = Mix_LoadWAV("assets/sounds/GunShot2.wav");
 	shotgun_shot = Mix_LoadWAV("assets/sounds/shotgun.wav");
-	//rifle_shot = Mix_LoadWAV("assets/sounds/GunShot2.wav");
+	rifle_shot = Mix_LoadWAV("assets/sounds/rifle.wav");
 	walk = Mix_LoadWAV("assets/sounds/walk.wav");
-	
+	food = Mix_LoadWAV("assets/sounds/food.wav");
+	water_drink = Mix_LoadWAV("assets/sounds/drinking.wav");
 }

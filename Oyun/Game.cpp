@@ -59,19 +59,22 @@ bool Game :: init(const char* baþlýk , int x , int y , int yükseklik , int geniþ
 					// ARKAPLAN YÜKLEME BASLA
 					SDL_SetRenderDrawColor(renderer , 0 , 0 , 0 , 255);
 					SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
-
-					SDL_ShowCursor(SDL_ENABLE);
-
-					arkaplan_yükle("assets/desert.png", renderer);	
+					
 					fonts_yükle();
+					cout<<"fontlar yuklendi"<<endl;
 					load_inf(renderer);
+					cout<<"load_inf yuklendi"<<endl;
 					//MENÜ YÜKLE
 					load_buttonss(renderer);
-					
+					cout<<"butonlar yuklendi"<<endl;
+					death_information(renderer);
+					cout<<"olum penceresi yuklendi"<<endl;
 					// MÜZÝKLERÝ YÜKLE
 					load_sounds(renderer);
-					load_animation(renderer);
+					cout<<"sesler yuklendi"<<endl;
+					//load_animation(renderer);
 					enemy_load(renderer);
+					cout<<"dusmanlar yuklendi"<<endl;
 			}	
 			else
 			{

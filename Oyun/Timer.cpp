@@ -12,6 +12,11 @@ Timer :: Timer()
 	timer_textColor.b = 0;
 	timer_textColor.a = 150;
 
+	textColor.r = 130;
+	textColor.g = 30;
+	textColor.b = 30;
+	textColor.a = 255;
+
 	world.x = 0;
 	world.y = 0;
 	world.w = 6000;
@@ -88,7 +93,7 @@ void Timer :: gece_gündüz(SDL_Renderer* rend , Uint32 gercek_zaman)
 	
 }
 
-void Timer :: Write(SDL_Renderer* rend , Uint32 zaman , string text)
+void Timer :: Write(SDL_Renderer* rend , Uint32 zaman , string text , Uint32 delay_time)
 {
 	if(zaman != 0)
 	{
@@ -96,19 +101,22 @@ void Timer :: Write(SDL_Renderer* rend , Uint32 zaman , string text)
 		{
 			if((gecen_süre == 0)) // ilk zamaný sakla
 			{
-				gecen_süre = zaman + 3000; // yazý ekranda 3 sn görünecek
+				if(delay_time == -1)
+					gecen_süre = zaman + 1000;
+				else
+					gecen_süre = zaman + delay_time; // yazý ekranda delay_time kadar görünecek
 			}
 	
-			if((current_time <= gecen_süre)) // yazýnýn ekranda gözükme süresi
+			if((current_time < gecen_süre)) // yazýnýn ekranda gözükme süresi
 			{
 		
 			SDL_Rect yazi;
 				yazi.x = 250 + (425 - (text.length()*10)/2);
-				yazi.y = 0;
+				yazi.y = 5;
 				yazi.w = text.length()*10;
 				yazi.h = 25;
 
-				SDL_Surface* temel = TTF_RenderText_Blended( timer_font , text.c_str() , timer_textColor );
+				SDL_Surface* temel = TTF_RenderText_Blended( timer_font , text.c_str() , textColor );
 				yazii_texture = SDL_CreateTextureFromSurface(rend, temel );
 				SDL_FreeSurface(temel);
 
@@ -118,8 +126,16 @@ void Timer :: Write(SDL_Renderer* rend , Uint32 zaman , string text)
 			}
 			else
 			{
-				gecen_süre = 0;	
-				active = false;
+				if(delay_time == -1)
+				{
+					gecen_süre = zaman + 1000;
+					active = true;
+				}
+				else
+				{
+					gecen_süre = 0;	
+					active = false;
+				}
 			}
 		}
 	}
@@ -143,5 +159,5 @@ void Timer :: Write(SDL_Renderer* rend , Uint32 zaman , string text)
 
 void Timer :: fonts_yükle()
 {
-	timer_font = TTF_OpenFont("fonts/fontss.ttf", 100);
+	timer_font = TTF_OpenFont("fonts/fontss.ttf", 140);
 }
