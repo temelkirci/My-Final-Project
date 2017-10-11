@@ -4,6 +4,9 @@
 #include "SDL/SDL.h"
 #include <stdlib.h> // srand için
 #include <Time.h> // time için
+#include <GL/glew.h>
+#include <SDL/SDL_opengl.h>
+#include <GL/freeglut.h>
 
 using namespace std;
 
@@ -17,10 +20,11 @@ Render :: Render()
 	world_h = 1500;
 	z=0;
 
-	viewport.x = 1200;
-	viewport.y = 400;
-	viewport.w = 100;
-	viewport.h = 100;
+	viewport.x = 0;
+	viewport.y = 0;
+	viewport.w = 1100;
+	viewport.h = 750;
+	
 }
 
 Render :: ~Render()
@@ -31,18 +35,23 @@ Render :: ~Render()
 void Render :: render(SDL_Renderer* rend , bool menu)
 {	
 	start = SDL_GetTicks();
+	/*
 	srand ((unsigned int)time(NULL));
-	
+	//SDL_RenderSetViewport(rend , &viewport);
 	// EKRANI TEMÝZLE
 	SDL_RenderClear(rend); 
 	
 	// BACKGROUND
 	draw_camera(rend, &xpoz , &ypoz , 1350, 700);
 
+	drawAirplane(rend , camera.x , camera.y , current_time);
+
+	if(creature_health > 0)
+		drawCreature(rend , camera.x , camera.y , current_time);
 	// ITEMS
 
 		// toplanabilir nesneleri çizeceðiz
-		draw_object(rend , current_time); 
+		draw_object(rend , current_time ); 
 
 		// toplanamaz ve içinden geçilebilir nesneleri çizeceðiz -> mermi , su , taþ , ot , diðer yer þekilleri
 		draw_texture(rend);
@@ -50,23 +59,22 @@ void Render :: render(SDL_Renderer* rend , bool menu)
 		// toplanamaz ve içinden geçilemez nesneleri çizeceðiz -> dað , aðaç kaya
 		draw_solid_texture(rend);
 
+		draw_bullet(rend);
+		
 	if(health > 0)
 	{
-		draw_bullet(rend); // mermi çizer
-
-		barbaros_çiz(rend , barbaros_guns , &xpoz , &ypoz , camera.x , camera.y , barbaros_durum , current_time); // ana karakteri çiz
-	}
-
-	if(health > 0)
-	{
-		draw_enemy(rend , current_time , camera.x , camera.y);
-		draw_trex(rend , current_time , &xpoz , &ypoz , angle , camera.x , camera.y);
-	
 		gece_gündüz(rend , current_time); // gece gündüz döngüsü
 	}
 
-		barbaros_güncelle(rend , current_time); // susuzluk durumu , saðlýk durumu , mermi durumu , açlýk durumunu güncelle
+	if(health > 0)
+	{		
+		barbaros_çiz(rend , barbaros_guns , &xpoz , &ypoz , camera.x , camera.y , barbaros_durum , current_time); // ana karakteri çiz
+	}
 
+	barbaros_güncelle(rend , current_time); // susuzluk durumu , saðlýk durumu , mermi durumu , açlýk durumunu güncelle
+
+	//SDL_RenderSetScale(rend , 0.5 , 0.5);
+	
 	// Karakter bilgilerini çiz ve güncelle
 	if(barbaros_guns == "handgun")
 	{
@@ -107,21 +115,29 @@ void Render :: render(SDL_Renderer* rend , bool menu)
 		Envanter_Çiz("9_envanter", 387 , 670 , 575 , 50 , rend); // 9 birimlik envanter çizer
 	
 	Envanter_Güncelle(rend); // envanterdeki tüm nesneleri çizer
+	Envanter(rend);
+
 	
-	/*
-	// calculate FPS  
-	if(deltaclock > 0)
-		currentFPS = 1000 / deltaclock;
-	// write FPS
-	if((current_time / 1000)%2 == 0)
-		cout<<endl<<currentFPS<<endl;
+	//SDL_RenderSetLogicalSize(rend , 300 , 300);
+	informationItem(rend);
+	//tank(rend , camera.x , camera.y);
+	SDL_RenderCopyEx(rend, map_texture[current_cursor] , NULL , &solid_mouse , 0 , 0 , SDL_FLIP_NONE);
+	// EKRANI GÜNCELLE
 	*/
-	
+	SDL_RenderPresent(rend); 
+
 	// Toplam süreyi hesapla
 	deltaclock = SDL_GetTicks() - start;
 	total = total + deltaclock;
-	current_time = current_time + deltaclock;
-	SDL_RenderCopyEx(rend, map_texture[current_cursor] , NULL , &solid_mouse , 0 , 0 , SDL_FLIP_NONE);
-	// EKRANI GÜNCELLE
-	SDL_RenderPresent(rend); 
+	//current_time = current_time + deltaclock;
+
+	// calculate FPS  
+	//if(deltaclock > 0.0)
+		currentFPS = 1000.0 / deltaclock;
+	// write FPS
+	//if((current_time / 1000.0)%2 == 0)
+	//{
+		SDL_SetWindowTitle(win , (to_string(int(currentFPS))).c_str());
+	//}
+	cout<<deltaclock<<endl;
 }

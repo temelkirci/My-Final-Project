@@ -12,11 +12,11 @@ public:
 	Menu();
 	~Menu();
 
-	void menu_yukle(string , SDL_Renderer*);
+	void menu_yukle(char* , SDL_Renderer*);
 	void menu_goster(SDL_Renderer* , int , int , int , int);
-	bool load_buttons(string , string , SDL_Renderer*);
+	bool loadPathMenu(char* , string , SDL_Renderer*);
 	bool klavye_mouse(bool);
-	void load_buttonss(SDL_Renderer*);
+	void loadMenu(SDL_Renderer*);
 	
 	TTF_Font* menu_font;
 	Mix_Chunk* click_x;

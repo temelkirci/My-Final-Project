@@ -11,17 +11,19 @@ public:
 	
 	void render(SDL_Renderer* , bool);
 
-	Uint32 deltaclock;
+	double deltaclock;
 	
-	Uint32 currentFPS;
-	Uint32 oldFPS;
+	double currentFPS;
+	double oldFPS;
 	SDL_Rect viewport;
+	SDL_Rect minimap;
+
 	int world_x;
 	int world_y;
 	int world_w;
 	int world_h;
-	
+	SDL_Window* win;
 private:
-	Uint32 start;
+	double start;
 	
 };

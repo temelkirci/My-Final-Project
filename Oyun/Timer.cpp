@@ -47,7 +47,7 @@ void Timer :: gece_gündüz(SDL_Renderer* rend , Uint32 gercek_zaman)
 {
 	if(toplam_time == 0)
 	{
-		toplam_time = gercek_zaman + 1000;
+		toplam_time = gercek_zaman + 100;
 	}
 
 	if((current_time <= toplam_time)) // gece gündüz döngüsü 1 sn
@@ -157,7 +157,7 @@ void Timer :: Write(SDL_Renderer* rend , Uint32 zaman , string text , Uint32 del
 	}
 }
 
-void Timer :: fonts_yükle()
+void Timer :: loadFonts()
 {
 	timer_font = TTF_OpenFont("fonts/fontss.ttf", 140);
 }

@@ -3,19 +3,18 @@
 #include <string>
 #include <map>
 #include "Timer.h"
-#include "Tools.h"
-#include "Animation.h"
+
 
 using namespace std;
 const int MAX_HEALTH = 100;
 
-class Player : public Timer , public Tools , public Animation
+class Player : public Timer 
 {
 public:
 	Player();
 	~Player();
 
-	bool barbaros_yukle_weapon(string , SDL_Renderer*,char*);
+	bool barbaros_yukle_weapon(char* , SDL_Renderer*,char*);
 
 	void barbaros_çiz(SDL_Renderer* , string , int* , int* , int , int ,string , Uint32);
 	void barbaros_güncelle(SDL_Renderer* , Uint32);
@@ -70,7 +69,7 @@ public:
 	Uint32 total_game_time; // toplam oyun süresi (dakika cinsinden)
 	
 	//
-
+	int knife_time;
 	Uint32 trex_attack_time;
 	SDL_Color playerColor;
 	SDL_Rect player_barbaros;

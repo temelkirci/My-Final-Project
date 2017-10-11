@@ -1,10 +1,12 @@
 #include <SDL/SDL.h> 
-#include <SDL/SDL_image.h>
-#include "SDL/SDL_ttf.h"
-#include "SDL/SDL_mixer.h"
 #include <iostream>
 #include <string>
 #include "Game.h"
+#include <GL/glew.h>
+#include <SDL/SDL_opengl.h>
+
+#include <GL/freeglut.h>
+
 
 #define SCREEN_WÝDTH  1366
 #define SCREEN_HEIGHT  768
@@ -15,6 +17,11 @@ using namespace std;
 
 int main(int argc, char** argv) 
 {
+	SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL,true);
+
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+
 	Game* oyun = new Game(); // Game sýnýfýndan oyun nesnesi oluþturuyoruz
 
 	oyun->init("TEMEL KIRCI", 10 , 30 , SCREEN_WÝDTH , SCREEN_HEIGHT , SDL_WINDOW_RESIZABLE); // temel bileþenleri yükle
@@ -44,7 +51,7 @@ int main(int argc, char** argv)
 				oyun->render(oyun->renderer , oyun->oyun_baslat); // Çizim olaylarý		
 			}
 		}
-
+		
 	SDL_Quit(); // Tüm SDL sistemlerini kapat
 	delete oyun; 
 	system("pause");

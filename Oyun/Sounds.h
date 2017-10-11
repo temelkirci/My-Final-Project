@@ -24,7 +24,8 @@ public:
 	Mix_Chunk *soup;
 	Mix_Chunk *food;
 
-	void load_sounds(SDL_Renderer*);
+	void loadSounds(SDL_Renderer*);
+
 private:
 	
 };

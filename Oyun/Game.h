@@ -17,7 +17,7 @@ public:
 	bool init(const char*,int,int,int,int,int);
 	SDL_Renderer* renderer;
 	Mix_Music *back;
-
+	SDL_GLContext glContext;
 private:
 	// DEÐÝÞKENLER
 	

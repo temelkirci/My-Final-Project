@@ -66,11 +66,11 @@ Menu :: ~Menu()
 	menu_texture = NULL ;
 }
 
-void Menu :: menu_yukle(string menü_yolu,SDL_Renderer* menu_render )
+void Menu :: menu_yukle(char* menü_yolu,SDL_Renderer* menu_render )
 {
 	menu_font = TTF_OpenFont("fonts/fontss.ttf", 100);
 
-	menu_surface = IMG_Load(menü_yolu.c_str());
+	menu_surface = IMG_Load(menü_yolu);
 	if(menu_surface == 0)
 	{
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR , "Menu" , "Menü yuklenemedi..!" , NULL);
@@ -80,9 +80,9 @@ void Menu :: menu_yukle(string menü_yolu,SDL_Renderer* menu_render )
 	SDL_FreeSurface(menu_surface);
 }
 
-bool Menu :: load_buttons(string dosya_adi , string texture_adi , SDL_Renderer* texture_render)
+bool Menu :: loadPathMenu(char* dosya_adi , string texture_adi , SDL_Renderer* texture_render)
 {
-	surface_buttons = IMG_Load(dosya_adi.c_str());
+	surface_buttons = IMG_Load(dosya_adi);
 	
 	if(surface_buttons == 0)
 	{
@@ -187,14 +187,14 @@ bool Menu :: klavye_mouse(bool baslat)
 	return baslat;
 }
 
-void Menu :: load_buttonss(SDL_Renderer* renderer)
+void Menu :: loadMenu(SDL_Renderer* renderer)
 {
 	menu_yukle("assets/menu.jpg", renderer);
-	load_buttons("assets/buttons/START.png", "START",renderer);
-	load_buttons("assets/buttons/SAVE.png", "SAVE",renderer);
-	load_buttons("assets/buttons/LOAD.png", "LOAD",renderer);
-	load_buttons("assets/buttons/CREDITS.png", "CREDITS",renderer);
-	load_buttons("assets/buttons/EXIT.png", "EXIT",renderer);
-	load_buttons("assets/Sepia.png", "sepia", renderer);
+	loadPathMenu("assets/buttons/START.png", "START",renderer);
+	loadPathMenu("assets/buttons/SAVE.png", "SAVE",renderer);
+	loadPathMenu("assets/buttons/LOAD.png", "LOAD",renderer);
+	loadPathMenu("assets/buttons/CREDITS.png", "CREDITS",renderer);
+	loadPathMenu("assets/buttons/EXIT.png", "EXIT",renderer);
+	loadPathMenu("assets/Sepia.png", "sepia", renderer);
 	
 }

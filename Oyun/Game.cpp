@@ -4,6 +4,7 @@
 #include "SDL/SDL_mixer.h"
 #include <string>
 #include <SDL/SDL_image.h>
+
 #include "Game.h"
 
 using namespace std;
@@ -41,16 +42,19 @@ bool Game :: init(const char* baþlýk , int x , int y , int yükseklik , int geniþ
 		if(SDL_Init(SDL_INIT_EVERYTHING) == 0) // SDL hatasýz yüklenirse
 		{
 			pencere = SDL_CreateWindow(baþlýk , x , y , yükseklik , geniþlik , bayraklar); // Pencere oluþtur
+			win = pencere;
 			
-			IMG_Init(IMG_INIT_JPG || IMG_INIT_PNG); // Resimleri aktif et
-			TTF_Init(); // Yazi fontlarýný aktif et
-			Mix_Init(MIX_INIT_MP3 || MIX_INIT_OGG); // Sesleri aktif et
-
+			glContext = SDL_GL_CreateContext(pencere);
+				
 			if(pencere == NULL )
 			{
 				SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR , "Oyun" , "Pencere Olusturma Hatasi" , NULL);
 				exit(0);
 			}
+
+			IMG_Init(IMG_INIT_JPG || IMG_INIT_PNG); // Resimleri aktif et
+			TTF_Init(); // Yazi fontlarýný aktif et
+			Mix_Init(MIX_INIT_MP3 || MIX_INIT_OGG); // Sesleri aktif et		
 			
 			if(pencere != 0 ) // Pencere oluþursa renderle
 			{	
@@ -60,21 +64,22 @@ bool Game :: init(const char* baþlýk , int x , int y , int yükseklik , int geniþ
 					SDL_SetRenderDrawColor(renderer , 0 , 0 , 0 , 255);
 					SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 					
-					fonts_yükle();
-					cout<<"fontlar yuklendi"<<endl;
+					
+					loadFonts();
+					loadInventory(renderer);
 					load_inf(renderer);
-					cout<<"load_inf yuklendi"<<endl;
+					
 					//MENÜ YÜKLE
-					load_buttonss(renderer);
-					cout<<"butonlar yuklendi"<<endl;
+					loadMenu(renderer);
+					
 					death_information(renderer);
-					cout<<"olum penceresi yuklendi"<<endl;
+					
 					// MÜZÝKLERÝ YÜKLE
-					load_sounds(renderer);
-					cout<<"sesler yuklendi"<<endl;
+					loadSounds(renderer);
+					
 					//load_animation(renderer);
 					enemy_load(renderer);
-					cout<<"dusmanlar yuklendi"<<endl;
+					
 			}	
 			else
 			{

@@ -11,7 +11,7 @@ Fonts :: Fonts()
 
 	backColor.r = 0;
 	backColor.g = 0;
-	backColor.b = 0;
+	backColor.b = 255;
 	backColor.a = 150;
 
 	backRect.x = 0;
@@ -36,9 +36,9 @@ Fonts :: ~Fonts()
 	TTF_CloseFont(Font); // Yazi fontunu kapatýr
 }
 
-int Fonts :: Resim(string resim_dosya, string resim_adi, SDL_Renderer* render)
+int Fonts :: Resim(char* resim_dosya, string resim_adi, SDL_Renderer* render)
 {
-	SDL_Surface * resim_surface = IMG_Load(resim_dosya.c_str());
+	SDL_Surface * resim_surface = IMG_Load(resim_dosya);
 	if(resim_surface == 0)
 	{
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR , "Fonts" , "Sol üst resimler yuklenemedi..!" , NULL);
@@ -68,7 +68,7 @@ void Fonts :: barbaros_status(SDL_Renderer* render_font ,
 
 	//SDL_SetRenderDrawColor(render_font , 220 , 220 , 220 , 200); // gri arkaplan
 	//SDL_RenderFillRect(render_font, &arkaPlan);
-
+	
 	for(int i=0; i<4 ; i++)
 	{
 		SDL_Rect yazi;

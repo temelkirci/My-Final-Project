@@ -8,17 +8,18 @@ class Timer : public Enemy
 public:
 	Timer();
 	~Timer();
-
+	SDL_Rect tank_rect;
+	bool emel;
 	Uint32 süre_hesapla(Uint32,Uint32);
 	void Write(SDL_Renderer*  , Uint32 , string , Uint32);
-	void fonts_yükle();
+	void loadFonts();
 	void gece_gündüz(SDL_Renderer* , Uint32);
 	int day;
 	Uint8 real_time;
 	bool night;
 	Uint32 toplam_time;
 	Uint32 first_time;
-	Uint32 current_time;
+	double current_time;
 	Uint32 oldTime;
 	SDL_Texture* yazii_texture;
 	TTF_Font* timer_font;

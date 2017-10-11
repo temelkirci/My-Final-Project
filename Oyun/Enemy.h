@@ -13,47 +13,22 @@ public:
 	Enemy();
 	~Enemy();
 
-	string enemy_array[16];
-	string trex_array[5];
-	string trex_direction;
-	int index;
+	//Uint32 delay_time;
+	//Uint32 current_time;
+	Uint32 airplane_time;
+	SDL_Rect airplane_rect;
 
-	string trex_status;
+	Uint32 creature_time;
+	SDL_Rect creature_rect;
+	int creature_health;
+	void drawHelicopter(SDL_Renderer*);
+	
+	void drawAirplane(SDL_Renderer* , int , int , Uint32);
+	void drawCreature(SDL_Renderer* , int , int , Uint32);
 
-	double trex_health;
-	int trex_x;
-	int trex_y;
-	SDL_Rect trex_rect;
-	Mix_Chunk *trex_roar;
-	double walk_angle;
-	double real_angle;
-
-	double x_dis;
-	double y_dis;
-	double trex_tanjant;
-
-	int meteor_health;
-	int meteor_range;
-	int meteor_x;
-	int meteor_y;
-	int index_trex;
-	int trex_speed;
-
-	Uint32 delay_time;
-	Uint32 current_time;
-
-	Uint32 trex_current_time;
-	Uint32 trex_delay_time;
-	Uint32 trex_dead_time;
-	Uint32 trex_walk_time;
-	Uint32 trex_walk_delay_time;
-
-	bool trex_dead;
-	SDL_Rect meteor_rect;
 	void enemy_load(SDL_Renderer*);
-	void load_enemy(string , char* , SDL_Renderer*);
-	void draw_enemy(SDL_Renderer* , Uint32 , int , int);
-	void draw_trex(SDL_Renderer* , Uint32 , int* , int* , double , int , int);
+	void load_enemy(char* , char* , SDL_Renderer*);
+	
 private:
 	map<string , SDL_Texture*> enemy_map;
 };

@@ -1,4 +1,4 @@
-#include "SDL/SDL.h"
+ï»¿#include "SDL/SDL.h"
 #include <SDL/SDL_image.h>
 #include "Player.h"
 #include "SDL/SDL_ttf.h"
@@ -44,7 +44,7 @@ Player :: Player()
 
 	playerColor.r = 0;
 	playerColor.g = 0;
-	playerColor.b = 0;
+	playerColor.b = 255;
 	playerColor.a = 150;
 
 	playerPoint.x = 50;
@@ -58,22 +58,22 @@ Player :: Player()
 	trex_attack_time = 0;
 	trex_attack = true;
 	active_bullet = false;
-	barbaros_durum = "move"; // move olarak baþlayacak
-	barbaros_guns = "knife"; // barbaros elinde knife ile baþlayacak
+	barbaros_durum = "move"; // move olarak baÃ¾layacak
+	barbaros_guns = "rifle"; // barbaros elinde knife ile baÃ¾layacak
 }
 
 Player :: ~Player()
 {
 	SDL_FreeSurface(surface_barbaros);
 	SDL_DestroyTexture(texture_barbaros);
-
+	
 	surface_barbaros = NULL ;
 	texture_barbaros = NULL ;
 }
 
-bool Player :: barbaros_yukle_weapon(string dosya_yolu , SDL_Renderer* rend , char* barbaros_parca)
+bool Player :: barbaros_yukle_weapon(char* dosya_yolu , SDL_Renderer* rend , char* barbaros_parca)
 {
-	surface_barbaros = IMG_Load(dosya_yolu.c_str());
+	surface_barbaros = IMG_Load(dosya_yolu);
 	if(surface_barbaros == 0)
 	{
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR , "Oyun" , "barbaros_yukle_weapon yuklenemedi..!" , NULL);
@@ -94,7 +94,7 @@ bool Player :: barbaros_yukle_weapon(string dosya_yolu , SDL_Renderer* rend , ch
 void Player :: death_information(SDL_Renderer* ren)
 {
 	SDL_Surface* surface_cr = IMG_Load("assets/bilgi_kutusu.jpg");
-	SDL_Texture* texture_cr = SDL_CreateTextureFromSurface(ren , surface_cr);	// yüzeyi renderleyerek texture oluþtur	
+	SDL_Texture* texture_cr = SDL_CreateTextureFromSurface(ren , surface_cr);	// yÃ¼zeyi renderleyerek texture oluÅŸtur	
 	SDL_FreeSurface(surface_cr);
 	
 	dead_texture = texture_cr;
@@ -115,9 +115,9 @@ void Player :: player_information(SDL_Renderer* render_barbaros)
 
 			// DAY
 			string day_text = to_string(day);
-			string gün = "Day : " + day_text;
-			day_yazi.w = 10*(gün.length());
-			daySurface = TTF_RenderText_Blended( timer_font , gün.c_str() , playerColor );
+			string gÃ¼n = "Day : " + day_text;
+			day_yazi.w = 10*(gÃ¼n.length());
+			daySurface = TTF_RenderText_Blended( timer_font , gÃ¼n.c_str() , playerColor );
 			dayTexture = SDL_CreateTextureFromSurface( render_barbaros, daySurface );
 
 			SDL_RenderCopyEx(render_barbaros , dayTexture , NULL , &day_yazi , 0 , 0 , SDL_FLIP_NONE);
@@ -146,7 +146,7 @@ void Player :: player_information(SDL_Renderer* render_barbaros)
 	
 }
 
-void Player :: barbaros_çiz(SDL_Renderer* render_barbaros , string barbaros_gun , int *x , int *y , int xcamera , int ycamera , string barbaros_stat , Uint32 süre)
+void Player :: barbaros_Ã§iz(SDL_Renderer* render_barbaros , string barbaros_gun , int *x , int *y , int xcamera , int ycamera , string barbaros_stat , Uint32 sÃ¼re)
 {
 	
 	player_barbaros.x=(*x)+xcamera;
@@ -154,46 +154,8 @@ void Player :: barbaros_çiz(SDL_Renderer* render_barbaros , string barbaros_gun 
 	player_barbaros.w=100;
 	player_barbaros.h=100;
 	
-	if(SDL_HasIntersection(&player_barbaros , &meteor_rect))
-	{
-		health = health - 20;
-		meteor_x = -100;
-		meteor_y = rand() % 500;
-	}
-
-	if(SDL_HasIntersection(&player_barbaros , &trex_rect) && (barbaros_stat == "attack" && barbaros_gun == "knife"))
-	{
-		trex_health = trex_health - 0.1;
-	}
-
-	if(SDL_HasIntersection(&player_barbaros , &trex_rect))
-	{
-		trex_speed = 0;
-		if(trex_attack_time == 0)
-			trex_attack_time = süre + 1000;
-
-		if(süre <= trex_attack_time)
-		{
-			if(trex_attack)
-			{
-				health = health - 1;
-				trex_attack = false;
-			}
-		}
-		else
-		{
-			trex_attack_time = 0;
-			trex_attack = true;
-		}
-	}
-	else
-	{
-		trex_speed = 10;
-		trex_attack_time = 0;
-		trex_attack = true;	
-	}
 	
-	// Y EKSENÝ ÝÇÝN SINIR BELÝRLEME
+	// Y EKSENÄ° Ä°Ã‡Ä°N SINIR BELÄ°RLEME
 	if(player_barbaros.y <= 0)
 	{
 		player_barbaros.y=0;
@@ -255,7 +217,7 @@ void Player :: barbaros_çiz(SDL_Renderer* render_barbaros , string barbaros_gun 
 	{
 		if(player_time == 0 && barbaros_durum == "move")
 		{
-			player_time = 300 + süre;
+			player_time = 300 + sÃ¼re;
 		}
 		
 		if(current_time <= player_time && barbaros_durum == "move") // 50 ms sayarsa
@@ -290,7 +252,7 @@ void Player :: barbaros_çiz(SDL_Renderer* render_barbaros , string barbaros_gun 
 		
 		if(player_time == 0 && barbaros_durum == "attack")
 		{
-			player_time = 100 + süre;
+			player_time = 100 + sÃ¼re;
 		}
 		
 		if(current_time <= player_time && barbaros_durum == "attack") // 50 ms sayarsa
@@ -326,7 +288,7 @@ void Player :: barbaros_çiz(SDL_Renderer* render_barbaros , string barbaros_gun 
 		
 		if(player_time == 0 )
 		{
-			player_time = 50 + süre;
+			player_time = 50 + sÃ¼re;
 		}
 		
 		if(current_time <= player_time && barbaros_durum == "move") // 100 ms sayarsa
@@ -423,7 +385,7 @@ void Player :: barbaros_çiz(SDL_Renderer* render_barbaros , string barbaros_gun 
 		
 		if(player_time == 0)
 		{
-			player_time = 100 + süre;
+			player_time = 100 + sÃ¼re;
 		}
 		
 		if(current_time <= player_time) // 100 ms sayarsa
@@ -450,7 +412,7 @@ void Player :: barbaros_çiz(SDL_Renderer* render_barbaros , string barbaros_gun 
 	{
 		if(player_time == 0 )
 		{
-			player_time = 200 + süre;
+			player_time = 200 + sÃ¼re;
 		}
 		
 		if(current_time <= player_time) // 200 ms sayarsa
@@ -485,7 +447,7 @@ void Player :: barbaros_çiz(SDL_Renderer* render_barbaros , string barbaros_gun 
 	
 		if(player_time == 0)
 		{
-			player_time = 200 + süre;
+			player_time = 200 + sÃ¼re;
 		}
 		
 		if(current_time <= player_time) // 200 ms sayarsa
@@ -512,7 +474,7 @@ void Player :: barbaros_çiz(SDL_Renderer* render_barbaros , string barbaros_gun 
 	{
 		if(player_time == 0)
 		{
-			player_time = 200 + süre;
+			player_time = 200 + sÃ¼re;
 		}
 		
 		if(current_time <= player_time) // 200 ms sayarsa
@@ -548,7 +510,7 @@ void Player :: barbaros_çiz(SDL_Renderer* render_barbaros , string barbaros_gun 
 		
 		if(player_time == 0)
 		{
-			player_time = 100 + süre;
+			player_time = 100 + sÃ¼re;
 		}
 		
 		if(current_time <= player_time) // 100 ms sayarsa
@@ -575,7 +537,7 @@ void Player :: barbaros_çiz(SDL_Renderer* render_barbaros , string barbaros_gun 
 	{
 		if(player_time == 0)
 		{
-			player_time = 200 + süre;
+			player_time = 200 + sÃ¼re;
 		}
 		
 		if(current_time <= player_time) // 100 ms sayarsa
@@ -608,7 +570,7 @@ void Player :: barbaros_çiz(SDL_Renderer* render_barbaros , string barbaros_gun 
 
 }
 
-void Player :: barbaros_güncelle(SDL_Renderer* render , Uint32 time_barbaros)
+void Player :: barbaros_gÃ¼ncelle(SDL_Renderer* render , Uint32 time_barbaros)
 {
 	if(health <= 0)
 	{
@@ -646,7 +608,7 @@ void Player :: barbaros_güncelle(SDL_Renderer* render , Uint32 time_barbaros)
 			hunger = 100;
 
 		if(hunger_time == 0)
-			hunger_time = time_barbaros + 7000; // açlýk her 7 saniyede 1 azalacak
+			hunger_time = time_barbaros + 7000; // aÃ§lÃ½k her 7 saniyede 1 azalacak
 
 		if(thirsty_time == 0)
 			thirsty_time = time_barbaros + 5000; // susuzluk her 5 saniyede 1 azalacak
@@ -681,11 +643,11 @@ void Player :: barbaros_güncelle(SDL_Renderer* render , Uint32 time_barbaros)
 		}
 		else if((rifle_mermi <= 0) && (barbaros_guns == "rifle"))
 		{		
-			Write(render , current_time , "Tüfek mermisi bitti" , 3000);
+			Write(render , current_time , "TÃ¼fek mermisi bitti" , 3000);
 		}
 		else if((shotgun_mermi <= 0) && (barbaros_guns == "shotgun"))
 		{		
-			Write(render , current_time , "Pompalý tüfek mermisi bitti" , 3000);
+			Write(render , current_time , "Pompali tÃ¼fek mermisi bitti" , 3000);
 		}
 
 		
@@ -694,7 +656,7 @@ void Player :: barbaros_güncelle(SDL_Renderer* render , Uint32 time_barbaros)
                 
 void Player :: load_barbaros(SDL_Renderer* renderer)
 {
-	
+
 	barbaros_yukle_weapon("assets/barbaros/flashlight/move/survivor-move_flashlight_0.png" ,renderer, "move_flashlight_0");
 	barbaros_yukle_weapon("assets/barbaros/flashlight/move/survivor-move_flashlight_5.png" ,renderer, "move_flashlight_1");
 	barbaros_yukle_weapon("assets/barbaros/flashlight/move/survivor-move_flashlight_10.png" ,renderer, "move_flashlight_2");

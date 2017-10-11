@@ -1,4 +1,4 @@
-#include <iostream>
+ï»¿#include <iostream>
 #include "Sounds.h"
 #include "SDL/SDL.h"
 
@@ -14,13 +14,13 @@ Sounds::~Sounds()
 
 }
 
-void Sounds :: load_sounds(SDL_Renderer* render)
+void Sounds :: loadSounds(SDL_Renderer* render)
 {
 	if(Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, 3072) < 0 )
-						cout<<"Mix_OpenAudio yüklenemedi "<<Mix_GetError()<<endl;
+						cout<<"Mix_OpenAudio yÃ¼klenemedi "<<Mix_GetError()<<endl;
 
 
-	tap = Mix_LoadMUS("assets/sounds/menu.ogg"); // menü müziði
+	tap = Mix_LoadMUS("assets/sounds/menu.ogg"); // menÃ¼ mÃ¼ziÃ°i
 					
 	Mix_VolumeMusic(100);	
 	Mix_PlayMusic(tap, -1 );

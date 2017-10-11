@@ -40,9 +40,9 @@ Texture :: ~Texture()
 }
 
 
-bool Texture :: load(string dosya_adi , string texture_adi , SDL_Renderer* texture_render)
+bool Texture :: load(char* dosya_adi , string texture_adi , SDL_Renderer* texture_render)
 {
-	load_surface = IMG_Load(dosya_adi.c_str());
+	load_surface = IMG_Load(dosya_adi);
 	
 	if(load_surface == 0)
 	{
@@ -108,8 +108,9 @@ void Texture :: draw_camera(SDL_Renderer* ren , int* pozx, int* pozy, int genisl
 				camera.x = -((*pozx) - 625);
 			}
 			
-			
-	//cout<<camera.x<<endl<<camera.y<<endl<<endl;
+			//SDL_RenderCopyEx(ren, texture_background , NULL , &camera , 0 , 0 , SDL_FLIP_NONE);
+	
+	
 	if(camera.x >= 0 && camera.x <= 625)
 	{
 		map_x = -300;
@@ -127,6 +128,8 @@ void Texture :: draw_camera(SDL_Renderer* ren , int* pozx, int* pozy, int genisl
 	{
 		map_y = ((-camera.y) / 200 ) * 200;
 	}
+	
+	//SDL_RenderSetClipRect(ren , &map);
 
 	for(int i=0;i<map_row;i++) // satır = 5
 	{
@@ -145,6 +148,7 @@ void Texture :: draw_camera(SDL_Renderer* ren , int* pozx, int* pozy, int genisl
 	map_x = ((-camera.x) / 300 - 1) * 300;
 	map_y = ((-camera.y) / 200 ) * 200 ;
 	
+	
 }
 
 void Texture :: item_bilgi(SDL_Renderer* ren , string inf_text)
@@ -152,8 +156,6 @@ void Texture :: item_bilgi(SDL_Renderer* ren , string inf_text)
 	Write(ren , 0 , inf_text , 3000);
 }
 
-// toplanılabilir , içinden geçilebilir nesneleri çizer
-// silahlar , yiyecekler , içecekler , mermi , çanta
 void Texture :: draw_object(SDL_Renderer* texture_render , Uint32 collectible_time) 
 {
 	SDL_Rect hedef_texture;
@@ -338,68 +340,15 @@ void Texture :: draw_texture(SDL_Renderer* texture_render)
 
 			if(Uncollectible_Items[i].item_name == "bullet_rifle" || Uncollectible_Items[i].item_name == "bullet_handgun" || Uncollectible_Items[i].item_name == "bullet_shotgun")
 			{
-				if(SDL_HasIntersection(&hedef_texture , &meteor_rect))
+				if((SDL_HasIntersection(&creature_rect , &Uncollectible_Items[i].item_rect)))
 				{
-					if(Uncollectible_Items[i].item_name == "bullet_rifle")
-					{
-						meteor_health = meteor_health - 70;
-						active_bullet = false;
-						z = 0;
-						Uncollectible_Items[99].item_active = false;
-					}
-					else if(Uncollectible_Items[i].item_name == "bullet_handgun")
-					{
-						meteor_health = meteor_health - 40;
-						active_bullet = false;
-						z = 0;
-						Uncollectible_Items[98].item_active = false;
-					}
-					else if(Uncollectible_Items[i].item_name == "bullet_shotgun")
-					{
-						meteor_health = meteor_health - 100;
-						active_bullet = false;
-						z = 0;
-						Uncollectible_Items[97].item_active = false;
-					}
+					creature_health -=20;
+					z = 0;
+					Uncollectible_Items[i].item_active = false;
 				}
-
-				else if(SDL_HasIntersection(&hedef_texture , &trex_rect))
-				{
-					if(Uncollectible_Items[i].item_name == "bullet_rifle")
-					{
-						trex_health = trex_health - 60.0;
-						trex_dead = true;
-						
-						active_bullet = false;
-						z = 0;
-						Uncollectible_Items[99].item_active = false;
-					}
-					else if(Uncollectible_Items[i].item_name == "bullet_handgun")
-					{
-						trex_health = trex_health - 40.0;
-						trex_dead = true;
-						
-						active_bullet = false;
-						z = 0;
-						Uncollectible_Items[98].item_active = false;
-					}
-					else if(Uncollectible_Items[i].item_name == "bullet_shotgun")
-					{
-						trex_health = trex_health - 100.0;
-						trex_dead = true;
-						
-						active_bullet = false;
-						z = 0;
-						Uncollectible_Items[97].item_active = false;
-					}
-				}
-
+				if(Uncollectible_Items[i].item_active)
+					SDL_RenderCopyEx(texture_render , map_texture[Uncollectible_Items[i].item_name] , NULL , &hedef_texture , bullet_angle , 0 , SDL_FLIP_NONE);
 				
-				else
-				{
-					if(Uncollectible_Items[99].item_active || Uncollectible_Items[98].item_active || Uncollectible_Items[97].item_active)
-						SDL_RenderCopyEx(texture_render , map_texture[Uncollectible_Items[i].item_name] , NULL , &hedef_texture , bullet_angle , 0 , SDL_FLIP_NONE);
-				}
 			}
 			else
 			{
@@ -413,9 +362,9 @@ void Texture :: draw_texture(SDL_Renderer* texture_render)
 	}
 }
 
-void Texture :: arkaplan_yükle(string dosya_yolu , SDL_Renderer* render_arkaplan)
+void Texture :: arkaplan_yükle(char* dosya_yolu , SDL_Renderer* render_arkaplan)
 {
-	surface_background = IMG_Load(dosya_yolu.c_str());
+	surface_background = IMG_Load(dosya_yolu);
 	if(surface_background == 0)
 	{
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR , "Texture" , "arkaplan yuklenemedi..!" , NULL);
@@ -424,7 +373,6 @@ void Texture :: arkaplan_yükle(string dosya_yolu , SDL_Renderer* render_arkapla
 	texture_background = SDL_CreateTextureFromSurface(render_arkaplan , surface_background);
 	SDL_FreeSurface(surface_background);
 }
-
 
 void Texture :: draw_bullet(SDL_Renderer* rend)
 {
@@ -440,56 +388,56 @@ void Texture :: draw_bullet(SDL_Renderer* rend)
 
 						if(bullet_angle >= 0 && bullet_angle <90)
 						{
-							Uncollectible_Items[99].item_rect.x = xpoz + 90 - (int)(30*cos((bullet_angle*PI)/180));
-							Uncollectible_Items[99].item_rect.y = ypoz + 70 - (int)(30*sin((bullet_angle*PI)/180));
+							Uncollectible_Items[9].item_rect.x = xpoz + 90 - (int)(30*cos((bullet_angle*PI)/180));
+							Uncollectible_Items[9].item_rect.y = ypoz + 70 - (int)(30*sin((bullet_angle*PI)/180));
 						}
 						else if(bullet_angle >= 90 && bullet_angle <180)
 						{
-							Uncollectible_Items[99].item_rect.x = xpoz + 20 + (int)(30*cos((90-bullet_angle*PI)/180));
-							Uncollectible_Items[99].item_rect.y = ypoz + 70 - (int)(30*sin((90-bullet_angle*PI)/180));
+							Uncollectible_Items[9].item_rect.x = xpoz + 20 + (int)(30*cos((90-bullet_angle*PI)/180));
+							Uncollectible_Items[9].item_rect.y = ypoz + 70 - (int)(30*sin((90-bullet_angle*PI)/180));
 						}
 						else if(bullet_angle >= 180 && bullet_angle <270)
 						{
-							Uncollectible_Items[99].item_rect.x = xpoz + 20 + (int)(30*cos((180-bullet_angle*PI)/180));
-							Uncollectible_Items[99].item_rect.y = ypoz + 25 + (int)(30*sin((180-bullet_angle*PI)/180));
+							Uncollectible_Items[9].item_rect.x = xpoz + 20 + (int)(30*cos((180-bullet_angle*PI)/180));
+							Uncollectible_Items[9].item_rect.y = ypoz + 25 + (int)(30*sin((180-bullet_angle*PI)/180));
 						}
 						else if(bullet_angle >= 270 && bullet_angle <360)
 						{
-							Uncollectible_Items[99].item_rect.x = xpoz + 70 - (int)(30*cos((270-bullet_angle*PI)/180));
-							Uncollectible_Items[99].item_rect.y = ypoz + 20 + (int)(30*sin((270-bullet_angle*PI)/180));
+							Uncollectible_Items[9].item_rect.x = xpoz + 70 - (int)(30*cos((270-bullet_angle*PI)/180));
+							Uncollectible_Items[9].item_rect.y = ypoz + 20 + (int)(30*sin((270-bullet_angle*PI)/180));
 						}
 						
-						Uncollectible_Items[99].item_rect.w = 20;
-						Uncollectible_Items[99].item_rect.h = 5;
-						Uncollectible_Items[99].item_active = true;
-						Uncollectible_Items[99].item_name = "bullet_rifle";
+						Uncollectible_Items[9].item_rect.w = 20;
+						Uncollectible_Items[9].item_rect.h = 5;
+						Uncollectible_Items[9].item_active = true;
+						Uncollectible_Items[9].item_name = "bullet_rifle";
 						
 					}
 					if(bullet_angle == 270)
 					{
-						Uncollectible_Items[99].item_rect.y = (Uncollectible_Items[99].item_rect.y) - 1;
+						Uncollectible_Items[9].item_rect.y = (Uncollectible_Items[9].item_rect.y) - 1;
 					}
 					
 					if(bullet_angle >= 270) // sağ üst
 					{
-						Uncollectible_Items[99].item_rect.x = (Uncollectible_Items[99].item_rect.x) + (int)(10*cos(((360-bullet_angle)*PI)/180));
-						Uncollectible_Items[99].item_rect.y = (Uncollectible_Items[99].item_rect.y) - (int)(10*sin(((360-bullet_angle)*PI)/180));
+						Uncollectible_Items[9].item_rect.x = (Uncollectible_Items[9].item_rect.x) + (int)(10*cos(((360-bullet_angle)*PI)/180));
+						Uncollectible_Items[9].item_rect.y = (Uncollectible_Items[9].item_rect.y) - (int)(10*sin(((360-bullet_angle)*PI)/180));
 					}
 					else if(bullet_angle >= 180 && bullet_angle < 270) // sol üst
 					{
-						Uncollectible_Items[99].item_rect.x = (Uncollectible_Items[99].item_rect.x) - (int)(10*cos(((bullet_angle-180)*PI)/180));
-						Uncollectible_Items[99].item_rect.y = (Uncollectible_Items[99].item_rect.y) - (int)(10*sin(((bullet_angle-180)*PI)/180));
+						Uncollectible_Items[9].item_rect.x = (Uncollectible_Items[9].item_rect.x) - (int)(10*cos(((bullet_angle-180)*PI)/180));
+						Uncollectible_Items[9].item_rect.y = (Uncollectible_Items[9].item_rect.y) - (int)(10*sin(((bullet_angle-180)*PI)/180));
 
 					}
 					else if(bullet_angle >= 90 && bullet_angle < 180) // sol alt
 					{
-						Uncollectible_Items[99].item_rect.x = (Uncollectible_Items[99].item_rect.x) - (int)(10*cos(((180-bullet_angle)*PI)/180));
-						Uncollectible_Items[99].item_rect.y = (Uncollectible_Items[99].item_rect.y) + (int)(10*sin(((180-bullet_angle)*PI)/180));
+						Uncollectible_Items[9].item_rect.x = (Uncollectible_Items[9].item_rect.x) - (int)(10*cos(((180-bullet_angle)*PI)/180));
+						Uncollectible_Items[9].item_rect.y = (Uncollectible_Items[9].item_rect.y) + (int)(10*sin(((180-bullet_angle)*PI)/180));
 					}
 					else if(bullet_angle >= 0 && bullet_angle < 90) // sağ alt
 					{
-						Uncollectible_Items[99].item_rect.x = (Uncollectible_Items[99].item_rect.x) + (int)(10*cos(((bullet_angle)*PI)/180));
-						Uncollectible_Items[99].item_rect.y = (Uncollectible_Items[99].item_rect.y) + (int)(10*sin(((bullet_angle)*PI)/180));
+						Uncollectible_Items[9].item_rect.x = (Uncollectible_Items[9].item_rect.x) + (int)(10*cos(((bullet_angle)*PI)/180));
+						Uncollectible_Items[9].item_rect.y = (Uncollectible_Items[9].item_rect.y) + (int)(10*sin(((bullet_angle)*PI)/180));
 					}
 					
 					draw_texture(rend);
@@ -504,56 +452,56 @@ void Texture :: draw_bullet(SDL_Renderer* rend)
 
 						if(bullet_angle >= 0 && bullet_angle <90)
 						{
-							Uncollectible_Items[98].item_rect.x = xpoz + 90 - (int)(30*cos((bullet_angle*PI)/180));
-							Uncollectible_Items[98].item_rect.y = ypoz + 70 - (int)(30*sin((bullet_angle*PI)/180));
+							Uncollectible_Items[8].item_rect.x = xpoz + 90 - (int)(30*cos((bullet_angle*PI)/180));
+							Uncollectible_Items[8].item_rect.y = ypoz + 70 - (int)(30*sin((bullet_angle*PI)/180));
 						}
 						else if(bullet_angle >= 90 && bullet_angle <180)
 						{
-							Uncollectible_Items[98].item_rect.x = xpoz + 20 + (int)(30*cos((90-bullet_angle*PI)/180));
-							Uncollectible_Items[98].item_rect.y = ypoz + 70 - (int)(30*sin((90-bullet_angle*PI)/180));
+							Uncollectible_Items[8].item_rect.x = xpoz + 20 + (int)(30*cos((90-bullet_angle*PI)/180));
+							Uncollectible_Items[8].item_rect.y = ypoz + 70 - (int)(30*sin((90-bullet_angle*PI)/180));
 						}
 						else if(bullet_angle >= 180 && bullet_angle <270)
 						{
-							Uncollectible_Items[98].item_rect.x = xpoz + 20 + (int)(30*cos((180-bullet_angle*PI)/180));
-							Uncollectible_Items[98].item_rect.y = ypoz + 25 + (int)(30*sin((180-bullet_angle*PI)/180));
+							Uncollectible_Items[8].item_rect.x = xpoz + 20 + (int)(30*cos((180-bullet_angle*PI)/180));
+							Uncollectible_Items[8].item_rect.y = ypoz + 25 + (int)(30*sin((180-bullet_angle*PI)/180));
 						}
 						else if(bullet_angle >= 270 && bullet_angle <360)
 						{
-							Uncollectible_Items[98].item_rect.x = xpoz + 70 - (int)(30*cos((270-bullet_angle*PI)/180));
-							Uncollectible_Items[98].item_rect.y = ypoz + 20 + (int)(30*sin((270-bullet_angle*PI)/180));
+							Uncollectible_Items[8].item_rect.x = xpoz + 70 - (int)(30*cos((270-bullet_angle*PI)/180));
+							Uncollectible_Items[8].item_rect.y = ypoz + 20 + (int)(30*sin((270-bullet_angle*PI)/180));
 						}
 						
-						Uncollectible_Items[98].item_rect.w = 20;
-						Uncollectible_Items[98].item_rect.h = 5;
-						Uncollectible_Items[98].item_active = true;
-						Uncollectible_Items[98].item_name = "bullet_handgun";
+						Uncollectible_Items[8].item_rect.w = 20;
+						Uncollectible_Items[8].item_rect.h = 5;
+						Uncollectible_Items[8].item_active = true;
+						Uncollectible_Items[8].item_name = "bullet_handgun";
 						
 					}
 					if(bullet_angle == 270)
 					{
-						Uncollectible_Items[98].item_rect.y = (Uncollectible_Items[98].item_rect.y) - 1;
+						Uncollectible_Items[8].item_rect.y = (Uncollectible_Items[8].item_rect.y) - 1;
 					}
 					
 					if(bullet_angle >= 270) // sağ üst
 					{
-						Uncollectible_Items[98].item_rect.x = (Uncollectible_Items[98].item_rect.x) + (int)(10*cos(((360-bullet_angle)*PI)/180));
-						Uncollectible_Items[98].item_rect.y = (Uncollectible_Items[98].item_rect.y) - (int)(10*sin(((360-bullet_angle)*PI)/180));
+						Uncollectible_Items[8].item_rect.x = (Uncollectible_Items[8].item_rect.x) + (int)(10*cos(((360-bullet_angle)*PI)/180));
+						Uncollectible_Items[8].item_rect.y = (Uncollectible_Items[8].item_rect.y) - (int)(10*sin(((360-bullet_angle)*PI)/180));
 					}
 					else if(bullet_angle >= 180 && bullet_angle < 270) // sol üst
 					{
-						Uncollectible_Items[98].item_rect.x = (Uncollectible_Items[98].item_rect.x) - (int)(10*cos(((bullet_angle-180)*PI)/180));
-						Uncollectible_Items[98].item_rect.y = (Uncollectible_Items[98].item_rect.y) - (int)(10*sin(((bullet_angle-180)*PI)/180));
+						Uncollectible_Items[8].item_rect.x = (Uncollectible_Items[8].item_rect.x) - (int)(10*cos(((bullet_angle-180)*PI)/180));
+						Uncollectible_Items[8].item_rect.y = (Uncollectible_Items[8].item_rect.y) - (int)(10*sin(((bullet_angle-180)*PI)/180));
 
 					}
 					else if(bullet_angle >= 90 && bullet_angle < 180) // sol alt
 					{
-						Uncollectible_Items[98].item_rect.x = (Uncollectible_Items[98].item_rect.x) - (int)(10*cos(((180-bullet_angle)*PI)/180));
-						Uncollectible_Items[98].item_rect.y = (Uncollectible_Items[98].item_rect.y) + (int)(10*sin(((180-bullet_angle)*PI)/180));
+						Uncollectible_Items[8].item_rect.x = (Uncollectible_Items[8].item_rect.x) - (int)(10*cos(((180-bullet_angle)*PI)/180));
+						Uncollectible_Items[8].item_rect.y = (Uncollectible_Items[8].item_rect.y) + (int)(10*sin(((180-bullet_angle)*PI)/180));
 					}
 					else if(bullet_angle >= 0 && bullet_angle < 90) // sağ alt
 					{
-						Uncollectible_Items[98].item_rect.x = (Uncollectible_Items[98].item_rect.x) + (int)(10*cos(((bullet_angle)*PI)/180));
-						Uncollectible_Items[98].item_rect.y = (Uncollectible_Items[98].item_rect.y) + (int)(10*sin(((bullet_angle)*PI)/180));
+						Uncollectible_Items[8].item_rect.x = (Uncollectible_Items[8].item_rect.x) + (int)(10*cos(((bullet_angle)*PI)/180));
+						Uncollectible_Items[8].item_rect.y = (Uncollectible_Items[8].item_rect.y) + (int)(10*sin(((bullet_angle)*PI)/180));
 					}
 					
 					draw_texture(rend);
@@ -568,56 +516,56 @@ void Texture :: draw_bullet(SDL_Renderer* rend)
 
 						if(bullet_angle >= 0 && bullet_angle <90)
 						{
-							Uncollectible_Items[97].item_rect.x = xpoz + 90 - (int)(30*cos((bullet_angle*PI)/180));
-							Uncollectible_Items[97].item_rect.y = ypoz + 70 - (int)(30*sin((bullet_angle*PI)/180));
+							Uncollectible_Items[7].item_rect.x = xpoz + 90 - (int)(30*cos((bullet_angle*PI)/180));
+							Uncollectible_Items[7].item_rect.y = ypoz + 70 - (int)(30*sin((bullet_angle*PI)/180));
 						}
 						else if(bullet_angle >= 90 && bullet_angle <180)
 						{
-							Uncollectible_Items[97].item_rect.x = xpoz + 20 + (int)(30*cos((90-bullet_angle*PI)/180));
-							Uncollectible_Items[97].item_rect.y = ypoz + 70 - (int)(30*sin((90-bullet_angle*PI)/180));
+							Uncollectible_Items[7].item_rect.x = xpoz + 20 + (int)(30*cos((90-bullet_angle*PI)/180));
+							Uncollectible_Items[7].item_rect.y = ypoz + 70 - (int)(30*sin((90-bullet_angle*PI)/180));
 						}
 						else if(bullet_angle >= 180 && bullet_angle <270)
 						{
-							Uncollectible_Items[97].item_rect.x = xpoz + 20 + (int)(30*cos((180-bullet_angle*PI)/180));
-							Uncollectible_Items[97].item_rect.y = ypoz + 25 + (int)(30*sin((180-bullet_angle*PI)/180));
+							Uncollectible_Items[7].item_rect.x = xpoz + 20 + (int)(30*cos((180-bullet_angle*PI)/180));
+							Uncollectible_Items[7].item_rect.y = ypoz + 25 + (int)(30*sin((180-bullet_angle*PI)/180));
 						}
 						else if(bullet_angle >= 270 && bullet_angle <360)
 						{
-							Uncollectible_Items[97].item_rect.x = xpoz + 70 - (int)(30*cos((270-bullet_angle*PI)/180));
-							Uncollectible_Items[97].item_rect.y = ypoz + 20 + (int)(30*sin((270-bullet_angle*PI)/180));
+							Uncollectible_Items[7].item_rect.x = xpoz + 70 - (int)(30*cos((270-bullet_angle*PI)/180));
+							Uncollectible_Items[7].item_rect.y = ypoz + 20 + (int)(30*sin((270-bullet_angle*PI)/180));
 						}
 						
-						Uncollectible_Items[97].item_rect.w = 20;
-						Uncollectible_Items[97].item_rect.h = 5;
-						Uncollectible_Items[97].item_active = true;
-						Uncollectible_Items[97].item_name = "bullet_shotgun";
+						Uncollectible_Items[7].item_rect.w = 20;
+						Uncollectible_Items[7].item_rect.h = 5;
+						Uncollectible_Items[7].item_active = true;
+						Uncollectible_Items[7].item_name = "bullet_shotgun";
 						
 					}
 					if(bullet_angle == 270)
 					{
-						Uncollectible_Items[97].item_rect.y = (Uncollectible_Items[97].item_rect.y) - 1;
+						Uncollectible_Items[7].item_rect.y = (Uncollectible_Items[7].item_rect.y) - 1;
 					}
 					
 					if(bullet_angle >= 270) // sağ üst
 					{
-						Uncollectible_Items[97].item_rect.x = (Uncollectible_Items[97].item_rect.x) + (int)(10*cos(((360-bullet_angle)*PI)/180));
-						Uncollectible_Items[97].item_rect.y = (Uncollectible_Items[97].item_rect.y) - (int)(10*sin(((360-bullet_angle)*PI)/180));
+						Uncollectible_Items[7].item_rect.x = (Uncollectible_Items[7].item_rect.x) + (int)(10*cos(((360-bullet_angle)*PI)/180));
+						Uncollectible_Items[7].item_rect.y = (Uncollectible_Items[7].item_rect.y) - (int)(10*sin(((360-bullet_angle)*PI)/180));
 					}
 					else if(bullet_angle >= 180 && bullet_angle < 270) // sol üst
 					{
-						Uncollectible_Items[97].item_rect.x = (Uncollectible_Items[97].item_rect.x) - (int)(10*cos(((bullet_angle-180)*PI)/180));
-						Uncollectible_Items[97].item_rect.y = (Uncollectible_Items[97].item_rect.y) - (int)(10*sin(((bullet_angle-180)*PI)/180));
+						Uncollectible_Items[7].item_rect.x = (Uncollectible_Items[7].item_rect.x) - (int)(10*cos(((bullet_angle-180)*PI)/180));
+						Uncollectible_Items[7].item_rect.y = (Uncollectible_Items[7].item_rect.y) - (int)(10*sin(((bullet_angle-180)*PI)/180));
 
 					}
 					else if(bullet_angle >= 90 && bullet_angle < 180) // sol alt
 					{
-						Uncollectible_Items[97].item_rect.x = (Uncollectible_Items[97].item_rect.x) - (int)(10*cos(((180-bullet_angle)*PI)/180));
-						Uncollectible_Items[97].item_rect.y = (Uncollectible_Items[97].item_rect.y) + (int)(10*sin(((180-bullet_angle)*PI)/180));
+						Uncollectible_Items[7].item_rect.x = (Uncollectible_Items[7].item_rect.x) - (int)(10*cos(((180-bullet_angle)*PI)/180));
+						Uncollectible_Items[7].item_rect.y = (Uncollectible_Items[7].item_rect.y) + (int)(10*sin(((180-bullet_angle)*PI)/180));
 					}
 					else if(bullet_angle >= 0 && bullet_angle < 90) // sağ alt
 					{
-						Uncollectible_Items[97].item_rect.x = (Uncollectible_Items[97].item_rect.x) + (int)(10*cos(((bullet_angle)*PI)/180));
-						Uncollectible_Items[97].item_rect.y = (Uncollectible_Items[97].item_rect.y) + (int)(10*sin(((bullet_angle)*PI)/180));
+						Uncollectible_Items[7].item_rect.x = (Uncollectible_Items[7].item_rect.x) + (int)(10*cos(((bullet_angle)*PI)/180));
+						Uncollectible_Items[7].item_rect.y = (Uncollectible_Items[7].item_rect.y) + (int)(10*sin(((bullet_angle)*PI)/180));
 					}
 					
 					draw_texture(rend);
@@ -630,23 +578,50 @@ void Texture :: draw_bullet(SDL_Renderer* rend)
 			z=0;
 			active_bullet = false;
 
-			Uncollectible_Items[97].item_active = false;
-			Uncollectible_Items[98].item_active = false;
-			Uncollectible_Items[99].item_active = false;	
+			Uncollectible_Items[7].item_active = false;
+			Uncollectible_Items[8].item_active = false;
+			Uncollectible_Items[9].item_active = false;	
 		}
 	}
 	else // active_bullet = false ise mermi çizimi olmayacak
 	{
 		z=0;
-		Uncollectible_Items[97].item_active = false;
-		Uncollectible_Items[98].item_active = false;
-		Uncollectible_Items[99].item_active = false;
+		Uncollectible_Items[7].item_active = false;
+		Uncollectible_Items[8].item_active = false;
+		Uncollectible_Items[9].item_active = false;
 
 	}
 }
 
-void Texture :: load_textures(SDL_Renderer* renderer)
+void Texture :: tank(SDL_Renderer* rend , int camerax , int cameray)
 {
+	
+	tank_rect.x = xtank + camerax;
+	tank_rect.y = ytank + cameray;
+	tank_rect.w = 300;
+	tank_rect.h = 200;
+
+	SDL_Rect temel;
+	temel.x = tank_rect.x;
+	temel.y = tank_rect.y - 100;
+	temel.w = 50;
+	temel.h = 100;
+	
+	SDL_Texture* texture = SDL_CreateTexture(rend , SDL_PIXELFORMAT_RGBA8888 , SDL_TEXTUREACCESS_TARGET , temel.w , temel.h);
+	
+	SDL_SetTextureBlendMode( texture, SDL_BLENDMODE_BLEND);
+	
+	SDL_SetRenderDrawColor(rend , 255 , 255 , 255 , 10); //
+	SDL_SetTextureAlphaMod( texture , 10);
+
+	SDL_RenderFillRect(rend, &tank_rect);
+	
+	SDL_RenderCopyEx(rend , texture , NULL , &tank_rect , 0 , 0 , SDL_FLIP_NONE);
+	SDL_DestroyTexture(texture);
+}
+
+void Texture :: load_textures(SDL_Renderer* renderer)
+{	
 	load("assets/guns/health_bag.png", "health_bag", renderer);
 	load("assets/guns/full_bag.png", "full_bag", renderer);
 	load("assets/guns/12_bag.png", "12_bag", renderer);
@@ -657,36 +632,32 @@ void Texture :: load_textures(SDL_Renderer* renderer)
 	load("assets/guns/shotgun.png", "shotgun", renderer);
 	load("assets/guns/handgun.png", "handgun", renderer);		
 	load("assets/guns/knife.png", "knife", renderer);
-	load("assets/rock_1.png", "rock_1", renderer);
-	load("assets/stone.png", "stone", renderer);
-	load("assets/iron.png", "iron", renderer);
-	load("assets/steel.png", "steel", renderer);
+	//load("assets/rock_1.png", "rock_1", renderer);
+	//load("assets/stone.png", "stone", renderer);
+	//load("assets/iron.png", "iron", renderer);
+	//load("assets/steel.png", "steel", renderer);
 
-	load("assets/kuru_agac.png", "kuru_agac", renderer);
+	//load("assets/kuru_agac.png", "kuru_agac", renderer);
 	
-	load("assets/block/stone_wall.png", "stone_block", renderer);
-	load("assets/block/brick_wall.png", "brick_block", renderer);
-	load("assets/block/iron_wall.png", "iron_block", renderer);
-	load("assets/block/box_wall.png", "box_block", renderer);
-	load("assets/block/steel_wall.png", "steel_block", renderer);
+	//load("assets/block/stone_wall.png", "stone_block", renderer);
+	//load("assets/block/brick_wall.png", "brick_block", renderer);
+	//load("assets/block/iron_wall.png", "iron_block", renderer);
+	//load("assets/block/box_wall.png", "box_block", renderer);
+	//load("assets/block/steel_wall.png", "steel_block", renderer);
 	
-	load("assets/shoot.png", "shoot", renderer);
+	load("assets/cursor.png", "shoot", renderer);
 	load("assets/Sepia.png", "sepia", renderer);
-	load("assets/su.png", "water", renderer);
+	load("assets/torch.png", "torch", renderer);
 	load("assets/guns/soup.png", "soup", renderer);
-	load("assets/food.png", "bread", renderer);
+	load("assets/huge_box.jpg", "huge_box", renderer);
 	load("assets/guns/rifle.png", "rifle", renderer);
-	load("assets/guns/energy water.png", "energy_water", renderer);
-	load("assets/crater1.png", "krater", renderer);
-	load("assets/dagg.png", "dag", renderer);
+	//load("assets/guns/energy water.png", "energy_water", renderer);
+	//load("assets/crater1.png", "krater", renderer);
+	//load("assets/dagg.png", "dag", renderer);
 
-	arkaplan_yükle("assets/ground.jpg", renderer);
+	arkaplan_yükle("assets/indir.jpg", renderer);
 	load("assets/bilgi_kutusu.jpg", "bilgi_kutusu", renderer);
 	load("assets/guns/bullet_handgun.png", "bullet_handgun", renderer);
 	load("assets/guns/bullet_shotgun.png", "bullet_shotgun", renderer);
 	load("assets/guns/bullet_rifle.png", "bullet_rifle", renderer);
-
-	Envanter_Yukle("assets/18_envanter.png", "full_envanter", renderer);
-	Envanter_Yukle("assets/12_envanter.png", "12_envanter", renderer);
-	Envanter_Yukle("assets/9_envanter.png", "9_envanter", renderer);
 }

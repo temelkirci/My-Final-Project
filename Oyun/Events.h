@@ -27,7 +27,8 @@ public:
 	bool yerlestirme;
 	int indis_item;
 	bool cancel_draw;
-
+	int xtank;
+	int ytank;
 	double x_target;
 	double y_target;
 	double x_distance;

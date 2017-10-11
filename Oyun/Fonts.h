@@ -14,7 +14,7 @@ public:
 	~Fonts();
 
 	void load_Resim(SDL_Renderer*);
-	int Resim(string , string , SDL_Renderer*);
+	int Resim(char* , string , SDL_Renderer*);
 	void barbaros_status(SDL_Renderer* , int , int , int , int , int , int , int , int);
 	void Write_Text(SDL_Renderer* , Uint32 , char*);
 	TTF_Font* Font ;
@@ -28,7 +28,7 @@ public:
 	SDL_Rect thirstyRect; // 0-100 piksel arasýnda olacak
 	SDL_Rect healthRect; // 0-100 piksel arasýnda olacak
 
-	Uint32 total; 
+	double total; 
 
 	SDL_Texture* resim_texture;
 	SDL_Surface* resim_surface;

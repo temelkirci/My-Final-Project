@@ -15,10 +15,23 @@ Inventory :: Inventory()
 	
 	for(int i=0;i<18;i++)
 	{
-		get<0>(envanter[i]) = "";
-		get<2>(envanter[i]) = 0; // eþya sayýsý 0 olsun
+		InventoryObject[i].objectName = "";
+		InventoryObject[i].objectNumber = 0; // eþya sayýsý 0 olsun
 	}
-	
+
+		envanter_color.r = 255;
+		envanter_color.g = 0;
+		envanter_color.b = 0;
+		envanter_color.a = 0;
+
+	infItem = "";
+	InventoryStore.OpenInventory = false;
+
+	InventoryStore.InventoryRect.x = 1050;
+	InventoryStore.InventoryRect.y = 100;
+	InventoryStore.InventoryRect.w = 300;
+	InventoryStore.InventoryRect.h = 400;
+
 	envanter_durum = "9_envanter" ;
 	max_envanter = 9;
 
@@ -34,9 +47,9 @@ Inventory :: ~Inventory()
 
 }
 
-void Inventory :: Envanter_Yukle(string envanter_dosya, string envanter_adi, SDL_Renderer* render)
+void Inventory :: Envanter_Yukle(char* envanter_dosya, string envanter_adi, SDL_Renderer* render)
 {
-	SDL_Surface * envanter_surface = IMG_Load(envanter_dosya.c_str());
+	SDL_Surface * envanter_surface = IMG_Load(envanter_dosya);
 	if(envanter_surface == 0)
 	{
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR , "Envanter" , "Envanter yuklenemedi..!" , NULL);
@@ -52,18 +65,12 @@ void Inventory :: Envanter_Yukle(string envanter_dosya, string envanter_adi, SDL
 
 void Inventory :: Envanter_Çiz(string esya_adi, int envanter_x , int envanter_y , int envanter_genislik , int envanter_yukseklik , SDL_Renderer* rend)
 {
-	SDL_Rect hedef;
-			hedef.x=envanter_x;
-			hedef.y=envanter_y;
-			hedef.w=envanter_genislik;
-			hedef.h=envanter_yukseklik;
-
 	rect_inventory.x=envanter_x;
 	rect_inventory.y=envanter_y;
 	rect_inventory.w = envanter_genislik;
 	rect_inventory.h = envanter_yukseklik;
 
-	SDL_RenderCopyEx(rend, envanter_draw[esya_adi] , NULL , &hedef , 0 , 0 , SDL_FLIP_NONE);
+	SDL_RenderCopyEx(rend, envanter_draw[esya_adi] , NULL , &rect_inventory , 0 , 0 , SDL_FLIP_NONE);
 }
 
 
@@ -73,24 +80,24 @@ void Inventory :: Esya_Ekle(string esya_adi , int eklenecek_aded , SDL_Renderer*
 	{
 		for(int i=0;i<18;i++)
 		{
-			if((get<0>(envanter[i]) == "") && (get<2>(envanter[i]) <= 0)) // eþya envanterde yoksa
+			if((InventoryObject[i].objectName == "") && (InventoryObject[i].objectNumber <= 0)) // eþya envanterde yoksa
 			{
-				get<0>(envanter[i]) = esya_adi;
-				get<1>(envanter[i]) = esya_texture;
-				get<2>(envanter[i]) = eklenecek_aded;
+				InventoryObject[i].objectName = esya_adi;
+				InventoryObject[i].objectTexture = esya_texture;
+				InventoryObject[i].objectNumber = eklenecek_aded;
 				inventory_size++;
 				break;
 			}
-			else if(get<0>(envanter[i]) == esya_adi) // eþya envanterde varsa
+			else if(InventoryObject[i].objectName == esya_adi) // eþya envanterde varsa
 			{
-				if(get<2>(envanter[i]) < 9) // her eþyadan maximum 9 tane olabilir
+				if(InventoryObject[i].objectNumber < 9) // her eþyadan maximum 9 tane olabilir
 				{
-					get<2>(envanter[i]) = get<2>(envanter[i]) + 1;			
+					InventoryObject[i].objectNumber = InventoryObject[i].objectNumber + 1;			
 					break;
 				}
 				else
 				{
-					get<2>(envanter[i]) = 9;
+					InventoryObject[i].objectNumber = 9;
 					cout<<esya_adi<<" sayisi 9 u gecemez"<<endl;
 				}
 			}
@@ -140,20 +147,20 @@ void Inventory :: Envanter_Güncelle(SDL_Renderer* rend)
 		esya.w = 40;
 		esya.h = 30;
 							
-		if(get<2>(envanter[t]) > 0) // eþya sayýsý 1 den fazlaysa
+		if(InventoryObject[t].objectNumber > 0) // eþya sayýsý 1 den fazlaysa
 		{
-			get<3>(envanter[t]) = esya.x; // esya x-koordinatý
-			get<4>(envanter[t]) = esya.y; // esya y-koordinatý
+			InventoryObject[t].xCoord = esya.x; // esya x-koordinatý
+			InventoryObject[t].yCoord = esya.y; // esya y-koordinatý
 
-			SDL_SetTextureBlendMode(get<1>(envanter[t]) , SDL_BLENDMODE_BLEND);
-			SDL_RenderCopyEx(rend, get<1>(envanter[t]) , NULL , &esya , 0 , 0 , SDL_FLIP_NONE);	// eþyayý çiz
+			SDL_SetTextureBlendMode(InventoryObject[t].objectTexture , SDL_BLENDMODE_BLEND);
+			SDL_RenderCopyEx(rend, InventoryObject[t].objectTexture , NULL , &esya , 0 , 0 , SDL_FLIP_NONE);	// eþyayý çiz
 					
 			yazi.x = esya.x-7;
 			yazi.y = esya.y-13;
 			yazi.w = 10;
 			yazi.h = 12;
 
-			string adet_deger = to_string(get<2>(envanter[t]));
+			string adet_deger = to_string(InventoryObject[t].objectNumber);
 			char* adet_yaz = _strdup(adet_deger.c_str());
 
 			SDL_Surface* textSurface = TTF_RenderText_Blended(Font , adet_yaz , inventory_color );
@@ -166,13 +173,79 @@ void Inventory :: Envanter_Güncelle(SDL_Renderer* rend)
 			a=a+65;			
 		}
 		
-		else if(get<2>(envanter[t]) <= 0) // eþya yoksa
+		else if(InventoryObject[t].objectNumber <= 0) // eþya yoksa
 		{
-			get<0>(envanter[t]) = ""; // eþya ismini sýfýrla
-			get<1>(envanter[t]) = NULL; // eþya textureyi sýfýrla
-			get<2>(envanter[t]) = 0; // eþya sayýsýný 0 yap
-			get<3>(envanter[t]) = NULL; // esya x-koordinatý
-			get<4>(envanter[t]) = NULL; // esya y-koordinatý
+			InventoryObject[t].objectName = ""; // eþya ismini sýfýrla
+			InventoryObject[t].objectTexture = NULL; // eþya textureyi sýfýrla
+			InventoryObject[t].objectNumber = 0; // eþya sayýsýný 0 yap
+			InventoryObject[t].xCoord = NULL; // esya x-koordinatý
+			InventoryObject[t].yCoord = NULL; // esya y-koordinatý
 		}	
 	}							
+}
+
+void Inventory :: deleteItem(string object_name , int delete_number)
+{
+	for(int t=0;t<inventory_size;t++)
+	{
+		if(InventoryObject[t].objectName == object_name)
+		{
+			InventoryObject[t].objectNumber = InventoryObject[t].objectNumber - delete_number;
+
+			if(InventoryObject[t].objectNumber <= 0)
+				inventory_size--;
+
+			break;
+		}
+	}
+	
+}
+
+void Inventory :: Envanter(SDL_Renderer* rend)
+{
+	if(InventoryStore.OpenInventory)
+		SDL_RenderCopyEx(rend , envanter_draw["Inventory"] , NULL , &InventoryStore.InventoryRect , 0 , 0 , SDL_FLIP_NONE);
+}
+
+void Inventory :: informationItem(SDL_Renderer* rend)
+{
+	if(infItem != "")
+	{
+		for(int t=0;t<inventory_size;t++)
+		{
+			if(InventoryObject[t].objectName == infItem) // kutucuklarýn üzerindeyse
+			{
+
+				box.x = InventoryObject[t].xCoord - 15;
+				box.y = InventoryObject[t].yCoord - 120;
+				box.w = 80;
+				box.h = 100;
+
+				SDL_SetRenderDrawColor(rend , 255 , 255 , 255 , 100); 
+				SDL_RenderFillRect(rend, &box);
+
+				SDL_Rect yazi;
+				yazi.x = InventoryObject[t].xCoord - 10;
+				yazi.y = InventoryObject[t].yCoord - 110;
+				yazi.w = 35;
+				yazi.h = 15;
+				
+				SDL_Surface* temel = TTF_RenderText_Blended( Font , infItem.c_str() , envanter_color );
+				SDL_Texture* yazii_texture = SDL_CreateTextureFromSurface(rend, temel );
+				SDL_FreeSurface(temel);
+
+				SDL_RenderCopyEx(rend , yazii_texture , NULL , &yazi , 0 , 0 , SDL_FLIP_NONE);
+				SDL_DestroyTexture(yazii_texture);
+			}
+		}
+	}
+}
+
+void Inventory :: loadInventory(SDL_Renderer* renderer)
+{
+	Envanter_Yukle("assets/18_envanter.png", "full_envanter", renderer);
+	Envanter_Yukle("assets/12_envanter.png", "12_envanter", renderer);
+	Envanter_Yukle("assets/9_envanter.png", "9_envanter", renderer);
+
+	Envanter_Yukle("assets/envanter1.jpg", "Inventory", renderer);
 }
