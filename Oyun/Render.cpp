@@ -19,11 +19,7 @@ Render :: Render()
 	world_w = 3000;
 	world_h = 1500;
 	z=0;
-
-	viewport.x = 0;
-	viewport.y = 0;
-	viewport.w = 1100;
-	viewport.h = 750;
+	fpsTime = 0;
 	
 }
 
@@ -35,7 +31,7 @@ Render :: ~Render()
 void Render :: render(SDL_Renderer* rend , bool menu)
 {	
 	start = SDL_GetTicks();
-	/*
+	
 	srand ((unsigned int)time(NULL));
 	//SDL_RenderSetViewport(rend , &viewport);
 	// EKRANI TEMÝZLE
@@ -44,14 +40,14 @@ void Render :: render(SDL_Renderer* rend , bool menu)
 	// BACKGROUND
 	draw_camera(rend, &xpoz , &ypoz , 1350, 700);
 
-	drawAirplane(rend , camera.x , camera.y , current_time);
+	drawAirplane(rend , camera.x , camera.y , start);
 
 	if(creature_health > 0)
-		drawCreature(rend , camera.x , camera.y , current_time);
+		drawCreature(rend , camera.x , camera.y , start);
 	// ITEMS
 
 		// toplanabilir nesneleri çizeceðiz
-		draw_object(rend , current_time ); 
+		draw_object(rend , start ); 
 
 		// toplanamaz ve içinden geçilebilir nesneleri çizeceðiz -> mermi , su , taþ , ot , diðer yer þekilleri
 		draw_texture(rend);
@@ -63,15 +59,15 @@ void Render :: render(SDL_Renderer* rend , bool menu)
 		
 	if(health > 0)
 	{
-		gece_gündüz(rend , current_time); // gece gündüz döngüsü
+		gece_gündüz(rend , start); // gece gündüz döngüsü
 	}
 
 	if(health > 0)
 	{		
-		barbaros_çiz(rend , barbaros_guns , &xpoz , &ypoz , camera.x , camera.y , barbaros_durum , current_time); // ana karakteri çiz
+		barbaros_çiz(rend , barbaros_guns , &xpoz , &ypoz , camera.x , camera.y , barbaros_durum , start); // ana karakteri çiz
 	}
 
-	barbaros_güncelle(rend , current_time); // susuzluk durumu , saðlýk durumu , mermi durumu , açlýk durumunu güncelle
+	barbaros_güncelle(rend , start); // susuzluk durumu , saðlýk durumu , mermi durumu , açlýk durumunu güncelle
 
 	//SDL_RenderSetScale(rend , 0.5 , 0.5);
 	
@@ -123,21 +119,28 @@ void Render :: render(SDL_Renderer* rend , bool menu)
 	//tank(rend , camera.x , camera.y);
 	SDL_RenderCopyEx(rend, map_texture[current_cursor] , NULL , &solid_mouse , 0 , 0 , SDL_FLIP_NONE);
 	// EKRANI GÜNCELLE
-	*/
+	
 	SDL_RenderPresent(rend); 
 
 	// Toplam süreyi hesapla
 	deltaclock = SDL_GetTicks() - start;
 	total = total + deltaclock;
 	//current_time = current_time + deltaclock;
+	fpsTime += deltaclock;
 
 	// calculate FPS  
 	//if(deltaclock > 0.0)
-		currentFPS = 1000.0 / deltaclock;
+	currentFPS = 1000.0 / deltaclock;
+
 	// write FPS
-	//if((current_time / 1000.0)%2 == 0)
-	//{
+	if(fpsTime > 1000.0)
+	{
 		SDL_SetWindowTitle(win , (to_string(int(currentFPS))).c_str());
-	//}
-	cout<<deltaclock<<endl;
+	}
+
+	if(fpsTime >= 1000.0)
+	{
+		fpsTime = 0;
+	}
+	
 }

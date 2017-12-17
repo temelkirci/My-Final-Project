@@ -382,7 +382,7 @@ void Texture :: draw_bullet(SDL_Renderer* rend)
 		{		
 			if(barbaros_guns == "rifle")
 			{
-			if(z == 0)
+				if(z == 0)
 					{	
 						bullet_angle = angle;
 
@@ -413,6 +413,7 @@ void Texture :: draw_bullet(SDL_Renderer* rend)
 						Uncollectible_Items[9].item_name = "bullet_rifle";
 						
 					}
+
 					if(bullet_angle == 270)
 					{
 						Uncollectible_Items[9].item_rect.y = (Uncollectible_Items[9].item_rect.y) - 1;
@@ -573,23 +574,16 @@ void Texture :: draw_bullet(SDL_Renderer* rend)
 				}
 					
 		}
-		else if(z >= 50) // menzili aştıysa çizmeyi bırak
+
+		if(z >= 50) // menzili aştıysa çizmeyi bırak
 		{
 			z=0;
 			active_bullet = false;
-
+			barbaros_durum = "move";
 			Uncollectible_Items[7].item_active = false;
 			Uncollectible_Items[8].item_active = false;
 			Uncollectible_Items[9].item_active = false;	
 		}
-	}
-	else // active_bullet = false ise mermi çizimi olmayacak
-	{
-		z=0;
-		Uncollectible_Items[7].item_active = false;
-		Uncollectible_Items[8].item_active = false;
-		Uncollectible_Items[9].item_active = false;
-
 	}
 }
 
