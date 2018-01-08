@@ -587,33 +587,6 @@ void Texture :: draw_bullet(SDL_Renderer* rend)
 	}
 }
 
-void Texture :: tank(SDL_Renderer* rend , int camerax , int cameray)
-{
-	
-	tank_rect.x = xtank + camerax;
-	tank_rect.y = ytank + cameray;
-	tank_rect.w = 300;
-	tank_rect.h = 200;
-
-	SDL_Rect temel;
-	temel.x = tank_rect.x;
-	temel.y = tank_rect.y - 100;
-	temel.w = 50;
-	temel.h = 100;
-	
-	SDL_Texture* texture = SDL_CreateTexture(rend , SDL_PIXELFORMAT_RGBA8888 , SDL_TEXTUREACCESS_TARGET , temel.w , temel.h);
-	
-	SDL_SetTextureBlendMode( texture, SDL_BLENDMODE_BLEND);
-	
-	SDL_SetRenderDrawColor(rend , 255 , 255 , 255 , 10); //
-	SDL_SetTextureAlphaMod( texture , 10);
-
-	SDL_RenderFillRect(rend, &tank_rect);
-	
-	SDL_RenderCopyEx(rend , texture , NULL , &tank_rect , 0 , 0 , SDL_FLIP_NONE);
-	SDL_DestroyTexture(texture);
-}
-
 void Texture :: load_textures(SDL_Renderer* renderer)
 {	
 	load("assets/guns/health_bag.png", "health_bag", renderer);
@@ -626,31 +599,14 @@ void Texture :: load_textures(SDL_Renderer* renderer)
 	load("assets/guns/shotgun.png", "shotgun", renderer);
 	load("assets/guns/handgun.png", "handgun", renderer);		
 	load("assets/guns/knife.png", "knife", renderer);
-	//load("assets/rock_1.png", "rock_1", renderer);
-	//load("assets/stone.png", "stone", renderer);
-	//load("assets/iron.png", "iron", renderer);
-	//load("assets/steel.png", "steel", renderer);
 
-	//load("assets/kuru_agac.png", "kuru_agac", renderer);
-	
-	//load("assets/block/stone_wall.png", "stone_block", renderer);
-	//load("assets/block/brick_wall.png", "brick_block", renderer);
-	//load("assets/block/iron_wall.png", "iron_block", renderer);
-	//load("assets/block/box_wall.png", "box_block", renderer);
-	//load("assets/block/steel_wall.png", "steel_block", renderer);
-	
 	load("assets/cursor.png", "shoot", renderer);
 	load("assets/Sepia.png", "sepia", renderer);
-	load("assets/torch.png", "torch", renderer);
 	load("assets/guns/soup.png", "soup", renderer);
 	load("assets/huge_box.jpg", "huge_box", renderer);
 	load("assets/guns/rifle.png", "rifle", renderer);
-	//load("assets/guns/energy water.png", "energy_water", renderer);
-	//load("assets/crater1.png", "krater", renderer);
-	//load("assets/dagg.png", "dag", renderer);
 
-	arkaplan_yükle("assets/indir.jpg", renderer);
-	load("assets/bilgi_kutusu.jpg", "bilgi_kutusu", renderer);
+	arkaplan_yükle("assets/desertt.jpg", renderer);
 	load("assets/guns/bullet_handgun.png", "bullet_handgun", renderer);
 	load("assets/guns/bullet_shotgun.png", "bullet_shotgun", renderer);
 	load("assets/guns/bullet_rifle.png", "bullet_rifle", renderer);

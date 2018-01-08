@@ -11,8 +11,8 @@ Fonts :: Fonts()
 
 	backColor.r = 0;
 	backColor.g = 0;
-	backColor.b = 255;
-	backColor.a = 150;
+	backColor.b = 0;
+	backColor.a = 255;
 
 	backRect.x = 0;
 	backRect.y = 0;
@@ -66,9 +66,6 @@ void Fonts :: barbaros_status(SDL_Renderer* render_font ,
 		hungerRect.w = aclik;
 		thirstyRect.w = susuzluk;
 
-	//SDL_SetRenderDrawColor(render_font , 220 , 220 , 220 , 200); // gri arkaplan
-	//SDL_RenderFillRect(render_font, &arkaPlan);
-	
 	for(int i=0; i<4 ; i++)
 	{
 		SDL_Rect yazi;

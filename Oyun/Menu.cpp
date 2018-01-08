@@ -147,6 +147,7 @@ bool Menu :: klavye_mouse(bool baslat)
 				exit(0);
 				break;
 			case SDL_MOUSEBUTTONDOWN:
+
 				// Play tuþuna basýlýrsa
 				if((ev.button.button == SDL_BUTTON_LEFT) && (SDL_HasIntersection(&menü_mouse , &start_button)))
 				{
@@ -160,8 +161,33 @@ bool Menu :: klavye_mouse(bool baslat)
 				}
 				// Credits tuþuna basýlýrsa
 				else if((ev.button.button == SDL_BUTTON_LEFT) && (SDL_HasIntersection(&menü_mouse , &save_button)))
-				{					
-					cout<<"Oyun Kaydedildi"<<endl;
+				{	
+					char* data_path = NULL;
+					char* base_path = SDL_GetBasePath();
+					if(base_path)
+					{
+						data_path = base_path;
+						cout<<data_path<<endl;
+					}
+					else
+					{
+						data_path = SDL_strdup("./");
+						cout<<data_path<<endl;
+					}
+					/*
+					char* pref_path = NULL;
+					char* base_path = SDL_GetPrefPath("Temel Game" , "My Awesome SDL2 Game");
+					
+					if(base_path)
+					{
+						pref_path = base_path;
+						cout<<"Oyun Kaydedildi"<<endl;
+					}
+					else
+					{
+						cout<<"else"<<endl;
+					}
+					*/
 					break;
 				}
 				else if((ev.button.button == SDL_BUTTON_LEFT) && (SDL_HasIntersection(&menü_mouse , &load_button)))

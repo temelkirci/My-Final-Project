@@ -14,12 +14,12 @@ public:
 	void Write(SDL_Renderer*  , Uint32 , string , Uint32);
 	void loadFonts();
 	void gece_gündüz(SDL_Renderer* , Uint32);
+	int calculateTime(int);
 	int day;
 	Uint8 real_time;
 	bool night;
 	Uint32 toplam_time;
 	Uint32 first_time;
-	double current_time;
 	Uint32 oldTime;
 	SDL_Texture* yazii_texture;
 	TTF_Font* timer_font;

@@ -2,6 +2,7 @@
 #include <iostream>
 #include "Timer.h"
 #include "SDL/SDL_ttf.h"
+#include <chrono>
 
 using namespace std;
 
@@ -10,11 +11,11 @@ Timer :: Timer()
 	timer_textColor.r = 0;
 	timer_textColor.g = 0;
 	timer_textColor.b = 0;
-	timer_textColor.a = 150;
+	timer_textColor.a = 255;
 
-	textColor.r = 130;
-	textColor.g = 30;
-	textColor.b = 30;
+	textColor.r = 0;
+	textColor.g = 0;
+	textColor.b = 0;
 	textColor.a = 255;
 
 	world.x = 0;
@@ -26,7 +27,6 @@ Timer :: Timer()
 	real_time = 0;
 	day = 1;
 	gecen_süre = 0;
-	current_time = 0;
 	oldTime = 0;
 	active = true;
 	night = false; // oyun gündüz olarak baþlayacak
@@ -43,14 +43,46 @@ Uint32 Timer :: süre_hesapla(Uint32 ilksüre , Uint32 sonsüre)
 	return (sonsüre-ilksüre)/1000; 	
 }
 
+int Timer :: calculateTime(int time)
+{
+	/*
+	chrono::system_clock::time_point tp = chrono::system_clock::now(); // current time of system_clock
+	cout<<tp.time_since_epoch().count()<<endl;
+
+	std::chrono::duration<int , ratio<1,1>>; // bir integerde depolanan saniyelerin sayýsý
+	std::chrono::duration<double , ratio<60,1>>; // bir ondalýk sayýda depolanan dakikalarýn sayýsý
+	
+	chrono::steady_clock::time_point start = chrono::steady_clock::now(); // saymaya baþla
+	//
+	chrono::steady_clock::time_point end = chrono::steady_clock::now();
+	chrono::steady_clock::duration elapsed = end - start;
+
+	
+	if(elapsed == chrono::steady_clock::duration::zero())
+	{
+		cout<<"No Time Elapsed"<<endl<<endl;
+	}
+	else
+	{
+		cout<<endl;
+		cout<<"Elapsed Nanooseconds Time : "<<chrono::duration_cast<chrono::nanoseconds>(elapsed).count()<<endl;
+		cout<<"Elapsed Microseconds Time : "<<chrono::duration_cast<chrono::microseconds>(elapsed).count()<<endl;
+		cout<<"Elapsed Milliseconds Time : "<<chrono::duration_cast<chrono::milliseconds>(elapsed).count()<<endl;
+		cout<<"Elapsed Seconds Time : "<<chrono::duration_cast<chrono::milliseconds>(elapsed).count() / 1000.0 <<endl<<endl;
+	}
+	*/
+	return 0;
+}
+
 void Timer :: gece_gündüz(SDL_Renderer* rend , Uint32 gercek_zaman)
 {
+	
 	if(toplam_time == 0)
 	{
 		toplam_time = gercek_zaman + 100;
 	}
 
-	if((current_time <= toplam_time)) // gece gündüz döngüsü 1 sn
+	if((gercek_zaman <= toplam_time)) // gece gündüz döngüsü 1 sn
 	{
 		SDL_SetRenderDrawColor(rend , 0 , 0 , 0 , real_time); //
 		SDL_RenderFillRect(rend, &world);
@@ -107,7 +139,7 @@ void Timer :: Write(SDL_Renderer* rend , Uint32 zaman , string text , Uint32 del
 					gecen_süre = zaman + delay_time; // yazý ekranda delay_time kadar görünecek
 			}
 	
-			if((current_time < gecen_süre)) // yazýnýn ekranda gözükme süresi
+			if((delay_time < gecen_süre)) // yazýnýn ekranda gözükme süresi
 			{
 		
 			SDL_Rect yazi;
@@ -143,17 +175,17 @@ void Timer :: Write(SDL_Renderer* rend , Uint32 zaman , string text , Uint32 del
 	{
 		
 		SDL_Rect yazii;
-				yazii.x = 250 + (425 - (text.length()*10)/2);
-				yazii.y = 0;
-				yazii.w = text.length()*10;
-				yazii.h = 25;
+		yazii.x = 250 + (425 - (text.length()*10)/2);
+		yazii.y = 0;
+		yazii.w = text.length()*10;
+		yazii.h = 25;
 				
-				SDL_Surface* temell = TTF_RenderText_Blended( timer_font , text.c_str() , timer_textColor );
-				yazii_texture = SDL_CreateTextureFromSurface(rend, temell );
-				SDL_FreeSurface(temell);
+		SDL_Surface* temell = TTF_RenderText_Blended( timer_font , text.c_str() , timer_textColor );
+		yazii_texture = SDL_CreateTextureFromSurface(rend, temell );
+		SDL_FreeSurface(temell);
 
-				SDL_RenderCopyEx(rend , yazii_texture , NULL , &yazii , 0 , 0 , SDL_FLIP_NONE);
-				SDL_DestroyTexture(yazii_texture);
+		SDL_RenderCopyEx(rend , yazii_texture , NULL , &yazii , 0 , 0 , SDL_FLIP_NONE);
+		SDL_DestroyTexture(yazii_texture);
 	}
 }
 

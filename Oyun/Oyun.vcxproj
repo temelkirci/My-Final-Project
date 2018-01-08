@@ -79,10 +79,8 @@
     <ClCompile Include="Items.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Menu.cpp" />
-    <ClCompile Include="NPC.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Render.cpp" />
-    <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Sounds.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Timer.cpp" />
@@ -96,10 +94,8 @@
     <ClInclude Include="Inventory.h" />
     <ClInclude Include="Items.h" />
     <ClInclude Include="Menu.h" />
-    <ClInclude Include="NPC.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Render.h" />
-    <ClInclude Include="Shader.h" />
     <ClInclude Include="Sounds.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Timer.h" />

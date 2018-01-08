@@ -13,18 +13,18 @@ public:
 	Enemy();
 	~Enemy();
 
-	//Uint32 delay_time;
-	//Uint32 current_time;
 	Uint32 airplane_time;
 	SDL_Rect airplane_rect;
 
 	Uint32 creature_time;
 	SDL_Rect creature_rect;
+	Uint32 move_time;
+
 	int creature_health;
 	void drawHelicopter(SDL_Renderer*);
 	
 	void drawAirplane(SDL_Renderer* , int , int , Uint32);
-	void drawCreature(SDL_Renderer* , int , int , Uint32);
+	void drawCreature(SDL_Renderer* , int , int , SDL_Rect , Uint32);
 
 	void enemy_load(SDL_Renderer*);
 	void load_enemy(char* , char* , SDL_Renderer*);

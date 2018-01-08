@@ -811,10 +811,7 @@ void Events :: klavye(SDL_Renderer* rend , int camx , int camy)
 
 					case SDLK_t:
 						
-						if(InventoryStore.OpenInventory)
-							InventoryStore.OpenInventory = false;
-						else
-							InventoryStore.OpenInventory = true;
+						
 						break;
 
 					case SDLK_UP:

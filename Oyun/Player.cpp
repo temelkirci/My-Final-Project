@@ -4,6 +4,7 @@
 #include "SDL/SDL_ttf.h"
 #include <string>
 #include <iostream>
+#include <chrono>
 
 Player :: Player()
 {
@@ -31,7 +32,7 @@ Player :: Player()
 
 	angle = 0;
 	player_time = 0;
-	
+	health_time = 0;
 	player_barbaros.x = 625;
 	player_barbaros.y = 300;
 	player_barbaros.w = 100;
@@ -44,8 +45,8 @@ Player :: Player()
 
 	playerColor.r = 0;
 	playerColor.g = 0;
-	playerColor.b = 255;
-	playerColor.a = 150;
+	playerColor.b = 0;
+	playerColor.a = 255;
 
 	playerPoint.x = 50;
 	playerPoint.y = 50;
@@ -212,6 +213,20 @@ void Player :: barbaros_çiz(SDL_Renderer* render_barbaros , string barbaros_gun
 		eksi_y_speed = speed;
 		arti_y_speed = speed;
 	}
+	
+	if(SDL_HasIntersection(&creature_rect , &player_barbaros))
+	{
+		if(health_time == 0)
+		{
+			health_time = 300 + süre;
+		}
+		if(süre > health_time)
+		{
+			health_time = 0;
+			health--;
+		}
+	
+	}
 
 	if((barbaros_stat == "move") && (barbaros_gun == "flashlight"))
 	{
@@ -220,23 +235,23 @@ void Player :: barbaros_çiz(SDL_Renderer* render_barbaros , string barbaros_gun
 			player_time = 300 + süre;
 		}
 		
-		if(current_time <= player_time && barbaros_durum == "move") // 50 ms sayarsa
+		if(süre <= player_time && barbaros_durum == "move") // 50 ms sayarsa
 		{
 			SDL_RenderCopyEx(render_barbaros , barbaros_weapon["move_flashlight_0"] , NULL , &player_barbaros , angle , &playerPoint , SDL_FLIP_NONE);
 		}
-		else if((current_time > player_time) && (current_time <= (player_time + 300)) && barbaros_durum == "move") 
+		else if((süre > player_time) && (süre <= (player_time + 300)) && barbaros_durum == "move") 
 		{
 			SDL_RenderCopyEx(render_barbaros , barbaros_weapon["move_flashlight_1"] , NULL , &player_barbaros , angle , &playerPoint , SDL_FLIP_NONE);
 		}
-		else if((current_time > player_time + 300) && (current_time <= (player_time + 600)) && barbaros_durum == "move")
+		else if((süre > player_time + 300) && (süre <= (player_time + 600)) && barbaros_durum == "move")
 		{
 			SDL_RenderCopyEx(render_barbaros , barbaros_weapon["move_flashlight_2"] , NULL , &player_barbaros , angle , &playerPoint , SDL_FLIP_NONE);
 		}
-		else if((current_time > player_time + 600) && (current_time <= (player_time + 900)) && barbaros_durum == "move")
+		else if((süre > player_time + 600) && (süre <= (player_time + 900)) && barbaros_durum == "move")
 		{
 			SDL_RenderCopyEx(render_barbaros , barbaros_weapon["move_flashlight_3"] , NULL , &player_barbaros , angle , &playerPoint , SDL_FLIP_NONE);
 		}
-		else if((current_time > player_time + 900) && (current_time <= (player_time + 1200)) && barbaros_durum == "move")
+		else if((süre > player_time + 900) && (süre <= (player_time + 1200)) && barbaros_durum == "move")
 		{
 			SDL_RenderCopyEx(render_barbaros , barbaros_weapon["move_flashlight_4"] , NULL , &player_barbaros , angle , &playerPoint , SDL_FLIP_NONE);
 		}
@@ -255,23 +270,23 @@ void Player :: barbaros_çiz(SDL_Renderer* render_barbaros , string barbaros_gun
 			player_time = 100 + süre;
 		}
 		
-		if(current_time <= player_time && barbaros_durum == "attack") // 50 ms sayarsa
+		if(süre <= player_time && barbaros_durum == "attack") // 50 ms sayarsa
 		{
 			SDL_RenderCopyEx(render_barbaros , barbaros_weapon["knife1"] , NULL , &player_barbaros , angle , &playerPoint , SDL_FLIP_NONE);
 		}
-		else if((current_time > player_time) && (current_time <= (player_time + 100)) && barbaros_durum == "attack") 
+		else if((süre > player_time) && (süre <= (player_time + 100)) && barbaros_durum == "attack") 
 		{
 			SDL_RenderCopyEx(render_barbaros , barbaros_weapon["knife2"] , NULL , &player_barbaros , angle , &playerPoint , SDL_FLIP_NONE);
 		}
-		else if((current_time > player_time + 100) && (current_time <= (player_time + 200)) && barbaros_durum == "attack")
+		else if((süre > player_time + 100) && (süre <= (player_time + 200)) && barbaros_durum == "attack")
 		{
 			SDL_RenderCopyEx(render_barbaros , barbaros_weapon["knife3"] , NULL , &player_barbaros , angle , &playerPoint , SDL_FLIP_NONE);
 		}
-		else if((current_time > player_time + 200) && (current_time <= (player_time + 300)) && barbaros_durum == "attack")
+		else if((süre > player_time + 200) && (süre <= (player_time + 300)) && barbaros_durum == "attack")
 		{
 			SDL_RenderCopyEx(render_barbaros , barbaros_weapon["knife4"] , NULL , &player_barbaros , angle , &playerPoint , SDL_FLIP_NONE);
 		}
-		else if((current_time > player_time + 300) && (current_time <= (player_time + 400)) && barbaros_durum == "attack")
+		else if((süre > player_time + 300) && (süre <= (player_time + 400)) && barbaros_durum == "attack")
 		{
 			SDL_RenderCopyEx(render_barbaros , barbaros_weapon["knife5"] , NULL , &player_barbaros , angle , &playerPoint , SDL_FLIP_NONE);
 		}
@@ -291,83 +306,83 @@ void Player :: barbaros_çiz(SDL_Renderer* render_barbaros , string barbaros_gun
 			player_time = 50 + süre;
 		}
 		
-		if(current_time <= player_time && barbaros_durum == "move") // 100 ms sayarsa
+		if(süre <= player_time && barbaros_durum == "move") // 50 ms sayarsa
 		{
 			SDL_RenderCopyEx(render_barbaros , barbaros_weapon["idle_knife_0"] , NULL , &player_barbaros , angle , &playerPoint , SDL_FLIP_NONE);
 		}
-		else if((current_time > player_time) && (current_time <= (player_time + 50)) && barbaros_durum == "move") 
+		else if((süre > player_time) && (süre <= (player_time + 50)) && barbaros_durum == "move") 
 		{
 			SDL_RenderCopyEx(render_barbaros , barbaros_weapon["idle_knife_1"] , NULL , &player_barbaros , angle , &playerPoint , SDL_FLIP_NONE);
 		}
-		else if((current_time > player_time + 50) && (current_time <= (player_time + 100)) && barbaros_durum == "move")
+		else if((süre > player_time + 50) && (süre <= (player_time + 100)) && barbaros_durum == "move")
 		{
 			SDL_RenderCopyEx(render_barbaros , barbaros_weapon["idle_knife_2"] , NULL , &player_barbaros , angle , &playerPoint , SDL_FLIP_NONE);
 		}
-		else if((current_time > player_time + 100) && (current_time <= (player_time + 150)) && barbaros_durum == "move")
+		else if((süre > player_time + 100) && (süre <= (player_time + 150)) && barbaros_durum == "move")
 		{
 			SDL_RenderCopyEx(render_barbaros , barbaros_weapon["idle_knife_3"] , NULL , &player_barbaros , angle , &playerPoint , SDL_FLIP_NONE);
 		}
-		else if((current_time > player_time + 150) && (current_time <= (player_time + 200)) && barbaros_durum == "move")
+		else if((süre > player_time + 150) && (süre <= (player_time + 200)) && barbaros_durum == "move")
 		{
 			SDL_RenderCopyEx(render_barbaros , barbaros_weapon["idle_knife_4"] , NULL , &player_barbaros , angle , &playerPoint , SDL_FLIP_NONE);
 		}
-		else if((current_time > player_time + 200) && (current_time <= (player_time + 250)) && barbaros_durum == "move")
+		else if((süre > player_time + 200) && (süre <= (player_time + 250)) && barbaros_durum == "move")
 		{
 			SDL_RenderCopyEx(render_barbaros , barbaros_weapon["idle_knife_5"] , NULL , &player_barbaros , angle , &playerPoint , SDL_FLIP_NONE);
 		}
-		else if((current_time > player_time + 250) && (current_time <= (player_time + 300)) && barbaros_durum == "move")
+		else if((süre > player_time + 250) && (süre <= (player_time + 300)) && barbaros_durum == "move")
 		{
 			SDL_RenderCopyEx(render_barbaros , barbaros_weapon["idle_knife_6"] , NULL , &player_barbaros , angle , &playerPoint , SDL_FLIP_NONE);
 		}
-		else if((current_time > player_time + 300) && (current_time <= (player_time + 350)) && barbaros_durum == "move")
+		else if((süre > player_time + 300) && (süre <= (player_time + 350)) && barbaros_durum == "move")
 		{
 			SDL_RenderCopyEx(render_barbaros , barbaros_weapon["idle_knife_7"] , NULL , &player_barbaros , angle , &playerPoint , SDL_FLIP_NONE);
 		}
-		else if((current_time > player_time + 350) && (current_time <= (player_time + 400)) && barbaros_durum == "move")
+		else if((süre > player_time + 350) && (süre <= (player_time + 400)) && barbaros_durum == "move")
 		{
 			SDL_RenderCopyEx(render_barbaros , barbaros_weapon["idle_knife_8"] , NULL , &player_barbaros , angle , &playerPoint , SDL_FLIP_NONE);
 		}
-		else if((current_time > player_time + 400) && (current_time <= (player_time + 450)) && barbaros_durum == "move")
+		else if((süre > player_time + 400) && (süre <= (player_time + 450)) && barbaros_durum == "move")
 		{
 			SDL_RenderCopyEx(render_barbaros , barbaros_weapon["idle_knife_9"] , NULL , &player_barbaros , angle , &playerPoint , SDL_FLIP_NONE);
 		}
-		else if((current_time > player_time + 450) && (current_time <= (player_time + 500)) && barbaros_durum == "move")
+		else if((süre > player_time + 450) && (süre <= (player_time + 500)) && barbaros_durum == "move")
 		{
 			SDL_RenderCopyEx(render_barbaros , barbaros_weapon["idle_knife_10"] , NULL , &player_barbaros , angle , &playerPoint , SDL_FLIP_NONE);
 		}
-		else if((current_time > player_time + 500) && (current_time <= (player_time + 550)) && barbaros_durum == "move")
+		else if((süre > player_time + 500) && (süre <= (player_time + 550)) && barbaros_durum == "move")
 		{
 			SDL_RenderCopyEx(render_barbaros , barbaros_weapon["idle_knife_11"] , NULL , &player_barbaros , angle , &playerPoint , SDL_FLIP_NONE);
 		}
-		else if((current_time > player_time + 550) && (current_time <= (player_time + 600)) && barbaros_durum == "move")
+		else if((süre > player_time + 550) && (süre <= (player_time + 600)) && barbaros_durum == "move")
 		{
 			SDL_RenderCopyEx(render_barbaros , barbaros_weapon["idle_knife_12"] , NULL , &player_barbaros , angle , &playerPoint , SDL_FLIP_NONE);
 		}
-		else if((current_time > player_time + 600) && (current_time <= (player_time + 650)) && barbaros_durum == "move")
+		else if((süre > player_time + 600) && (süre <= (player_time + 650)) && barbaros_durum == "move")
 		{
 			SDL_RenderCopyEx(render_barbaros , barbaros_weapon["idle_knife_13"] , NULL , &player_barbaros , angle , &playerPoint , SDL_FLIP_NONE);
 		}
-		else if((current_time > player_time + 650) && (current_time <= (player_time + 700)) && barbaros_durum == "move")
+		else if((süre > player_time + 650) && (süre <= (player_time + 700)) && barbaros_durum == "move")
 		{
 			SDL_RenderCopyEx(render_barbaros , barbaros_weapon["idle_knife_14"] , NULL , &player_barbaros , angle , &playerPoint , SDL_FLIP_NONE);
 		}
-		else if((current_time > player_time + 700) && (current_time <= (player_time + 750)) && barbaros_durum == "move")
+		else if((süre > player_time + 700) && (süre <= (player_time + 750)) && barbaros_durum == "move")
 		{
 			SDL_RenderCopyEx(render_barbaros , barbaros_weapon["idle_knife_15"] , NULL , &player_barbaros , angle , &playerPoint , SDL_FLIP_NONE);
 		}
-		else if((current_time > player_time + 750) && (current_time <= (player_time + 800)) && barbaros_durum == "move")
+		else if((süre > player_time + 750) && (süre <= (player_time + 800)) && barbaros_durum == "move")
 		{
 			SDL_RenderCopyEx(render_barbaros , barbaros_weapon["idle_knife_16"] , NULL , &player_barbaros , angle , &playerPoint , SDL_FLIP_NONE);
 		}
-		else if((current_time > player_time + 800) && (current_time <= (player_time + 850)) && barbaros_durum == "move")
+		else if((süre > player_time + 800) && (süre <= (player_time + 850)) && barbaros_durum == "move")
 		{
 			SDL_RenderCopyEx(render_barbaros , barbaros_weapon["idle_knife_17"] , NULL , &player_barbaros , angle , &playerPoint , SDL_FLIP_NONE);
 		}
-		else if((current_time > player_time + 850) && (current_time <= (player_time + 900)) && barbaros_durum == "move")
+		else if((süre > player_time + 850) && (süre <= (player_time + 900)) && barbaros_durum == "move")
 		{
 			SDL_RenderCopyEx(render_barbaros , barbaros_weapon["idle_knife_18"] , NULL , &player_barbaros , angle , &playerPoint , SDL_FLIP_NONE);
 		}
-		else if((current_time > player_time + 900) && (current_time <= (player_time + 950)) && barbaros_durum == "move")
+		else if((süre > player_time + 900) && (süre <= (player_time + 950)) && barbaros_durum == "move")
 		{
 			SDL_RenderCopyEx(render_barbaros , barbaros_weapon["idle_knife_19"] , NULL , &player_barbaros , angle , &playerPoint , SDL_FLIP_NONE);
 		}
@@ -388,15 +403,15 @@ void Player :: barbaros_çiz(SDL_Renderer* render_barbaros , string barbaros_gun
 			player_time = 100 + süre;
 		}
 		
-		if(current_time <= player_time) // 100 ms sayarsa
+		if(süre <= player_time) // 100 ms sayarsa
 		{
 			SDL_RenderCopyEx(render_barbaros , barbaros_weapon["handgun1"] , NULL , &player_barbaros , angle , &playerPoint , SDL_FLIP_NONE);
 		}
-		else if((current_time > player_time) && (current_time <= (player_time + 100))) 
+		else if((süre > player_time) && (süre <= (player_time + 100))) 
 		{
 			SDL_RenderCopyEx(render_barbaros , barbaros_weapon["handgun2"] , NULL , &player_barbaros , angle , &playerPoint , SDL_FLIP_NONE);
 		}
-		else if((current_time > player_time + 100) && (current_time <= (player_time + 200)))
+		else if((süre > player_time + 100) && (süre <= (player_time + 200)))
 		{
 			SDL_RenderCopyEx(render_barbaros , barbaros_weapon["handgun3"] , NULL , &player_barbaros , angle , &playerPoint , SDL_FLIP_NONE);
 		}
@@ -415,23 +430,23 @@ void Player :: barbaros_çiz(SDL_Renderer* render_barbaros , string barbaros_gun
 			player_time = 200 + süre;
 		}
 		
-		if(current_time <= player_time) // 200 ms sayarsa
+		if(süre <= player_time) // 200 ms sayarsa
 		{
 			SDL_RenderCopyEx(render_barbaros , barbaros_weapon["idle_handgun_0"] , NULL , &player_barbaros , angle , &playerPoint , SDL_FLIP_NONE);
 		}
-		else if((current_time > player_time) && (current_time <= (player_time + 200)) ) 
+		else if((süre > player_time) && (süre <= (player_time + 200)) ) 
 		{
 			SDL_RenderCopyEx(render_barbaros , barbaros_weapon["idle_handgun_1"] , NULL , &player_barbaros , angle , &playerPoint , SDL_FLIP_NONE);
 		}
-		else if((current_time > player_time + 200) && (current_time <= (player_time + 400)) )
+		else if((süre > player_time + 200) && (süre <= (player_time + 400)) )
 		{
 			SDL_RenderCopyEx(render_barbaros , barbaros_weapon["idle_handgun_2"] , NULL , &player_barbaros , angle , &playerPoint , SDL_FLIP_NONE);
 		}
-		else if((current_time > player_time + 400) && (current_time <= (player_time + 600)) )
+		else if((süre > player_time + 400) && (süre <= (player_time + 600)) )
 		{
 			SDL_RenderCopyEx(render_barbaros , barbaros_weapon["idle_handgun_3"] , NULL , &player_barbaros , angle , &playerPoint , SDL_FLIP_NONE);
 		}
-		else if((current_time > player_time + 600) && (current_time <= (player_time + 800)) )
+		else if((süre > player_time + 600) && (süre <= (player_time + 800)) )
 		{
 			SDL_RenderCopyEx(render_barbaros , barbaros_weapon["idle_handgun_4"] , NULL , &player_barbaros , angle , &playerPoint , SDL_FLIP_NONE);
 		}
@@ -450,15 +465,15 @@ void Player :: barbaros_çiz(SDL_Renderer* render_barbaros , string barbaros_gun
 			player_time = 200 + süre;
 		}
 		
-		if(current_time <= player_time) // 200 ms sayarsa
+		if(süre <= player_time) // 200 ms sayarsa
 		{
 			SDL_RenderCopyEx(render_barbaros , barbaros_weapon["shotgun1"] , NULL , &player_barbaros , angle , &playerPoint , SDL_FLIP_NONE);
 		}
-		else if((current_time > player_time) && (current_time <= (player_time + 200))) 
+		else if((süre > player_time) && (süre <= (player_time + 200))) 
 		{
 			SDL_RenderCopyEx(render_barbaros , barbaros_weapon["shotgun2"] , NULL , &player_barbaros , angle , &playerPoint , SDL_FLIP_NONE);
 		}
-		else if((current_time > player_time + 200) && (current_time <= (player_time + 400)))
+		else if((süre > player_time + 200) && (süre <= (player_time + 400)))
 		{
 			SDL_RenderCopyEx(render_barbaros , barbaros_weapon["shotgun3"] , NULL , &player_barbaros , angle , &playerPoint , SDL_FLIP_NONE);
 		}
@@ -477,23 +492,23 @@ void Player :: barbaros_çiz(SDL_Renderer* render_barbaros , string barbaros_gun
 			player_time = 200 + süre;
 		}
 		
-		if(current_time <= player_time) // 200 ms sayarsa
+		if(süre <= player_time) // 200 ms sayarsa
 		{
 			SDL_RenderCopyEx(render_barbaros , barbaros_weapon["idle_shotgun_0"] , NULL , &player_barbaros , angle , &playerPoint , SDL_FLIP_NONE);
 		}
-		else if((current_time > player_time) && (current_time <= (player_time + 200))) 
+		else if((süre > player_time) && (süre <= (player_time + 200))) 
 		{
 			SDL_RenderCopyEx(render_barbaros , barbaros_weapon["idle_shotgun_1"] , NULL , &player_barbaros , angle , &playerPoint , SDL_FLIP_NONE);
 		}
-		else if((current_time > player_time + 200) && (current_time <= (player_time + 400)))
+		else if((süre > player_time + 200) && (süre <= (player_time + 400)))
 		{
 			SDL_RenderCopyEx(render_barbaros , barbaros_weapon["idle_shotgun_2"] , NULL , &player_barbaros , angle , &playerPoint , SDL_FLIP_NONE);
 		}
-		else if((current_time > player_time + 400) && (current_time <= (player_time + 600)))
+		else if((süre > player_time + 400) && (süre <= (player_time + 600)))
 		{
 			SDL_RenderCopyEx(render_barbaros , barbaros_weapon["idle_shotgun_3"] , NULL , &player_barbaros , angle , &playerPoint , SDL_FLIP_NONE);
 		}
-		else if((current_time > player_time + 600) && (current_time <= (player_time + 800)))
+		else if((süre > player_time + 600) && (süre <= (player_time + 800)))
 		{
 			SDL_RenderCopyEx(render_barbaros , barbaros_weapon["idle_shotgun_4"] , NULL , &player_barbaros , angle , &playerPoint , SDL_FLIP_NONE);
 		}
@@ -513,15 +528,15 @@ void Player :: barbaros_çiz(SDL_Renderer* render_barbaros , string barbaros_gun
 			player_time = 100 + süre;
 		}
 		
-		if(current_time <= player_time) // 100 ms sayarsa
+		if(süre <= player_time) // 100 ms sayarsa
 		{
 			SDL_RenderCopyEx(render_barbaros , barbaros_weapon["rifle1"] , NULL , &player_barbaros , angle , &playerPoint , SDL_FLIP_NONE);
 		}
-		else if((current_time > player_time) && (current_time <= (player_time + 100))) 
+		else if((süre > player_time) && (süre <= (player_time + 100))) 
 		{
 			SDL_RenderCopyEx(render_barbaros , barbaros_weapon["rifle2"] , NULL , &player_barbaros , angle , &playerPoint , SDL_FLIP_NONE);
 		}
-		else if((current_time > player_time + 100) && (current_time <= (player_time + 200)))
+		else if((süre > player_time + 100) && (süre <= (player_time + 200)))
 		{
 			SDL_RenderCopyEx(render_barbaros , barbaros_weapon["rifle3"] , NULL , &player_barbaros , angle , &playerPoint , SDL_FLIP_NONE);
 		}
@@ -540,23 +555,23 @@ void Player :: barbaros_çiz(SDL_Renderer* render_barbaros , string barbaros_gun
 			player_time = 200 + süre;
 		}
 		
-		if(current_time <= player_time) // 100 ms sayarsa
+		if(süre <= player_time) // 100 ms sayarsa
 		{
 			SDL_RenderCopyEx(render_barbaros , barbaros_weapon["idle_rifle_0"] , NULL , &player_barbaros , angle , &playerPoint , SDL_FLIP_NONE);
 		}
-		else if((current_time > player_time) && (current_time <= (player_time + 200))) 
+		else if((süre > player_time) && (süre <= (player_time + 200))) 
 		{
 			SDL_RenderCopyEx(render_barbaros , barbaros_weapon["idle_rifle_1"] , NULL , &player_barbaros , angle , &playerPoint , SDL_FLIP_NONE);
 		}
-		else if((current_time > player_time + 200) && (current_time <= (player_time + 400)))
+		else if((süre > player_time + 200) && (süre <= (player_time + 400)))
 		{
 			SDL_RenderCopyEx(render_barbaros , barbaros_weapon["idle_rifle_2"] , NULL , &player_barbaros , angle , &playerPoint , SDL_FLIP_NONE);
 		}
-		else if((current_time > player_time + 400) && (current_time <= (player_time + 600)))
+		else if((süre > player_time + 400) && (süre <= (player_time + 600)))
 		{
 			SDL_RenderCopyEx(render_barbaros , barbaros_weapon["idle_rifle_3"] , NULL , &player_barbaros , angle , &playerPoint , SDL_FLIP_NONE);
 		}
-		else if((current_time > player_time + 600) && (current_time <= (player_time + 800)))
+		else if((süre > player_time + 600) && (süre <= (player_time + 800)))
 		{
 			SDL_RenderCopyEx(render_barbaros , barbaros_weapon["idle_rifle_4"] , NULL , &player_barbaros , angle , &playerPoint , SDL_FLIP_NONE);
 		}
@@ -613,7 +628,7 @@ void Player :: barbaros_güncelle(SDL_Renderer* render , Uint32 time_barbaros)
 		if(thirsty_time == 0)
 			thirsty_time = time_barbaros + 5000; // susuzluk her 5 saniyede 1 azalacak
 
-		if(current_time >= hunger_time)
+		if(time_barbaros >= hunger_time)
 		{
 			hunger--;
 			if(hunger <= 0)
@@ -625,7 +640,7 @@ void Player :: barbaros_güncelle(SDL_Renderer* render , Uint32 time_barbaros)
 
 		}
 
-		if(current_time >= thirsty_time)
+		if(time_barbaros >= thirsty_time)
 		{
 			thirtsy--;
 			if(thirtsy <= 0)
@@ -639,15 +654,15 @@ void Player :: barbaros_güncelle(SDL_Renderer* render , Uint32 time_barbaros)
 
 		if((handgun_mermi <= 0) && (barbaros_guns == "handgun"))
 		{		
-			Write(render , current_time , "Tabanca mermisi bitti" , 3000);
+			Write(render , time_barbaros , "Tabanca mermisi bitti" , 3000);
 		}
 		else if((rifle_mermi <= 0) && (barbaros_guns == "rifle"))
 		{		
-			Write(render , current_time , "Tüfek mermisi bitti" , 3000);
+			Write(render , time_barbaros , "Tüfek mermisi bitti" , 3000);
 		}
 		else if((shotgun_mermi <= 0) && (barbaros_guns == "shotgun"))
 		{		
-			Write(render , current_time , "Pompali tüfek mermisi bitti" , 3000);
+			Write(render , time_barbaros , "Pompali tüfek mermisi bitti" , 3000);
 		}
 
 		

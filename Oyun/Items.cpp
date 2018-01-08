@@ -3,6 +3,36 @@
 #include "SDL/SDL.h"
 #include <string>
 #include <tuple>
+#include <algorithm>
+#include <vector>
+
+void FindInVector(vector<int> v , int search)
+{
+	for (unsigned int i = 0; i < v.size(); ++i)
+	{
+		if (v[i] == search)
+		{
+			cout << "Found: " << v[i] << " at position: " << i << endl;
+		}
+	}
+	cout<<endl<<endl;
+}
+
+bool Descending(int first, int second)
+{
+	return first > second;
+}
+
+void SortVector(vector<int> v)
+{
+	sort(v.begin(), v.end()); // küçükten büyüðe sýralar
+	//sort(v.begin(), v.end() , Descending); // büyükten küçüðe sýralar
+
+	for (auto& value : v)
+	{
+		cout << value << endl;
+	}
+}
 
 Items :: Items()
 {
@@ -38,9 +68,37 @@ Items :: Items()
 		Collectible_Items[0].item_id = 0;
 		Collectible_Items[0].number_item = 1;
 		Collectible_Items[0].item_health = 100;
-		Collectible_Items[0].item_active = false;
+		Collectible_Items[0].item_active = true;
 		Collectible_Items[0].item_rect = temp_rect;
 		Collectible_Items[0].item_texture = NULL;
+
+		temp_rect.x = 50;
+		temp_rect.y = 350;
+		temp_rect.w = 50;
+		temp_rect.h = 30;
+
+		Collectible_Items[1].item_name = "handgun";
+		Collectible_Items[1].item_blendmode = "blend";
+		Collectible_Items[1].item_id = 1;
+		Collectible_Items[1].number_item = 1;
+		Collectible_Items[1].item_health = 100;
+		Collectible_Items[1].item_active = true;
+		Collectible_Items[1].item_rect = temp_rect;
+		Collectible_Items[1].item_texture = NULL;
+
+		temp_rect.x = 150;
+		temp_rect.y = 650;
+		temp_rect.w = 50;
+		temp_rect.h = 30;
+
+		Collectible_Items[2].item_name = "shotgun";
+		Collectible_Items[2].item_blendmode = "blend";
+		Collectible_Items[2].item_id = 2;
+		Collectible_Items[2].number_item = 1;
+		Collectible_Items[2].item_health = 100;
+		Collectible_Items[2].item_active = true;
+		Collectible_Items[2].item_rect = temp_rect;
+		Collectible_Items[2].item_texture = NULL;
 
 		temp_rect.x = 750;
 		temp_rect.y = 350;

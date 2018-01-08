@@ -4,9 +4,6 @@
 #include "SDL/SDL.h"
 #include <stdlib.h> // srand için
 #include <Time.h> // time için
-#include <GL/glew.h>
-#include <SDL/SDL_opengl.h>
-#include <GL/freeglut.h>
 
 using namespace std;
 
@@ -21,6 +18,10 @@ Render :: Render()
 	z=0;
 	fpsTime = 0;
 	
+	viewport.x = 10;
+	viewport.y = 10;
+	viewport.w = 1000;
+	viewport.h = 400;
 }
 
 Render :: ~Render()
@@ -36,14 +37,14 @@ void Render :: render(SDL_Renderer* rend , bool menu)
 	//SDL_RenderSetViewport(rend , &viewport);
 	// EKRANI TEMÝZLE
 	SDL_RenderClear(rend); 
-	
+
 	// BACKGROUND
 	draw_camera(rend, &xpoz , &ypoz , 1350, 700);
 
 	drawAirplane(rend , camera.x , camera.y , start);
 
 	if(creature_health > 0)
-		drawCreature(rend , camera.x , camera.y , start);
+		drawCreature(rend , camera.x , camera.y , player_barbaros , start);
 	// ITEMS
 
 		// toplanabilir nesneleri çizeceðiz
@@ -116,7 +117,7 @@ void Render :: render(SDL_Renderer* rend , bool menu)
 	
 	//SDL_RenderSetLogicalSize(rend , 300 , 300);
 	informationItem(rend);
-	//tank(rend , camera.x , camera.y);
+	
 	SDL_RenderCopyEx(rend, map_texture[current_cursor] , NULL , &solid_mouse , 0 , 0 , SDL_FLIP_NONE);
 	// EKRANI GÜNCELLE
 	
@@ -135,7 +136,7 @@ void Render :: render(SDL_Renderer* rend , bool menu)
 	// write FPS
 	if(fpsTime > 1000.0)
 	{
-		SDL_SetWindowTitle(win , (to_string(int(currentFPS))).c_str());
+		//SDL_SetWindowTitle(win , (to_string(int(currentFPS))).c_str());
 	}
 
 	if(fpsTime >= 1000.0)

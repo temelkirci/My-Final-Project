@@ -1,5 +1,4 @@
 #include <SDL/SDL.h>
-#include <iostream>
 #include "SDL/SDL_ttf.h"
 #include "SDL/SDL_mixer.h"
 #include <string>
@@ -43,9 +42,7 @@ bool Game :: init(const char* baþlýk , int x , int y , int yükseklik , int geniþ
 		{
 			pencere = SDL_CreateWindow(baþlýk , x , y , yükseklik , geniþlik , bayraklar); // Pencere oluþtur
 			win = pencere;
-			
-			glContext = SDL_GL_CreateContext(pencere);
-				
+					
 			if(pencere == NULL )
 			{
 				SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR , "Oyun" , "Pencere Olusturma Hatasi" , NULL);

@@ -1,4 +1,3 @@
-C:\USERS\TEMEL\DOCUMENTS\GITHUB\OYUN-MASTER\OYUN\DEBUG\ANIMATION.OBJ
 C:\USERS\TEMEL\DOCUMENTS\GITHUB\OYUN-MASTER\OYUN\DEBUG\ENEMY.OBJ
 C:\USERS\TEMEL\DOCUMENTS\GITHUB\OYUN-MASTER\OYUN\DEBUG\FONTS.OBJ
 C:\USERS\TEMEL\DOCUMENTS\GITHUB\OYUN-MASTER\OYUN\DEBUG\EVENTS.OBJ
@@ -7,18 +6,18 @@ C:\USERS\TEMEL\DOCUMENTS\GITHUB\OYUN-MASTER\OYUN\DEBUG\INVENTORY.OBJ
 C:\USERS\TEMEL\DOCUMENTS\GITHUB\OYUN-MASTER\OYUN\DEBUG\ITEMS.OBJ
 C:\USERS\TEMEL\DOCUMENTS\GITHUB\OYUN-MASTER\OYUN\DEBUG\MAIN.OBJ
 C:\USERS\TEMEL\DOCUMENTS\GITHUB\OYUN-MASTER\OYUN\DEBUG\MENU.OBJ
+C:\USERS\TEMEL\DOCUMENTS\GITHUB\OYUN-MASTER\OYUN\DEBUG\NPC.OBJ
 C:\USERS\TEMEL\DOCUMENTS\GITHUB\OYUN-MASTER\OYUN\DEBUG\PLAYER.OBJ
 C:\USERS\TEMEL\DOCUMENTS\GITHUB\OYUN-MASTER\OYUN\DEBUG\RENDER.OBJ
+C:\USERS\TEMEL\DOCUMENTS\GITHUB\OYUN-MASTER\OYUN\DEBUG\SHADER.OBJ
 C:\USERS\TEMEL\DOCUMENTS\GITHUB\OYUN-MASTER\OYUN\DEBUG\SOUNDS.OBJ
 C:\USERS\TEMEL\DOCUMENTS\GITHUB\OYUN-MASTER\OYUN\DEBUG\TEXTURE.OBJ
 C:\USERS\TEMEL\DOCUMENTS\GITHUB\OYUN-MASTER\OYUN\DEBUG\TIMER.OBJ
-C:\USERS\TEMEL\DOCUMENTS\GITHUB\OYUN-MASTER\OYUN\DEBUG\TOOLS.OBJ
 C:\USERS\TEMEL\DOCUMENTS\GITHUB\OYUN-MASTER\OYUN\DEBUG\WINDOW.OBJ
 C:\USERS\TEMEL\DOCUMENTS\GITHUB\OYUN-MASTER\OYUN\DEBUG\VC110.PDB
 C:\USERS\TEMEL\DOCUMENTS\GITHUB\OYUN-MASTER\DEBUG\MY FINAL PROJECT.ILK
 C:\USERS\TEMEL\DOCUMENTS\GITHUB\OYUN-MASTER\DEBUG\MY FINAL PROJECT.EXE
 C:\USERS\TEMEL\DOCUMENTS\GITHUB\OYUN-MASTER\DEBUG\MY FINAL PROJECT.PDB
-C:\Users\TEMEL\Documents\GitHub\Oyun-master\Oyun\Debug\Animation.obj
 C:\Users\TEMEL\Documents\GitHub\Oyun-master\Oyun\Debug\Enemy.obj
 C:\Users\TEMEL\Documents\GitHub\Oyun-master\Oyun\Debug\Events.obj
 C:\Users\TEMEL\Documents\GitHub\Oyun-master\Oyun\Debug\Fonts.obj
@@ -27,12 +26,13 @@ C:\Users\TEMEL\Documents\GitHub\Oyun-master\Oyun\Debug\Inventory.obj
 C:\Users\TEMEL\Documents\GitHub\Oyun-master\Oyun\Debug\Items.obj
 C:\Users\TEMEL\Documents\GitHub\Oyun-master\Oyun\Debug\Main.obj
 C:\Users\TEMEL\Documents\GitHub\Oyun-master\Oyun\Debug\Menu.obj
+C:\Users\TEMEL\Documents\GitHub\Oyun-master\Oyun\Debug\NPC.obj
 C:\Users\TEMEL\Documents\GitHub\Oyun-master\Oyun\Debug\Player.obj
 C:\Users\TEMEL\Documents\GitHub\Oyun-master\Oyun\Debug\Render.obj
+C:\Users\TEMEL\Documents\GitHub\Oyun-master\Oyun\Debug\Shader.obj
 C:\Users\TEMEL\Documents\GitHub\Oyun-master\Oyun\Debug\Sounds.obj
 C:\Users\TEMEL\Documents\GitHub\Oyun-master\Oyun\Debug\Texture.obj
 C:\Users\TEMEL\Documents\GitHub\Oyun-master\Oyun\Debug\Timer.obj
-C:\Users\TEMEL\Documents\GitHub\Oyun-master\Oyun\Debug\Tools.obj
 C:\Users\TEMEL\Documents\GitHub\Oyun-master\Oyun\Debug\Window.obj
 C:\Users\TEMEL\Documents\GitHub\Oyun-master\Oyun\Debug\cl.command.1.tlog
 C:\Users\TEMEL\Documents\GitHub\Oyun-master\Oyun\Debug\CL.read.1.tlog
@@ -41,24 +41,6 @@ C:\Users\TEMEL\Documents\GitHub\Oyun-master\Oyun\Debug\link-cvtres.read.1.tlog
 C:\Users\TEMEL\Documents\GitHub\Oyun-master\Oyun\Debug\link-cvtres.write.1.tlog
 C:\Users\TEMEL\Documents\GitHub\Oyun-master\Oyun\Debug\link-rc.read.1.tlog
 C:\Users\TEMEL\Documents\GitHub\Oyun-master\Oyun\Debug\link-rc.write.1.tlog
-C:\Users\TEMEL\Documents\GitHub\Oyun-master\Oyun\Debug\link.10016-cvtres.read.1.tlog
-C:\Users\TEMEL\Documents\GitHub\Oyun-master\Oyun\Debug\link.10016-cvtres.write.1.tlog
-C:\Users\TEMEL\Documents\GitHub\Oyun-master\Oyun\Debug\link.10016-rc.read.1.tlog
-C:\Users\TEMEL\Documents\GitHub\Oyun-master\Oyun\Debug\link.10016-rc.write.1.tlog
-C:\Users\TEMEL\Documents\GitHub\Oyun-master\Oyun\Debug\link.10016.read.1.tlog
-C:\Users\TEMEL\Documents\GitHub\Oyun-master\Oyun\Debug\link.10016.write.1.tlog
-C:\Users\TEMEL\Documents\GitHub\Oyun-master\Oyun\Debug\link.3552-cvtres.read.1.tlog
-C:\Users\TEMEL\Documents\GitHub\Oyun-master\Oyun\Debug\link.3552-cvtres.write.1.tlog
-C:\Users\TEMEL\Documents\GitHub\Oyun-master\Oyun\Debug\link.3552-rc.read.1.tlog
-C:\Users\TEMEL\Documents\GitHub\Oyun-master\Oyun\Debug\link.3552-rc.write.1.tlog
-C:\Users\TEMEL\Documents\GitHub\Oyun-master\Oyun\Debug\link.3552.read.1.tlog
-C:\Users\TEMEL\Documents\GitHub\Oyun-master\Oyun\Debug\link.3552.write.1.tlog
-C:\Users\TEMEL\Documents\GitHub\Oyun-master\Oyun\Debug\link.7828-cvtres.read.1.tlog
-C:\Users\TEMEL\Documents\GitHub\Oyun-master\Oyun\Debug\link.7828-cvtres.write.1.tlog
-C:\Users\TEMEL\Documents\GitHub\Oyun-master\Oyun\Debug\link.7828-rc.read.1.tlog
-C:\Users\TEMEL\Documents\GitHub\Oyun-master\Oyun\Debug\link.7828-rc.write.1.tlog
-C:\Users\TEMEL\Documents\GitHub\Oyun-master\Oyun\Debug\link.7828.read.1.tlog
-C:\Users\TEMEL\Documents\GitHub\Oyun-master\Oyun\Debug\link.7828.write.1.tlog
 C:\Users\TEMEL\Documents\GitHub\Oyun-master\Oyun\Debug\link.command.1.tlog
 C:\Users\TEMEL\Documents\GitHub\Oyun-master\Oyun\Debug\link.read.1.tlog
 C:\Users\TEMEL\Documents\GitHub\Oyun-master\Oyun\Debug\link.write.1.tlog

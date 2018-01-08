@@ -58,7 +58,7 @@ public:
 	bool active_bullet;
 	SDL_Texture* dead_texture;
 	SDL_Rect death_rect;
-
+	Uint32 health_time;
 	//
 
 	int total_survival_day; // hayatta kalýnan gün sayýsý
