@@ -4,6 +4,7 @@
 #include "Events.h"
 #include <tuple>
 #include <cmath>
+#include <vector>
 
 #define PI 3.14159265 // Radyan dan dereceye çevirmek için kullanacağız
 
@@ -202,18 +203,17 @@ void Events :: klavye(SDL_Renderer* rend , int camx , int camy)
 
 	}
 	////////////////////////
-
+	/*
 	if(drawing != "") // çizilecek eşya varsa
 	{
 		current_cursor = "sepia";
 		if(!yerlestirme)
 		{
-			for(int j=0;j<Collectible_Size;j++)
+			for(auto j=0;j<col.size();j++)
 			{
-				if((Solid_Items[j].item_name == "")) // çizilecek item için indis bulma
+				if((solid[j].item_name == "")) // çizilecek item için indis bulma
 				{
-					Solid_Items[j].item_name = drawing;
-					Solid_Items[j].item_id = j;
+					solid[j].item_name = drawing;					
 					indis_item = j;
 
 					yerlestirme = true;
@@ -228,36 +228,36 @@ void Events :: klavye(SDL_Renderer* rend , int camx , int camy)
 		}
 		else // eşya bilgileri kaydedilmişse
 		{
-			Solid_Items[indis_item].item_active = false;
-			Solid_Items[indis_item].item_blendmode = "add";
-			Solid_Items[indis_item].number_item = 1;
+			solid[indis_item].item_active = false;
+			solid[indis_item].item_blendmode = "add";
+			solid[indis_item].number_item = 1;
 
-				if(Solid_Items[indis_item].item_name == "wood_block")
-					Solid_Items[indis_item].item_health = 1000;
-				if(Solid_Items[indis_item].item_name == "brick_block")
-					Solid_Items[indis_item].item_health = 2000;
-				if(Solid_Items[indis_item].item_name == "stone_block")
-					Solid_Items[indis_item].item_health = 3000;
-				if(Solid_Items[indis_item].item_name == "iron_block")
-					Solid_Items[indis_item].item_health = 4000;
-				if(Solid_Items[indis_item].item_name == "steel_block")
-					Solid_Items[indis_item].item_health = 5000;
+				if(solid[indis_item].item_name == "wood_block")
+					solid[indis_item].item_health = 1000;
+				if(solid[indis_item].item_name == "brick_block")
+					solid[indis_item].item_health = 2000;
+				if(solid[indis_item].item_name == "stone_block")
+					solid[indis_item].item_health = 3000;
+				if(solid[indis_item].item_name == "iron_block")
+					solid[indis_item].item_health = 4000;
+				if(solid[indis_item].item_name == "steel_block")
+					solid[indis_item].item_health = 5000;
 				
 
-			for(int t=0;t<Collectible_Size;t++)
+			for(vector<Item>::iterator t = col.begin() ; t != col.end(); t++)
 			{
 				
-				if((SDL_HasIntersection(&Solid_Items[indis_item].item_rect , &Uncollectible_Items[t].item_rect)))
+				if((SDL_HasIntersection(&solid[indis_item].item_rect , &(*t).item_rect) ))
 				{
 					collision = true;
 					break;
 				}
-				else if((SDL_HasIntersection(&Solid_Items[indis_item].item_rect , &Collectible_Items[t].item_rect)))
+				else if((SDL_HasIntersection(&solid[indis_item].item_rect , &(*t).item_rect)))
 				{
 					collision = true;
 					break;
 				}
-				else if((SDL_HasIntersection(&Solid_Items[indis_item].item_rect , &player_barbaros)))
+				else if((SDL_HasIntersection(&solid[indis_item].item_rect , &player_barbaros)))
 				{
 					collision = true;
 					break;
@@ -271,23 +271,23 @@ void Events :: klavye(SDL_Renderer* rend , int camx , int camy)
 		
 			if(draw_apply) // eşyayı çiz
 			{
-				Solid_Items[indis_item].item_blendmode = "blend";
-				Solid_Items[indis_item].item_active = true;
-				Solid_Items[indis_item].item_rect.x = (mouse.x/25)*25; 
-				Solid_Items[indis_item].item_rect.y = (mouse.y/12)*12;   
-				Solid_Items[indis_item].item_rect.w = 100;
-				Solid_Items[indis_item].item_rect.h = 100;
+				solid[indis_item].item_blendmode = "blend";
+				solid[indis_item].item_active = true;
+				solid[indis_item].item_rect.x = (mouse.x/25)*25; 
+				solid[indis_item].item_rect.y = (mouse.y/12)*12;   
+				solid[indis_item].item_rect.w = 100;
+				solid[indis_item].item_rect.h = 100;
 				
-				if(Solid_Items[indis_item].item_blendmode == "wood_block")
-					Solid_Items[indis_item].item_health = 1000;
-				if(Solid_Items[indis_item].item_blendmode == "brick_block")
-					Solid_Items[indis_item].item_health = 2000;
-				if(Solid_Items[indis_item].item_blendmode == "stone_block")
-					Solid_Items[indis_item].item_health = 3000;
-				if(Solid_Items[indis_item].item_blendmode == "iron_block")
-					Solid_Items[indis_item].item_health = 4000;
-				if(Solid_Items[indis_item].item_blendmode == "steel_block")
-					Solid_Items[indis_item].item_health = 5000;
+				if(solid[indis_item].item_blendmode == "wood_block")
+					solid[indis_item].item_health = 1000;
+				if(solid[indis_item].item_blendmode == "brick_block")
+					solid[indis_item].item_health = 2000;
+				if(solid[indis_item].item_blendmode == "stone_block")
+					solid[indis_item].item_health = 3000;
+				if(solid[indis_item].item_blendmode == "iron_block")
+					solid[indis_item].item_health = 4000;
+				if(solid[indis_item].item_blendmode == "steel_block")
+					solid[indis_item].item_health = 5000;
 				
 
 				for(int i=0;i<inventory_size;i++)
@@ -308,27 +308,26 @@ void Events :: klavye(SDL_Renderer* rend , int camx , int camy)
 			}
 		else // eşya çizilmemişse
 			{
-					Solid_Items[indis_item].item_active = false;
-					Solid_Items[indis_item].item_blendmode = "add";
-					Solid_Items[indis_item].item_rect.x = (mouse.x/25)*25;
-					Solid_Items[indis_item].item_rect.y = (mouse.y/12)*12;
-					Solid_Items[indis_item].item_rect.w = 100;
-					Solid_Items[indis_item].item_rect.h = 100;
+					solid[indis_item].item_active = false;
+					solid[indis_item].item_blendmode = "add";
+					solid[indis_item].item_rect.x = (mouse.x/25)*25;
+					solid[indis_item].item_rect.y = (mouse.y/12)*12;
+					solid[indis_item].item_rect.w = 100;
+					solid[indis_item].item_rect.h = 100;
 
 					current_cursor = "sepia";
 
 					if(cancel_draw)
 					{
-						Solid_Items[indis_item].item_name = "";
-						Solid_Items[indis_item].item_blendmode = "";
-						Solid_Items[indis_item].item_id = NULL;
-						Solid_Items[indis_item].number_item = NULL;
-						Solid_Items[indis_item].item_health = NULL;
-						Solid_Items[indis_item].item_rect.x = NULL;
-						Solid_Items[indis_item].item_rect.y = NULL;
-						Solid_Items[indis_item].item_rect.w = NULL;
-						Solid_Items[indis_item].item_rect.h = NULL;
-						Solid_Items[indis_item].item_texture = NULL;
+						solid[indis_item].item_name = "";
+						solid[indis_item].item_blendmode = "";
+						solid[indis_item].number_item = NULL;
+						solid[indis_item].item_health = NULL;
+						solid[indis_item].item_rect.x = NULL;
+						solid[indis_item].item_rect.y = NULL;
+						solid[indis_item].item_rect.w = NULL;
+						solid[indis_item].item_rect.h = NULL;
+						solid[indis_item].item_texture = NULL;
 
 						drawing = "";
 						draw_apply = false;
@@ -341,27 +340,28 @@ void Events :: klavye(SDL_Renderer* rend , int camx , int camy)
 			}
 		}
 	}
-
+	*/
 	
 
 	for(int k=0;k<10;k++)
 	{
-		if(SDL_HasIntersection(&mouse , &Collectible_Items[k].item_rect))
+		/*
+		if(SDL_HasIntersection(&mouse , &col[k].item_rect))
 		{
-			inf = Collectible_Items[k].item_name;
+			inf = col[k].item_name;
 			break;
 		}
-		if(SDL_HasIntersection(&mouse , &(Uncollectible_Items[k].item_rect )))
+		if(SDL_HasIntersection(&mouse , &(uncol[k].item_rect )))
 		{
-			inf = Uncollectible_Items[k].item_name;
+			inf = uncol[k].item_name;
 			break;
 		}
-		if(SDL_HasIntersection(&mouse , &Solid_Items[k].item_rect))
+		if(SDL_HasIntersection(&mouse , &solid[k].item_rect))
 		{
-			inf = Solid_Items[k].item_name;
+			inf = solid[k].item_name;
 			break;
 		}
-		
+		*/
 		if( SDL_HasIntersection(&solid_mouse , &rect_inventory))
 		{
 			for(int t=0;t<inventory_size;t++)
@@ -810,8 +810,11 @@ void Events :: klavye(SDL_Renderer* rend , int camx , int camy)
 						break;
 
 					case SDLK_t:
-						
-						
+						for(vector<Item>::iterator i = col.begin() ; i != col.end(); ++i)
+						{
+							cout<<(*i).item_name<<endl;
+						}
+						cout<<endl;
 						break;
 
 					case SDLK_UP:

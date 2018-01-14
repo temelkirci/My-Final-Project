@@ -41,10 +41,10 @@ void Render :: render(SDL_Renderer* rend , bool menu)
 	// BACKGROUND
 	draw_camera(rend, &xpoz , &ypoz , 1350, 700);
 
-	drawAirplane(rend , camera.x , camera.y , start);
+	//drawAirplane(rend , camera.x , camera.y , start);
 
 	if(creature_health > 0)
-		drawCreature(rend , camera.x , camera.y , player_barbaros , start);
+		//drawCreature(rend , camera.x , camera.y , player_barbaros , start);
 	// ITEMS
 
 		// toplanabilir nesneleri çizeceðiz
@@ -56,8 +56,9 @@ void Render :: render(SDL_Renderer* rend , bool menu)
 		// toplanamaz ve içinden geçilemez nesneleri çizeceðiz -> dað , aðaç kaya
 		draw_solid_texture(rend);
 
-		draw_bullet(rend);
+		draw_bullet(rend , camera.x , camera.y);
 		
+	calculateTime(8);
 	if(health > 0)
 	{
 		gece_gündüz(rend , start); // gece gündüz döngüsü
@@ -136,7 +137,7 @@ void Render :: render(SDL_Renderer* rend , bool menu)
 	// write FPS
 	if(fpsTime > 1000.0)
 	{
-		//SDL_SetWindowTitle(win , (to_string(int(currentFPS))).c_str());
+		SDL_SetWindowTitle(win , (to_string(int(currentFPS))).c_str());
 	}
 
 	if(fpsTime >= 1000.0)

@@ -36,126 +36,117 @@ void SortVector(vector<int> v)
 
 Items :: Items()
 {
-		Collectible_Size = 10;
-		Uncollectible_Size = 10;
-		Solid_Size = 10;
+	SDL_Rect temp_rect = {900,300,100,100};
+	setSolidItems("huge_box" , "blend" , 1 , 100 , true , temp_rect , NULL);
 
-		Collectible_Items = new Item[Collectible_Size];
-		Uncollectible_Items = new Item[Uncollectible_Size];
-		Solid_Items = new Item[Solid_Size];
+	
+	// COLLECTÝBLE ITEMS
+	temp_rect.x = 650;
+	temp_rect.y = 350;
+	temp_rect.w = 50;
+	temp_rect.h = 30;
+	
+	setColItems("rifle" , "blend" , 1 , 100 , true , temp_rect , NULL);
 
-		temp_rect.x = 900;
-		temp_rect.y = 300;
-		temp_rect.w = 100;
-		temp_rect.h = 100;
+	
+	temp_rect.x = 50;
+	temp_rect.y = 350;
+	temp_rect.w = 50;
+	temp_rect.h = 30;
+	
+	setColItems("handgun" , "blend" , 1 , 100 , true , temp_rect , NULL);
+	
 
-		Solid_Items[0].item_name = "huge_box";
-		Solid_Items[0].item_blendmode = "blend";
-		Solid_Items[0].item_id = 0;
-		Solid_Items[0].number_item = 1;
-		Solid_Items[0].item_health = 100;
-		Solid_Items[0].item_active = true;
-		Solid_Items[0].item_rect = temp_rect;
-		Solid_Items[0].item_texture = NULL;
+	temp_rect.x = 150;
+	temp_rect.y = 650;
+	temp_rect.w = 50;
+	temp_rect.h = 30;
 
-		temp_rect.x = 650;
-		temp_rect.y = 350;
-		temp_rect.w = 50;
-		temp_rect.h = 30;
+	setColItems("shotgun" , "blend" , 1 , 100 , true , temp_rect , NULL);
+	
 
-		Collectible_Items[0].item_name = "rifle";
-		Collectible_Items[0].item_blendmode = "blend";
-		Collectible_Items[0].item_id = 0;
-		Collectible_Items[0].number_item = 1;
-		Collectible_Items[0].item_health = 100;
-		Collectible_Items[0].item_active = true;
-		Collectible_Items[0].item_rect = temp_rect;
-		Collectible_Items[0].item_texture = NULL;
+	temp_rect.x = 750;
+	temp_rect.y = 350;
+	temp_rect.w = 50;
+	temp_rect.h = 30;
 
-		temp_rect.x = 50;
-		temp_rect.y = 350;
-		temp_rect.w = 50;
-		temp_rect.h = 30;
+	setColItems("soup" , "blend" , 1 , 100 , true , temp_rect , NULL);
 
-		Collectible_Items[1].item_name = "handgun";
-		Collectible_Items[1].item_blendmode = "blend";
-		Collectible_Items[1].item_id = 1;
-		Collectible_Items[1].number_item = 1;
-		Collectible_Items[1].item_health = 100;
-		Collectible_Items[1].item_active = true;
-		Collectible_Items[1].item_rect = temp_rect;
-		Collectible_Items[1].item_texture = NULL;
 
-		temp_rect.x = 150;
-		temp_rect.y = 650;
-		temp_rect.w = 50;
-		temp_rect.h = 30;
+	temp_rect.x = 950;
+	temp_rect.y = 550;
+	temp_rect.w = 50;
+	temp_rect.h = 30;
 
-		Collectible_Items[2].item_name = "shotgun";
-		Collectible_Items[2].item_blendmode = "blend";
-		Collectible_Items[2].item_id = 2;
-		Collectible_Items[2].number_item = 1;
-		Collectible_Items[2].item_health = 100;
-		Collectible_Items[2].item_active = true;
-		Collectible_Items[2].item_rect = temp_rect;
-		Collectible_Items[2].item_texture = NULL;
+	setColItems("health_bag" , "blend" , 1 , 100 , true , temp_rect , NULL);
 
-		temp_rect.x = 750;
-		temp_rect.y = 350;
-		temp_rect.w = 50;
-		temp_rect.h = 30;
+	bullet_handgun.bullet_name = "bullet_handgun";
+	bullet_handgun.bullet_active = false;
+	
+	bullet_rifle.bullet_name = "bullet_rifle";
+	bullet_rifle.bullet_active = false;
 
-		Collectible_Items[1].item_name = "soup";
-		Collectible_Items[1].item_blendmode = "blend";
-		Collectible_Items[1].item_id = 1;
-		Collectible_Items[1].number_item = 1;
-		Collectible_Items[1].item_health = 100;
-		Collectible_Items[1].item_active = false;
-		Collectible_Items[1].item_rect = temp_rect;
-		Collectible_Items[1].item_texture = NULL;
+	bullet_shotgun.bullet_name = "bullet_shotgun";
+	bullet_shotgun.bullet_active = false;
 
-		Uncollectible_Items[9].item_name = "bullet_rifle";
-		Uncollectible_Items[9].item_blendmode = "blend";
-		Uncollectible_Items[9].item_id = 9;
-		Uncollectible_Items[9].number_item = 1;
-		Uncollectible_Items[9].item_health = 100;
-		Uncollectible_Items[9].item_active = false;
-		Uncollectible_Items[9].item_rect = temp_rect;
-		Uncollectible_Items[9].item_texture = NULL;
+	// UNCOLLECTÝBLE ITEMS
+	temp_rect.x = 450;
+	temp_rect.y = 550;
+	temp_rect.w = 100;
+	temp_rect.h = 100;
 
-		Uncollectible_Items[8].item_name = "bullet_handgun";
-		Uncollectible_Items[8].item_blendmode = "blend";
-		Uncollectible_Items[8].item_id = 8;
-		Uncollectible_Items[8].number_item = 1;
-		Uncollectible_Items[8].item_health = 100;
-		Uncollectible_Items[8].item_active = false;
-		Uncollectible_Items[8].item_rect = temp_rect;
-		Uncollectible_Items[8].item_texture = NULL;
+	setUncolItems("crater" , "blend" , 1 , 100 , true , temp_rect , NULL);
 
-		Uncollectible_Items[7].item_name = "bullet_shotgun";
-		Uncollectible_Items[7].item_blendmode = "blend";
-		Uncollectible_Items[7].item_id = 7;
-		Uncollectible_Items[7].number_item = 1;
-		Uncollectible_Items[7].item_health = 100;
-		Uncollectible_Items[7].item_active = false;
-		Uncollectible_Items[7].item_rect = temp_rect;
-		Uncollectible_Items[7].item_texture = NULL;
-
-		inf = "";
-
-		
+	inf = "";		
 }
 
 Items :: ~Items()
 {
-	
-	for(int i=0 ; i<Collectible_Size ; i++)
-		Collectible_Items[i];
-	for(int i=0 ; i<Uncollectible_Size ; i++)
-		Collectible_Items[i];
-	for(int i=0 ; i<Solid_Size ; i++)
-		Collectible_Items[i];
-		
+	col.empty();
+	uncol.empty();
+	solid.empty();
+}
+
+void Items :: setColItems(string name , string mode , int number , int health , bool isActive , SDL_Rect position , SDL_Texture* texture)
+{
+	esya.item_name = name;
+	esya.item_blendmode = mode;
+	esya.number_item = number;
+	esya.item_health = health;
+	esya.item_active = isActive;
+	esya.item_rect = position;
+	esya.item_texture = texture;
+
+	rect.push_back(position);
+	col.push_back(esya);
+}
+
+void Items :: setUncolItems(string name , string mode , int number , int health , bool isActive , SDL_Rect position , SDL_Texture* texture)
+{
+	esya.item_name = name;
+	esya.item_blendmode = mode;
+	esya.number_item = number;
+	esya.item_health = health;
+	esya.item_active = isActive;
+	esya.item_rect = position;
+	esya.item_texture = texture;
+
+	rect.push_back(position);
+	uncol.push_back(esya);
+}
+
+void Items :: setSolidItems(string name , string mode , int number , int health , bool isActive , SDL_Rect position , SDL_Texture* texture)
+{
+	esya.item_name = name;
+	esya.item_blendmode = mode;
+	esya.number_item = number;
+	esya.item_health = health;
+	esya.item_active = isActive;
+	esya.item_rect = position;
+	esya.item_texture = texture;
+
+	rect.push_back(position);
+	solid.push_back(esya);
 }
 
 void Items :: item_information(SDL_Renderer* item_render , string item_name)

@@ -2,6 +2,7 @@
 #include "SDL/SDL.h"
 #include "SDL/SDL_ttf.h"
 #include "Enemy.h"
+#include <chrono>
 
 class Timer : public Enemy
 {
@@ -14,7 +15,7 @@ public:
 	void Write(SDL_Renderer*  , Uint32 , string , Uint32);
 	void loadFonts();
 	void gece_gündüz(SDL_Renderer* , Uint32);
-	int calculateTime(int);
+	void calculateTime(int);
 	int day;
 	Uint8 real_time;
 	bool night;
@@ -29,6 +30,8 @@ public:
 	SDL_Texture* texture_background;
 	SDL_Rect world;
 	int saat;
+	bool startTime;
+	std::chrono::steady_clock::time_point start;
 private:
 	Uint32 gecen_süre;
 	

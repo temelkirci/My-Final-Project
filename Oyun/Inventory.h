@@ -1,7 +1,6 @@
 #pragma once
 #include "SDL/SDL.h"
 #include <string>
-#include <iostream>
 #include <map>
 #include <tuple>
 #include "Fonts.h"

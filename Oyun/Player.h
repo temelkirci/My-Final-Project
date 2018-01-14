@@ -4,7 +4,6 @@
 #include <map>
 #include "Timer.h"
 
-
 using namespace std;
 const int MAX_HEALTH = 100;
 

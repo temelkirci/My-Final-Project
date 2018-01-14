@@ -31,6 +31,8 @@ Timer :: Timer()
 	active = true;
 	night = false; // oyun gündüz olarak baþlayacak
 	saat = 12; // oyun öðlen 12 de baþlayacak
+
+	startTime = false;
 }
 
 Timer :: ~Timer()
@@ -43,35 +45,29 @@ Uint32 Timer :: süre_hesapla(Uint32 ilksüre , Uint32 sonsüre)
 	return (sonsüre-ilksüre)/1000; 	
 }
 
-int Timer :: calculateTime(int time)
+void Timer :: calculateTime(int time) // saniye
 {
-	/*
-	chrono::system_clock::time_point tp = chrono::system_clock::now(); // current time of system_clock
-	cout<<tp.time_since_epoch().count()<<endl;
 
-	std::chrono::duration<int , ratio<1,1>>; // bir integerde depolanan saniyelerin sayýsý
-	std::chrono::duration<double , ratio<60,1>>; // bir ondalýk sayýda depolanan dakikalarýn sayýsý
-	
-	chrono::steady_clock::time_point start = chrono::steady_clock::now(); // saymaya baþla
-	//
-	chrono::steady_clock::time_point end = chrono::steady_clock::now();
-	chrono::steady_clock::duration elapsed = end - start;
-
-	
-	if(elapsed == chrono::steady_clock::duration::zero())
+	if(!startTime)
 	{
-		cout<<"No Time Elapsed"<<endl<<endl;
+		start = std::chrono::steady_clock::now();
+		startTime = true;
+	}
+
+	chrono::steady_clock::time_point   end = std::chrono::steady_clock::now();
+	chrono::steady_clock::duration   elapsed = end - start;
+
+	                                                                         
+	if(chrono::duration_cast<chrono::milliseconds>(elapsed).count() / 1000.0 >= time)
+	{
+		cout<<time<<" saniye gecti "<<endl;
 	}
 	else
 	{
-		cout<<endl;
-		cout<<"Elapsed Nanooseconds Time : "<<chrono::duration_cast<chrono::nanoseconds>(elapsed).count()<<endl;
-		cout<<"Elapsed Microseconds Time : "<<chrono::duration_cast<chrono::microseconds>(elapsed).count()<<endl;
-		cout<<"Elapsed Milliseconds Time : "<<chrono::duration_cast<chrono::milliseconds>(elapsed).count()<<endl;
-		cout<<"Elapsed Seconds Time : "<<chrono::duration_cast<chrono::milliseconds>(elapsed).count() / 1000.0 <<endl<<endl;
+		cout<<"Time : "<<chrono::duration_cast<chrono::milliseconds>(elapsed).count() / 1000.0 <<endl;
+		
 	}
-	*/
-	return 0;
+	
 }
 
 void Timer :: gece_gündüz(SDL_Renderer* rend , Uint32 gercek_zaman)

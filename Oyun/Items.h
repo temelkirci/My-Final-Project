@@ -1,8 +1,6 @@
 #pragma once
 #include "SDL/SDL.h"
 #include "Window.h"
-#include <tuple>
-#include <iostream>
 #include <string>
 #include <vector>
 
@@ -14,26 +12,39 @@ public:
 	Items();
 	~Items();
 	
-	int Collectible_Size;
-	int Uncollectible_Size;
-	int Solid_Size;
-
+	void setColItems(string , string , int , int , bool , SDL_Rect , SDL_Texture*);
+	void setUncolItems(string , string , int , int , bool , SDL_Rect , SDL_Texture*);
+	void setSolidItems(string , string , int , int , bool , SDL_Rect , SDL_Texture*);
+	
 	struct Item 
 	{
 		string item_name;
 		string item_blendmode;
-		int item_id;
 		int number_item;
 		int item_health;
 		bool item_active;
 		SDL_Rect item_rect;
 		SDL_Texture* item_texture;
-		
-	} *Collectible_Items , *Uncollectible_Items , *Solid_Items;
+
+	}esya;
 
 	void item_information(SDL_Renderer* , string);
 
-	SDL_Rect temp_rect;
+	vector<Item> solid;
+	vector<Item> col;
+	vector<Item> uncol;
+
+	struct bullet 
+	{
+		string bullet_name;
+		bool bullet_active;
+		SDL_Rect bullet_rect;
+		SDL_Texture* bullet_texture;
+		
+	}bullet_handgun , bullet_rifle , bullet_shotgun;
+
+	vector<SDL_Rect> rect; // tüm nesnelerin koordinatlarýný saklar
+
 	string inf;
 private:
 	

@@ -21,13 +21,15 @@ public:
 	void draw_texture(SDL_Renderer*); 
 	void draw_solid_texture(SDL_Renderer*);
 	void draw_camera(SDL_Renderer* , int* ,int* ,int ,int);
-	void draw_bullet(SDL_Renderer*);
+	void draw_bullet(SDL_Renderer* , int , int);
 	map<string , SDL_Texture*> map_texture; // ilk deðiþken string , ikinci deðiþken Texture tutan bir deðiþken
 	SDL_Surface* load_surface;
 	SDL_Rect camera;
 	SDL_Surface* sur_bck;
 	void tank(SDL_Renderer* , int , int);
-	
+
+	bool randomPosition(int , int , Item&);
+
 	string mevcut_mermi;
 	int z;
 	int map_row;
