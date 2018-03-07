@@ -2,25 +2,28 @@
 #include <SDL/SDL.h>
 #include <string>
 #include <map>
-#include "Timer.h"
+#include "GameObject.h"
+#include <SDL/SDL_image.h>
+#include <iostream>
 
 using namespace std;
 const int MAX_HEALTH = 100;
 
-class Player : public Timer 
+class Player : public GameObject 
 {
 public:
 	Player();
 	~Player();
 
-	bool barbaros_yukle_weapon(char* , SDL_Renderer*,char*);
+	bool loadPlayerWeapon(char* , SDL_Renderer* pRenderer, char*);
+	void drawPlayer(SDL_Renderer* pRenderer, string , double , double , double , double , string , Uint32);
+	void updatePLayer(SDL_Renderer* pRenderer, Uint32);
+	void loadPlayer(SDL_Renderer* pRenderer);
+	void playerInformation(SDL_Renderer* pRenderer);
+	void deathInformation(SDL_Renderer*pRenderer);
 
-	void barbaros_çiz(SDL_Renderer* , string , int* , int* , int , int ,string , Uint32);
-	void barbaros_güncelle(SDL_Renderer* , Uint32);
-	void load_barbaros(SDL_Renderer*);
-	void player_information(SDL_Renderer*);
-	void death_information(SDL_Renderer*);
-
+	
+private:
 	Uint32 player_time;
 	Uint32 hunger_time;
 	Uint32 thirsty_time;
@@ -36,23 +39,23 @@ public:
 	int handgun_mermi;
 	int rifle_mermi;
 	int shotgun_mermi;
-	
+
 	bool oyun_baslat;
 	bool trex_attack;
 
-	int arti_x_speed;
-	int eksi_x_speed;
-	int arti_y_speed;
-	int eksi_y_speed;
+	double mPlayerPositiveSpeedX;
+	double mPlayerPositiveSpeedY;
+	double mPlayerNegativeSpeedX;
+	double mPlayerNegativeSpeedY;
 
 	string direction_bullet;
 	string barbaros_durum;
 	string barbaros_guns;
 
-	int xpoz;
-	int ypoz;
-	double angle;
-	int speed;
+	double xpoz;
+	double ypoz;
+	double mPlayerAngle;
+	double mPlayerSpeed;
 
 	bool active_bullet;
 	SDL_Texture* dead_texture;
@@ -66,18 +69,16 @@ public:
 	int last_thirtsy; // susuzluk miktarý
 	int last_hunger; // açlýk miktarý
 	Uint32 total_game_time; // toplam oyun süresi (dakika cinsinden)
-	
-	//
-	int knife_time;
+
+							//
+	int mKnifeTime;
 	Uint32 trex_attack_time;
-	SDL_Color playerColor;
-	SDL_Rect player_barbaros;
-	SDL_Rect information;
-	SDL_Surface* surface_barbaros;
-	SDL_Texture* texture_barbaros;
-	SDL_Point playerPoint;
-	
-private:
-	
-	map<string , SDL_Texture*> barbaros_weapon;
+
+	SDL_Color mPlayerColor;
+	SDL_Rect mPlayerRect;
+	SDL_Rect mInformationRect;
+
+	SDL_Texture* mPlayerTexture;
+	SDL_Point mPlayerPoint;
+	map<string , SDL_Texture*> mPLayerWeaponMap;
 };

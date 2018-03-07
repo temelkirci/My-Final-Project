@@ -44,6 +44,7 @@
     <LibraryPath>C:\Program Files %28x86%29\Microsoft Visual Studio 11.0\VC\lib;$(LibraryPath)</LibraryPath>
     <RunCodeAnalysis>false</RunCodeAnalysis>
     <LinkIncremental>true</LinkIncremental>
+    <CodeAnalysisRuleSet>MixedRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -73,35 +74,29 @@
   <ItemGroup>
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Fonts.cpp" />
-    <ClCompile Include="Events.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameLoop.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Inventory.cpp" />
     <ClCompile Include="Items.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="Render.cpp" />
     <ClCompile Include="Sounds.cpp" />
-    <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Timer.cpp" />
-    <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Fonts.h" />
-    <ClInclude Include="Events.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GameLoop.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Inventory.h" />
     <ClInclude Include="Items.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Player.h" />
-    <ClInclude Include="Render.h" />
     <ClInclude Include="Sounds.h" />
-    <ClInclude Include="Texture.h" />
     <ClInclude Include="Timer.h" />
-    <ClInclude Include="Window.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

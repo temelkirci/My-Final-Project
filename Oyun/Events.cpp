@@ -1,10 +1,4 @@
-﻿#include <SDL/SDL.h>
-#include <iostream>
-#include <string>
-#include "Events.h"
-#include <tuple>
-#include <cmath>
-#include <vector>
+﻿#include "Events.h"
 
 #define PI 3.14159265 // Radyan dan dereceye çevirmek için kullanacağız
 
@@ -15,9 +9,6 @@ Events::Events()
     current_cursor = "shoot";
 	mevcut_resim = "sag";
 	drawing = "";
-
-	xtank = 1000;
-	ytank = 200;
 
 	player_inf = false;
 	draw_apply = false;
@@ -42,7 +33,7 @@ Events::~Events()
 	
 }
 
-void Events :: klavye(SDL_Renderer* rend , int camx , int camy)
+void Events :: mEvent(SDL_Renderer* rend , double camx , double camy)
 {
 	tus;
 	int x , y;	
@@ -54,10 +45,10 @@ void Events :: klavye(SDL_Renderer* rend , int camx , int camy)
 	solid_mouse.w=30;
 	solid_mouse.h=30;
 
-	mouse.x=x-camx;
-	mouse.y=y-camy;
-	mouse.w=30;
-	mouse.h=30;
+	mouse.x = x - (int)camx;
+	mouse.y = y - (int)camy;
+	mouse.w = 30;
+	mouse.h = 30;
 
 	
 	if(SDL_HasIntersection(&solid_mouse , &rect_inventory)) // mouse envanterin üzerineyse ok imleci gözüksün
@@ -81,10 +72,10 @@ void Events :: klavye(SDL_Renderer* rend , int camx , int camy)
 		infItem = "";	
 	}
 	
-	
-	if((xpoz+50) <= mouse.x) // mouse sað tarafta ise
+	//// PLAYER DÖNME AÇISI VE YÖNÜ ////
+	if((xpoz+50) <= mouse.x) // mouse sağ tarafta ise
 	{
-		if((ypoz+50) <= mouse.y) // 1.bölge (sað-alt)
+		if((ypoz+50) <= mouse.y) // 1.bölge (sağ-alt)
 		{
 			 x_distance = abs(mouse.x - (xpoz + 50));
 			 y_distance = abs(mouse.y - (ypoz + 50));
@@ -100,7 +91,7 @@ void Events :: klavye(SDL_Renderer* rend , int camx , int camy)
 
 		}
 
-		else // 4.bölge (sað-üst)
+		else // 4.bölge (sağ-üst)
 		{
 			x_distance = abs(mouse.x - (xpoz + 50));
 			y_distance = abs(mouse.y - (ypoz + 50));
@@ -151,10 +142,46 @@ void Events :: klavye(SDL_Renderer* rend , int camx , int camy)
 
 		}
 	}
+	
+	/*
+	if(((int)xpoz+50) <= x_target && move) // mouse sağ tarafta ise
+	{
+		if(((int)ypoz+50) <= y_target && move) // 1.bölge (sağ-alt)
+		{
+			xpoz = xpoz + ( xpoz * cos(playerAngle) ); 
+			ypoz = ypoz + ( ypoz * sin(playerAngle) );
 
+			cout<<cos(playerAngle)<<endl<<sin(playerAngle)<<endl<<endl;
+		}
+		else if(((int)ypoz+50) > y_target && move) // sağ-üst
+		{
+			xpoz = xpoz + ( xpoz * cos(playerAngle) ); 
+			ypoz = ypoz - ( ypoz * sin(playerAngle) );
 
+			cout<<cos(playerAngle)<<endl<<sin(playerAngle)<<endl<<endl;
+		}
+	}
+	else // mouse sol tarafta ise
+	{
+		if((int)ypoz+50 <= y_target && move) // 2.bölge (sol-alt)
+		{
+			xpoz = xpoz - ( xpoz * cos(playerAngle) ); 
+			ypoz = ypoz + ( ypoz * sin(playerAngle) );
+
+			cout<<cos(playerAngle)<<endl<<sin(playerAngle)<<endl<<endl;
+		}
+		else if((int)ypoz+50 > y_target && move) // sol-üst
+		{
+			xpoz = xpoz - ( xpoz * cos(playerAngle) ); 
+			ypoz = ypoz - ( ypoz * sin(playerAngle) );
+
+			cout<<xpoz<<endl<<ypoz<<endl<<endl;
+		}
+	}
+	*/
+	
 	///// MOUSE A GÖRE HAREKET ////
-	if(xpoz > x_target && move) 
+	if(xpoz+50 > x_target && move) // sola git
 	{
 		xpoz = xpoz - speed;
 		mevcut_resim = "sol";
@@ -164,7 +191,7 @@ void Events :: klavye(SDL_Renderer* rend , int camx , int camy)
 			Mix_PlayChannel(1 , walk , 0);
 		}
 	}
-	else if(xpoz+50 < x_target && move)
+	else if(xpoz+50 < x_target && move) // sağa git
 	{
 		xpoz = xpoz + speed;
 		mevcut_resim = "sag";
@@ -176,7 +203,7 @@ void Events :: klavye(SDL_Renderer* rend , int camx , int camy)
 	}
 	else
 	{
-		if(ypoz > y_target && move)
+		if(ypoz+50 > y_target && move) // yukarı git
 		{
 			ypoz = ypoz - speed;
 			mevcut_resim = "yukari";
@@ -186,7 +213,7 @@ void Events :: klavye(SDL_Renderer* rend , int camx , int camy)
 				Mix_PlayChannel(1 , walk , 0);
 			}
 		}
-		else if(ypoz+50 < y_target && move)
+		else if(ypoz+50 < y_target && move) // aşağı git
 		{
 			ypoz = ypoz + speed;
 			mevcut_resim = "asagi";
@@ -200,16 +227,16 @@ void Events :: klavye(SDL_Renderer* rend , int camx , int camy)
 		{
 			move=false; // dont move
 		}
-
 	}
+	
 	////////////////////////
-	/*
+	
 	if(drawing != "") // çizilecek eşya varsa
 	{
 		current_cursor = "sepia";
 		if(!yerlestirme)
 		{
-			for(auto j=0;j<col.size();j++)
+			for(size_t j=0 ; j != solid.size() ; ++j)
 			{
 				if((solid[j].item_name == "")) // çizilecek item için indis bulma
 				{
@@ -231,19 +258,7 @@ void Events :: klavye(SDL_Renderer* rend , int camx , int camy)
 			solid[indis_item].item_active = false;
 			solid[indis_item].item_blendmode = "add";
 			solid[indis_item].number_item = 1;
-
-				if(solid[indis_item].item_name == "wood_block")
-					solid[indis_item].item_health = 1000;
-				if(solid[indis_item].item_name == "brick_block")
-					solid[indis_item].item_health = 2000;
-				if(solid[indis_item].item_name == "stone_block")
-					solid[indis_item].item_health = 3000;
-				if(solid[indis_item].item_name == "iron_block")
-					solid[indis_item].item_health = 4000;
-				if(solid[indis_item].item_name == "steel_block")
-					solid[indis_item].item_health = 5000;
 				
-
 			for(vector<Item>::iterator t = col.begin() ; t != col.end(); t++)
 			{
 				
@@ -340,54 +355,33 @@ void Events :: klavye(SDL_Renderer* rend , int camx , int camy)
 			}
 		}
 	}
-	*/
 	
-
-	for(int k=0;k<10;k++)
+	
+	if( SDL_HasIntersection(&solid_mouse , &rect_inventory))
 	{
-		/*
-		if(SDL_HasIntersection(&mouse , &col[k].item_rect))
+		for(int t=0;t<inventory_size;t++)
 		{
-			inf = col[k].item_name;
-			break;
-		}
-		if(SDL_HasIntersection(&mouse , &(uncol[k].item_rect )))
-		{
-			inf = uncol[k].item_name;
-			break;
-		}
-		if(SDL_HasIntersection(&mouse , &solid[k].item_rect))
-		{
-			inf = solid[k].item_name;
-			break;
-		}
-		*/
-		if( SDL_HasIntersection(&solid_mouse , &rect_inventory))
-		{
-			for(int t=0;t<inventory_size;t++)
+			if((InventoryObject[t].xCoord <= x) && (InventoryObject[t].yCoord+50 >= x)) // mouse kutucuklardan birinin üzerindeyse
 			{
-				if((InventoryObject[t].xCoord <= x) && (InventoryObject[t].yCoord+50 >= x)) // mouse kutucuklardan birinin üzerindeyse
+				if(InventoryObject[t].objectName != "")
 				{
-					if(InventoryObject[t].objectName != "")
-					{
-						inf = "Bu nesneyi kullanmak icin sol tiklayin , silmek icin sag tiklayin";
-						break;
-					}
-					else
-					{
-						inf = "";
-					}
+					inf = "Bu nesneyi kullanmak icin sol tiklayin , silmek icin sag tiklayin";
+					break;
 				}
 				else
 				{
 					inf = "";
 				}
 			}
+			else
+			{
+				inf = "";
+			}
 		}
-		else
-		{
-			inf = "";
-		}
+	}
+	else
+	{
+		inf = "";
 	}
 	
 	while((SDL_PollEvent(&tus) != 0)) // herhangi bir tuşa basılmışsa
@@ -491,10 +485,7 @@ void Events :: klavye(SDL_Renderer* rend , int camx , int camy)
 							}
 							
 						}
-						else // tank
-						{
-
-						}
+						
 				}
 				if((tus.button.button == SDL_BUTTON_LEFT) && health <= 0)
 				{
@@ -605,154 +596,22 @@ void Events :: klavye(SDL_Renderer* rend , int camx , int camy)
 								health = health + 20;
 							
 								deleteItem(InventoryObject[t].objectName , 1);
-							}
-
-						
-							if(InventoryObject[t].objectName == "stone_block")
-							{		
-								drawing = "stone_block";
-								current_cursor = "sepia";
-								yerlestirme = false;
-							}
-
-							else if(InventoryObject[t].objectName == "brick_block")
-							{		
-								drawing = "brick_block";
-								current_cursor = "sepia";
-								yerlestirme = false;
-							}
-
-							else if(InventoryObject[t].objectName == "iron_block")
-							{		
-								drawing = "iron_block";
-								current_cursor = "sepia";
-								yerlestirme = false;
-							}
-
-							else if(InventoryObject[t].objectName == "steel_block")
-							{		
-								drawing = "steel_block";
-								current_cursor = "sepia";
-								yerlestirme = false;
-							}
-
-							else if(InventoryObject[t].objectName == "box_block")
-							{		
-								drawing = "box_block";
-								current_cursor = "sepia";
-								yerlestirme = false;
-							}
-							
+							}														
 						} // envantere tıklama sonu
 					} // for int t=0 sonu						
 				} // sol tıklama sonu
 
-				else if ((tus.button.button == SDL_BUTTON_LEFT) &&  SDL_HasIntersection(&solid_mouse , &slot1_rect))
-				{
-					if(statu_crafting)
-					{
-						get<0>(Slot1) = "";
-						get<1>(Slot1) = NULL;
-						get<2>(Slot1) = false;
-						get<3>(Slot1) = 0;
-					}
-				}
 
-				else if ((tus.button.button == SDL_BUTTON_LEFT) &&  SDL_HasIntersection(&solid_mouse , &slot2_rect))
-				{
-					if(statu_crafting)
-					{
-						get<0>(Slot2) = "";
-						get<1>(Slot2) = NULL;
-						get<2>(Slot2) = false;
-						get<3>(Slot2) = 0;
-					}
-				}
-
-				else if ((tus.button.button == SDL_BUTTON_RIGHT) &&  SDL_HasIntersection(&solid_mouse , &final_rect))
-				{
-					if(statu_crafting)
-					{
-						
-						if(get<2>(finalSlot))
-						{
-							Esya_Ekle(get<0>(finalSlot) , get<3>(finalSlot) , rend , get<1>(finalSlot)); // eşyanın üzerine sağ tıklandıysa eşyayı envantere ekle
-							for(int i=0;i<inventory_size;i++)
-							{
-								if((get<0>(Slot1) == InventoryObject[i].objectName) || (get<0>(Slot2) == InventoryObject[i].objectName))
-								{
-									InventoryObject[i].objectNumber = InventoryObject[i].objectNumber - 1;
-									break;
-								}
-							}
-								get<0>(Slot1) = "";
-								get<1>(Slot1) = NULL;
-								get<2>(Slot1) = false;
-								get<3>(Slot1) = 0;
-
-								get<0>(Slot2) = "";
-								get<1>(Slot2) = NULL;
-								get<2>(Slot2) = false;
-								get<3>(Slot2) = 0;
-
-								get<0>(finalSlot) = "";
-								get<1>(finalSlot) = NULL;
-								get<2>(finalSlot) = false;
-								get<3>(finalSlot) = 0;
-						}
-					}
-				}
 				// nesneye sağ tıklandığında eşyayı siler sayısını 0 yapar
 				else if ((tus.button.button == SDL_BUTTON_RIGHT) &&  SDL_HasIntersection(&solid_mouse , &rect_inventory)) // envanterdeki herhangi bir nesneye sağ tıklandığında
-				{
-	
-					if(statu_crafting)
+				{					
+					for(int k=0;k<inventory_size;k++)
 					{
-						if(get<2>(Slot1) == false)
-						{
-							for(int k=0;k<inventory_size;k++)
-							{
-								if((InventoryObject[k].objectNumber <= x) && (InventoryObject[k].objectNumber+50 >= x)) // kutucuklardan birine tıklandıysa
-								{
-									get<0>(Slot1) = InventoryObject[k].objectName;
-									get<1>(Slot1) = InventoryObject[k].objectTexture;
-									get<2>(Slot1) = true;
-									get<3>(Slot1) = 1;
-									
-									break;
-								}
-							}
-						}
-						else if (get<2>(Slot2) == false)
-						{
-							for(int k=0;k<inventory_size;k++)
-							{
-								if((InventoryObject[k].xCoord <= x) && (InventoryObject[k].yCoord+50 >= x)) // kutucuklardan birine tıklandıysa
-								{
-									get<0>(Slot2) = InventoryObject[k].objectName;
-									get<1>(Slot2) = InventoryObject[k].objectTexture;
-									get<2>(Slot2) = true;
-									get<3>(Slot2) = 1;
-
-									break;
-								}
-							}
-						}
-						
-						
-					}
-
-					else // crafting penceresi açık değilse eşyayı sil (1 azalt)
-					{
-						for(int k=0;k<inventory_size;k++)
-						{
-							if(InventoryObject[k].objectName == "health_bag")
-							{								
-								InventoryObject[k].objectNumber = 0;						
-								inventory_size--;
-							}
-
-						}
+						if(InventoryObject[k].objectName == "health_bag")
+						{								
+							InventoryObject[k].objectNumber = 0;						
+							inventory_size--;
+						}						
 					}
 				}
 				else if (tus.button.button == SDL_BUTTON_LEFT)
@@ -776,12 +635,13 @@ void Events :: klavye(SDL_Renderer* rend , int camx , int camy)
 					move = true;
 					x_target = mouse.x;
 					y_target = mouse.y;
+
+					playerAngle = angle;
 				}
 
 				break;
 ///////////////////////////////////////////// MOUSE BUTTON DOWN SONU /////////////////////////////////////////////////////////////////////////////////			
 			case SDL_KEYDOWN:
-			
 
 			switch(tus.key.keysym.sym)
 				{
@@ -801,11 +661,6 @@ void Events :: klavye(SDL_Renderer* rend , int camx , int camy)
 
 					
 					case SDLK_r:
-						
-						if(statu_crafting)
-							statu_crafting = false;
-						else
-							statu_crafting = true;
 						
 						break;
 

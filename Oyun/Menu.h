@@ -4,45 +4,49 @@
 #include <string>
 #include "SDL/SDL_mixer.h"
 #include "SDL/SDL_ttf.h"
+#include <SDL/SDL_image.h>
+#include <iostream>
+
 using namespace std;
 
 class Menu 
 {
 public:
-	Menu();
+	Menu(); // Default Constructor
+	Menu(const Menu& pMenu);
+	Menu& operator = (const Menu& pMenu);
 	~Menu();
 
-	void menu_yukle(char* , SDL_Renderer*);
-	void menu_goster(SDL_Renderer* , int , int , int , int);
+	void loadMenu(char* , SDL_Renderer*);
 	bool loadPathMenu(char* , string , SDL_Renderer*);
-	bool klavye_mouse(bool);
-	void loadMenu(SDL_Renderer*);
-	
-	TTF_Font* menu_font;
-	Mix_Chunk* click_x;
-	Mix_Music* back;
-	
-	SDL_Rect menü_mouse;
+	void loadMenuItems(SDL_Renderer*);
+	void eventHandling();	
+	void renderMenu(SDL_Renderer*);
 
-	SDL_Color menu_color;
-	SDL_Color text_color;
-
-	char* button_array[5];
-	SDL_Rect start_button; //
-	SDL_Rect resume_button;
-	SDL_Rect credits_button; //
-	SDL_Rect save_button; //
-	SDL_Rect exit_button; //
-	SDL_Rect load_button; //
-
-	map<string , SDL_Texture*> map_button;
+	static Menu* getInstanceMenu();
 
 private:
-	SDL_Texture* menu_texture;
-	SDL_Surface* menu_surface;
+	static Menu* mInstanceMenu;
 
-	SDL_Texture* texture_buttons;
-	SDL_Surface* surface_buttons;
+	TTF_Font * mMenuFont;
+	Mix_Music* mMenuMusic;
 
-	SDL_Event ev ;
+	SDL_Rect mMouseCoord;
+	SDL_Rect mMenuBackgroundRect;
+
+	SDL_Color mMenuColor;
+	SDL_Color mTextColor;
+
+	char* mButtonArray[5];
+	SDL_Rect mStartButton;
+	SDL_Rect mResumeButton;
+	SDL_Rect mCreditsButton;
+	SDL_Rect mSaveButton;
+	SDL_Rect mExitButton;
+	SDL_Rect mLoadButton;
+
+	map<string, SDL_Texture*> mButtonMap;
+
+	SDL_Texture* mMenuTexture;
+	SDL_Texture* mButtonTexture;
 };

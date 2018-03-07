@@ -1,23 +1,20 @@
 #include "Fonts.h"
-#include "SDL/SDL.h"
-#include "SDL/SDL_ttf.h"
-#include <SDL/SDL_image.h>
-#include <iostream>
-#include <string>
 
 Fonts :: Fonts()
 {
+	mFont = TTF_OpenFont("fonts/Roboto-Regular.ttf", 100);
+
 	toplam = 0;
 
-	backColor.r = 0;
-	backColor.g = 0;
-	backColor.b = 0;
-	backColor.a = 255;
+	mBackColor.r = 0;
+	mBackColor.g = 0;
+	mBackColor.b = 0;
+	mBackColor.a = 255;
 
-	backRect.x = 0;
-	backRect.y = 0;
-	backRect.w = 100;
-	backRect.h = 30;
+	mBackRect.x = 0;
+	mBackRect.y = 0;
+	mBackRect.w = 100;
+	mBackRect.h = 30;
 
 	arkaPlan.x = 0;
 	arkaPlan.y = 0;
@@ -31,144 +28,161 @@ Fonts :: Fonts()
 	
 }
 
-Fonts :: ~Fonts()
+Fonts::Fonts(const Fonts& pFonts)
 {
-	TTF_CloseFont(Font); // Yazi fontunu kapatýr
+
 }
 
-int Fonts :: Resim(char* resim_dosya, string resim_adi, SDL_Renderer* render)
+Fonts& Fonts::operator = (const Fonts& pFonts)
 {
-	SDL_Surface * resim_surface = IMG_Load(resim_dosya);
-	if(resim_surface == 0)
+	return *this;
+}
+
+Fonts :: ~Fonts()
+{
+	TTF_CloseFont(mFont); // Yazi fontunu kapatýr
+}
+
+Fonts* Fonts::getInstanceFonts()
+{
+	if (mInstanceFonts == 0)
+		mInstanceFonts = new Fonts();
+
+	return mInstanceFonts;
+}
+
+int Fonts :: loadImage(char* pPathFile, string pImageName, SDL_Renderer* pRender)
+{
+	SDL_Surface* tImageSurface = IMG_Load(pPathFile);
+
+	if(tImageSurface == 0)
 	{
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR , "Fonts" , "Sol üst resimler yuklenemedi..!" , NULL);
 		exit(0);
 	}
-	resim_texture = SDL_CreateTextureFromSurface(render , resim_surface);
-	SDL_FreeSurface(resim_surface);
 
-	if(resim_texture != 0)
+	mImageTexture = SDL_CreateTextureFromSurface(pRender, tImageSurface);
+	SDL_FreeSurface(tImageSurface);
+
+	if(mImageTexture != 0)
 	{
-		resim_map[resim_adi] = resim_texture; 
+		mImageMap[pImageName] = mImageTexture;
 		return true;
 	}
 	return false;
 
 }
 
-void Fonts :: barbaros_status(SDL_Renderer* render_font ,
-							 int hx , int hy , 
-							 int genislik , int yukseklik ,
-							 int saglik , int mermi , int aclik , int susuzluk)
+void Fonts ::playerStatus(SDL_Renderer* pRenderer ,
+							 int pX , int pY , 
+							 int pWidth , int pHeight ,
+							 int pHealth , int pBullet , int pHungury , int pThirsty)
 
 {
-		healthRect.w = saglik; // source rect
-		hungerRect.w = aclik;
-		thirstyRect.w = susuzluk;
+		mHealthRect.w = pBullet; // source rect
+		mHungerRect.w = pHungury;
+		mThirstyRect.w = pThirsty;
 
 	for(int i=0; i<4 ; i++)
 	{
-		SDL_Rect yazi;
-		yazi.x=hx;
-		yazi.y=hy;
-		yazi.w=genislik;
-		yazi.h=yukseklik;
+		SDL_Rect tText;
+		tText.x = pX;
+		tText.y = pY;
+		tText.w = pWidth;
+		tText.h = pHeight;
 
-		SDL_RenderCopyEx(render_font , resim_map[dizi[i]] , NULL , &yazi , 0 , 0 , SDL_FLIP_NONE); // saðlik resm , susuzluk resmi , açlýk resmi , mermi resmi
+		SDL_RenderCopyEx(pRenderer , mImageMap[dizi[i]] , NULL , &tText , 0 , 0 , SDL_FLIP_NONE); // saðlik resm , susuzluk resmi , açlýk resmi , mermi resmi
 				
 		// Saglýk , Mermi , Açlýk ve Susuzluk deðerleri
-		backRect.x = hx+genislik+10;
-		backRect.y = hy;
-		backRect.w = 100;
-		backRect.h = yukseklik;
+		mBackRect.x = pX+pWidth+10;
+		mBackRect.y = pY;
+		mBackRect.w = 100;
+		mBackRect.h = pHeight;
 
 		if(dizi[i] == "health")
 		{
-			SDL_SetRenderDrawColor(render_font , 47 , 79 , 79 , 150); // gri arkaplan
-		    SDL_RenderFillRect(render_font, &backRect);
+			SDL_SetRenderDrawColor(pRenderer , 47 , 79 , 79 , 150); // gri arkaplan
+		    SDL_RenderFillRect(pRenderer, &mBackRect);
 
-			healthRect.x = hx+genislik+10;
-			healthRect.y = hy;
-			healthRect.w = saglik;
-			healthRect.h = yukseklik;
+			mHealthRect.x = pX+pWidth+10;
+			mHealthRect.y = pY;
+			mHealthRect.w = pHealth;
+			mHealthRect.h = pHeight;
 
-			SDL_SetRenderDrawColor(render_font , 255 , 0 , 0 , 200); // beyaz arkaplan
-			SDL_RenderFillRect(render_font, &healthRect);
+			SDL_SetRenderDrawColor(pRenderer , 255 , 0 , 0 , 200); // beyaz arkaplan
+			SDL_RenderFillRect(pRenderer, &mHealthRect);
 
 		}
 		else if(dizi[i] == "hunger")
 		{
-			SDL_SetRenderDrawColor(render_font , 47 , 79 , 79 , 150); // gri arkaplan
-			SDL_RenderFillRect(render_font, &backRect);
+			SDL_SetRenderDrawColor(pRenderer , 47 , 79 , 79 , 150); // gri arkaplan
+			SDL_RenderFillRect(pRenderer, &mBackRect);
 
-			hungerRect.x = hx+genislik+10;
-			hungerRect.y = hy;
-			hungerRect.w = aclik;
-			hungerRect.h = yukseklik;
+			mHungerRect.x = pX+pHeight+10;
+			mHungerRect.y = pY;
+			mHungerRect.w = pHungury;
+			mHungerRect.h = pHeight;
 
-			SDL_SetRenderDrawColor(render_font , 255 , 0 , 0 , 200); // beyaz arkaplan
-			SDL_RenderFillRect(render_font, &hungerRect);
+			SDL_SetRenderDrawColor(pRenderer , 255 , 0 , 0 , 200); // beyaz arkaplan
+			SDL_RenderFillRect(pRenderer, &mHungerRect);
 		}
 		else if(dizi[i] == "thirsty")
 		{
-			SDL_SetRenderDrawColor(render_font , 47 , 79 , 79 , 150); // gri arkaplan
-			SDL_RenderFillRect(render_font, &backRect);
+			SDL_SetRenderDrawColor(pRenderer , 47 , 79 , 79 , 150); // gri arkaplan
+			SDL_RenderFillRect(pRenderer, &mBackRect);
 
-			thirstyRect.x = hx+genislik+10;
-			thirstyRect.y = hy;
-			thirstyRect.w = susuzluk;
-			thirstyRect.h = yukseklik;
+			mThirstyRect.x = pX+pWidth+10;
+			mThirstyRect.y = pY;
+			mThirstyRect.w = pThirsty;
+			mThirstyRect.h = pHeight;
 
-			SDL_SetRenderDrawColor(render_font , 255 , 0 , 0 , 200); // beyaz arkaplan
-			SDL_RenderFillRect(render_font, &thirstyRect);
+			SDL_SetRenderDrawColor(pRenderer , 255 , 0 , 0 , 200); // beyaz arkaplan
+			SDL_RenderFillRect(pRenderer, &mThirstyRect);
 		}
 
 		else if(dizi[i] == "bullet")
 		{
-			SDL_Rect yazi;
-			yazi.x=hx+genislik+10;;
-			yazi.y=hy;
-			yazi.w=genislik;
-			yazi.h=yukseklik;
+			SDL_Rect tText;
+			tText.x=pX+pWidth+10;;
+			tText.y=pY;
+			tText.w=pWidth;
+			tText.h=pHeight;
 			
-			string textt = to_string(mermi);
+			string tTempBullet = to_string(pBullet);
 			
-			SDL_Surface* textSurface = TTF_RenderText_Blended(Font , textt.c_str(), backColor );
-			SDL_Texture* back_ground = SDL_CreateTextureFromSurface( render_font, textSurface );
-			SDL_FreeSurface(textSurface);
+			SDL_Surface* tTextSurface = TTF_RenderText_Blended(mFont , tTempBullet.c_str(), mBackColor );
+			SDL_Texture* tTextTexture = SDL_CreateTextureFromSurface( pRenderer, tTextSurface);
+			SDL_FreeSurface(tTextSurface);
 
-			SDL_RenderCopyEx(render_font , back_ground , NULL , &yazi , 0 , 0 , SDL_FLIP_NONE);
-			SDL_DestroyTexture(back_ground);
+			SDL_RenderCopyEx(pRenderer , tTextTexture, NULL , &tText , 0 , 0 , SDL_FLIP_NONE);
+			SDL_DestroyTexture(tTextTexture);
 		}
-		hy=hy+yukseklik+20;
+		pY=pY+pHeight+20;
 	}
 }
 
 
-void Fonts :: Write_Text(SDL_Renderer* rend , Uint32 zaman , char* text)
+void Fonts :: writeText(SDL_Renderer* pRender , Uint32 pTime , char* pText)
 {
-	if(zaman != 0)
+	if(pTime != 0)
 	{
 		if(toplam == 0) // ilk zamaný sakla
-			toplam = zaman + 3000;
+			toplam = pTime + 3000;
 	
 		// yazý ekranda 3 sn görünecek
 		if(total <= toplam) // yazýnýn ekranda gözükme süresi
-		{
-		
-			SDL_Rect yazi;
-			yazi.x=250;
-			yazi.y=0;
-			yazi.w=strlen(text)*25;
-			yazi.h=30;
+		{		
+			SDL_Rect tText;
+			tText.x=250;
+			tText.y=0;
+			tText.w=strlen(pText)*25;
+			tText.h=30;
 
-			SDL_Surface* textSurface = TTF_RenderText_Blended( Font , text, backColor );
-			SDL_Texture* back_ground = SDL_CreateTextureFromSurface( rend, textSurface );
-			SDL_FreeSurface(textSurface);
+			SDL_Surface* tTextSurface = TTF_RenderText_Blended( mFont , pText, mBackColor );
+			tTextTexture = SDL_CreateTextureFromSurface(pRender, tTextSurface);
+			SDL_FreeSurface(tTextSurface);
 
-			SDL_RenderCopyEx(rend , back_ground , NULL , &yazi , 0 , 0 , SDL_FLIP_NONE);
-			SDL_DestroyTexture(back_ground);
-	
+			SDL_RenderCopyEx(pRender, tTextTexture, NULL , &tText , 0 , 0 , SDL_FLIP_NONE);	
 		}
 		else
 		{
@@ -178,27 +192,24 @@ void Fonts :: Write_Text(SDL_Renderer* rend , Uint32 zaman , char* text)
 	}
 	else
 	{
-		SDL_Rect yazi;
-			yazi.x=550;
-			yazi.y=0;
-			yazi.w=100;
-			yazi.h=30;
+		SDL_Rect tText;
+		tText.x=550;
+		tText.y=0;
+		tText.w=100;
+		tText.h=30;
 			
-			SDL_Surface* texttSurface = TTF_RenderText_Blended( Font , text , backColor );
-			SDL_Texture* backk_ground = SDL_CreateTextureFromSurface( rend, texttSurface );
-			SDL_FreeSurface(texttSurface);
+			SDL_Surface* tTextSurface = TTF_RenderText_Blended( mFont , pText, mBackColor );
+			tTextTexture = SDL_CreateTextureFromSurface(pRender, tTextSurface);
+			SDL_FreeSurface(tTextSurface);
 
-			SDL_RenderCopyEx(rend , backk_ground , NULL , &yazi , 0 , 0 , SDL_FLIP_NONE);
-			SDL_DestroyTexture(backk_ground);
+			SDL_RenderCopyEx(pRender, tTextTexture, NULL , &tText, 0 , 0 , SDL_FLIP_NONE);
 	}
 }
 
-void Fonts :: load_Resim(SDL_Renderer* renderer)
+void Fonts :: loadFonts(SDL_Renderer* pRenderer)
 {
-	Font = TTF_OpenFont("fonts/Roboto-Regular.ttf", 100);
-	
-	Resim("assets/hunger.png", "hunger" , renderer); // açlýk icon'u
-	Resim("assets/bullet.png", "bullet" , renderer); // mermi icon'u
-	Resim("assets/health.png", "health" , renderer); // saðlýk icon'u
-	Resim("assets/drop.png", "thirsty" , renderer); // susuzluk icon'u
+	loadImage("assets/hunger.png", "hunger" , pRenderer); // açlýk icon'u
+	loadImage("assets/bullet.png", "bullet" , pRenderer); // mermi icon'u
+	loadImage("assets/health.png", "health" , pRenderer); // saðlýk icon'u
+	loadImage("assets/drop.png", "thirsty" , pRenderer); // susuzluk icon'u
 }

@@ -1,190 +1,172 @@
-#include <iostream>
 #include "Items.h"
-#include "SDL/SDL.h"
-#include <string>
-#include <tuple>
-#include <algorithm>
-#include <vector>
-
-void FindInVector(vector<int> v , int search)
-{
-	for (unsigned int i = 0; i < v.size(); ++i)
-	{
-		if (v[i] == search)
-		{
-			cout << "Found: " << v[i] << " at position: " << i << endl;
-		}
-	}
-	cout<<endl<<endl;
-}
-
-bool Descending(int first, int second)
-{
-	return first > second;
-}
-
-void SortVector(vector<int> v)
-{
-	sort(v.begin(), v.end()); // küçükten büyüðe sýralar
-	//sort(v.begin(), v.end() , Descending); // büyükten küçüðe sýralar
-
-	for (auto& value : v)
-	{
-		cout << value << endl;
-	}
-}
 
 Items :: Items()
 {
-	SDL_Rect temp_rect = {900,300,100,100};
-	setSolidItems("huge_box" , "blend" , 1 , 100 , true , temp_rect , NULL);
+	SDL_Rect tTempRect = {900,300,100,100};
+	setSolidItems("huge_box" , "blend" , 1 , 100 , true , tTempRect, NULL);
 
 	
 	// COLLECTÝBLE ITEMS
-	temp_rect.x = 650;
-	temp_rect.y = 350;
-	temp_rect.w = 50;
-	temp_rect.h = 30;
+	tTempRect.x = 650;
+	tTempRect.y = 350;
+	tTempRect.w = 50;
+	tTempRect.h = 30;
 	
-	setColItems("rifle" , "blend" , 1 , 100 , true , temp_rect , NULL);
+	setCollectibleItems("rifle" , "blend" , 1 , 100 , true , tTempRect, NULL);
 
 	
-	temp_rect.x = 50;
-	temp_rect.y = 350;
-	temp_rect.w = 50;
-	temp_rect.h = 30;
+	tTempRect.x = 50;
+	tTempRect.y = 350;
+	tTempRect.w = 50;
+	tTempRect.h = 30;
 	
-	setColItems("handgun" , "blend" , 1 , 100 , true , temp_rect , NULL);
-	
-
-	temp_rect.x = 150;
-	temp_rect.y = 650;
-	temp_rect.w = 50;
-	temp_rect.h = 30;
-
-	setColItems("shotgun" , "blend" , 1 , 100 , true , temp_rect , NULL);
+	setCollectibleItems("handgun" , "blend" , 1 , 100 , true , tTempRect, NULL);
 	
 
-	temp_rect.x = 750;
-	temp_rect.y = 350;
-	temp_rect.w = 50;
-	temp_rect.h = 30;
+	tTempRect.x = 150;
+	tTempRect.y = 650;
+	tTempRect.w = 50;
+	tTempRect.h = 30;
 
-	setColItems("soup" , "blend" , 1 , 100 , true , temp_rect , NULL);
-
-
-	temp_rect.x = 950;
-	temp_rect.y = 550;
-	temp_rect.w = 50;
-	temp_rect.h = 30;
-
-	setColItems("health_bag" , "blend" , 1 , 100 , true , temp_rect , NULL);
-
-	bullet_handgun.bullet_name = "bullet_handgun";
-	bullet_handgun.bullet_active = false;
+	setCollectibleItems("shotgun" , "blend" , 1 , 100 , true , tTempRect, NULL);
 	
-	bullet_rifle.bullet_name = "bullet_rifle";
-	bullet_rifle.bullet_active = false;
 
-	bullet_shotgun.bullet_name = "bullet_shotgun";
-	bullet_shotgun.bullet_active = false;
+	tTempRect.x = 750;
+	tTempRect.y = 350;
+	tTempRect.w = 50;
+	tTempRect.h = 30;
+
+	setCollectibleItems("soup" , "blend" , 1 , 100 , true , tTempRect, NULL);
+
+
+	tTempRect.x = 950;
+	tTempRect.y = 550;
+	tTempRect.w = 50;
+	tTempRect.h = 30;
+
+	setCollectibleItems("health_bag" , "blend" , 1 , 100 , true , tTempRect, NULL);
+
+	bulletHandgun.bulletName = "bullet_handgun";
+	bulletHandgun.bulletActive = false;
+	
+	bulletRifle.bulletName = "bullet_rifle";
+	bulletRifle.bulletActive = false;
+
+	bulletShotgun.bulletName = "bullet_shotgun";
+	bulletShotgun.bulletActive = false;
 
 	// UNCOLLECTÝBLE ITEMS
-	temp_rect.x = 450;
-	temp_rect.y = 550;
-	temp_rect.w = 100;
-	temp_rect.h = 100;
+	tTempRect.x = 450;
+	tTempRect.y = 550;
+	tTempRect.w = 100;
+	tTempRect.h = 100;
 
-	setUncolItems("crater" , "blend" , 1 , 100 , true , temp_rect , NULL);
+	setUnCollectibleItems("crater" , "blend" , 1 , 100 , true , tTempRect, NULL);
 
-	inf = "";		
+	mInformation = "";		
+}
+
+Items::Items(const Items& pItems)
+{
+
+}
+
+Items& Items::operator = (const Items& pItems)
+{
+	return *this;
 }
 
 Items :: ~Items()
 {
-	col.empty();
-	uncol.empty();
-	solid.empty();
+
 }
 
-void Items :: setColItems(string name , string mode , int number , int health , bool isActive , SDL_Rect position , SDL_Texture* texture)
+Items* Items::getInstanceItems()
 {
-	esya.item_name = name;
-	esya.item_blendmode = mode;
-	esya.number_item = number;
-	esya.item_health = health;
-	esya.item_active = isActive;
-	esya.item_rect = position;
-	esya.item_texture = texture;
+	if (mInstanceItems == 0)
+		mInstanceItems = new Items();
 
-	rect.push_back(position);
-	col.push_back(esya);
+	return mInstanceItems;
 }
 
-void Items :: setUncolItems(string name , string mode , int number , int health , bool isActive , SDL_Rect position , SDL_Texture* texture)
+void Items :: setCollectibleItems(string pName , string pMode , int pNumber , int pHealth , bool pActive , SDL_Rect pPosition , SDL_Texture* pTexture)
 {
-	esya.item_name = name;
-	esya.item_blendmode = mode;
-	esya.number_item = number;
-	esya.item_health = health;
-	esya.item_active = isActive;
-	esya.item_rect = position;
-	esya.item_texture = texture;
+	item.itemName = pName;
+	item.itemBlendMode = pMode;
+	item.itemNumber = pNumber;
+	item.itemHealth = pHealth;
+	item.itemActive = pActive;
+	item.itemRect = pPosition;
+	item.itemTexture = pTexture;
 
-	rect.push_back(position);
-	uncol.push_back(esya);
+	mItemRectVector.push_back(pPosition);
+	mCollectibleVector.push_back(item);
 }
 
-void Items :: setSolidItems(string name , string mode , int number , int health , bool isActive , SDL_Rect position , SDL_Texture* texture)
+void Items::setUnCollectibleItems(string pName, string pMode, int pNumber, int pHealth, bool pActive, SDL_Rect pPosition, SDL_Texture* pTexture)
 {
-	esya.item_name = name;
-	esya.item_blendmode = mode;
-	esya.number_item = number;
-	esya.item_health = health;
-	esya.item_active = isActive;
-	esya.item_rect = position;
-	esya.item_texture = texture;
+	item.itemName = pName;
+	item.itemBlendMode = pMode;
+	item.itemNumber = pNumber;
+	item.itemHealth = pHealth;
+	item.itemActive = pActive;
+	item.itemRect = pPosition;
+	item.itemTexture = pTexture;
 
-	rect.push_back(position);
-	solid.push_back(esya);
+	mItemRectVector.push_back(pPosition);
+	mUnCollectibleVector.push_back(item);
 }
 
-void Items :: item_information(SDL_Renderer* item_render , string item_name)
+void Items::setSolidItems(string pName, string pMode, int pNumber, int pHealth, bool pActive, SDL_Rect pPosition, SDL_Texture* pTexture)
 {
-	if(item_name == "health_bag")
+	item.itemName = pName;
+	item.itemBlendMode = pMode;
+	item.itemNumber = pNumber;
+	item.itemHealth = pHealth;
+	item.itemActive = pActive;
+	item.itemRect = pPosition;
+	item.itemTexture = pTexture;
+
+	mItemRectVector.push_back(pPosition);
+	mSolidVector.push_back(item);
+}
+
+void Items :: itemInformation(string pItemName)
+{
+	if(pItemName == "health_bag")
 	{
-		inf = "Bu saglik cantasi karakterinizin sagligini 20 arttirir";
+		mInformation = "Bu saglik cantasi karakterinizin sagligini 20 arttirir";
 	}
-	else if(item_name == "handgun")
+	else if(pItemName == "handgun")
 	{
-		inf = "Bu silah zayif gorunuyor ama bununla kendimi bir sure koruyabilirim";
+		mInformation = "Bu silah zayif gorunuyor ama bununla kendimi bir sure koruyabilirim";
 	}
-	else if(item_name == "shotgun")
+	else if(pItemName == "shotgun")
 	{
-		inf = "Saldiri gucu yuksek bir silah . Yaratiklar benden korkacak";
+		mInformation = "Saldiri gucu yuksek bir silah . Yaratiklar benden korkacak";
 	}
-	else if(item_name == "rifle")
+	else if(pItemName == "rifle")
 	{
-		inf = "Bu silah ile hizli ates edebilirim";
+		mInformation = "Bu silah ile hizli ates edebilirim";
 	}
-	else if(item_name == "kuru_agac")
+	else if(pItemName == "kuru_agac")
 	{
-		inf = "Bu agac kurumus . Hicbir isime yaramaz";
+		mInformation = "Bu agac kurumus . Hicbir isime yaramaz";
 	}
-	else if(item_name == "bread")
+	else if(pItemName == "bread")
 	{
-		inf = "Bununla acligimi bir süre azaltabilirim";
+		mInformation = "Bununla acligimi bir süre azaltabilirim";
 	}
-	else if(item_name == "rock_1")
+	else if(pItemName == "rock_1")
 	{
-		inf = "Ise yarar bir kaya parcasi";
+		mInformation = "Ise yarar bir kaya parcasi";
 	}
-	else if(item_name == "water")
+	else if(pItemName == "water")
 	{
-		inf = "Su temiz gorunuyor";
+		mInformation = "Su temiz gorunuyor";
 	}
-	else if(item_name == "soup")
+	else if(pItemName == "soup")
 	{
-		inf = "Soguk corba.Bugun sansli gunumdeyim";
+		mInformation = "Soguk corba.Bugun sansli gunumdeyim";
 	}
 }

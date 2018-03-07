@@ -1,16 +1,23 @@
 #pragma once
 
-#include <SDL.h>
+#include "SDL/SDL.h"
+#include "SDL/SDL_mixer.h"
+#include "SDL/SDL_ttf.h"
+#include "SDL/SDL_image.h"
 
 class GameObject
 {
 public:
-	GameObject();
+	GameObject(); // Default Constructor
+	GameObject(const GameObject &pObj);
+	GameObject& operator = (const GameObject& pObj);
+	~GameObject();
 
-	virtual void draw(SDL_Renderer*) = 0;
-	virtual void update() = 0;
+	virtual void Render(SDL_Renderer* pRenderer);
+	virtual void Update() final;
+	virtual void Clean() final;
 
-	void setPosition(int , int);
+	static GameObject* getInstanceGameObject();
 protected:
-	float x , y;
+	static GameObject* mInstanceGameObject;
 };

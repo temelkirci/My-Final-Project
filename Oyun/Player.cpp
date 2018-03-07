@@ -1,20 +1,14 @@
-﻿#include "SDL/SDL.h"
-#include <SDL/SDL_image.h>
-#include "Player.h"
-#include "SDL/SDL_ttf.h"
-#include <string>
-#include <iostream>
-#include <chrono>
+﻿#include "Player.h"
 
 Player :: Player()
 {
-	oyun_baslat = false;
-	speed = 1;
-	arti_x_speed = speed;
-	eksi_y_speed = speed;
+	mPlayerSpeed = 0.5;
 
-	arti_y_speed = speed;
-	eksi_x_speed = speed;
+	mPlayerPositiveSpeedX = mPlayerSpeed;
+	mPlayerNegativeSpeedY = mPlayerSpeed;
+
+	mPlayerPositiveSpeedY = mPlayerSpeed;
+	mPlayerNegativeSpeedX = mPlayerSpeed;
 
 	thirtsy = 80;
 	health = 70;
@@ -27,8 +21,8 @@ Player :: Player()
 	rifle_mermi = 50;
 	shotgun_mermi = 20;
 	
-	xpoz = 625;
-	ypoz = 300;
+	xpoz = 625.0;
+	ypoz = 300.0;
 
 	angle = 0;
 	player_time = 0;
@@ -72,27 +66,27 @@ Player :: ~Player()
 	texture_barbaros = NULL ;
 }
 
-bool Player :: barbaros_yukle_weapon(char* dosya_yolu , SDL_Renderer* rend , char* barbaros_parca)
+bool Player :: loadPlayerWeapon(char* pPathFile , SDL_Renderer* rend , char* pPlayerWeaponName)
 {
-	surface_barbaros = IMG_Load(dosya_yolu);
-	if(surface_barbaros == 0)
+	SDL_Surface* tPlayerSurface = IMG_Load(pPathFile);
+	if(tPlayerSurface == 0)
 	{
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR , "Oyun" , "barbaros_yukle_weapon yuklenemedi..!" , NULL);
 		exit(0);
 	}
 
-	texture_barbaros = SDL_CreateTextureFromSurface(rend , surface_barbaros);
-	SDL_FreeSurface(surface_barbaros);
+	mPlayerTexture = SDL_CreateTextureFromSurface(rend , tPlayerSurface);
+	SDL_FreeSurface(tPlayerSurface);
 
-	if(texture_barbaros != 0)
+	if(mPlayerTexture != 0)
 	{
-		barbaros_weapon[barbaros_parca] = texture_barbaros; 
+		mPLayerWeaponMap[pPlayerWeaponName] = mPlayerTexture;
 		return true;
 	}
 	return false;
 }
 
-void Player :: death_information(SDL_Renderer* ren)
+void Player :: deathInformation(SDL_Renderer* ren)
 {
 	SDL_Surface* surface_cr = IMG_Load("assets/bilgi_kutusu.jpg");
 	SDL_Texture* texture_cr = SDL_CreateTextureFromSurface(ren , surface_cr);	// yüzeyi renderleyerek texture oluştur	
@@ -101,7 +95,7 @@ void Player :: death_information(SDL_Renderer* ren)
 	dead_texture = texture_cr;
 }
 
-void Player :: player_information(SDL_Renderer* render_barbaros)
+void Player :: playerInformation(SDL_Renderer* render_barbaros)
 {
 	SDL_Surface* daySurface;
 	SDL_Texture* dayTexture;
@@ -147,13 +141,13 @@ void Player :: player_information(SDL_Renderer* render_barbaros)
 	
 }
 
-void Player :: barbaros_çiz(SDL_Renderer* render_barbaros , string barbaros_gun , int *x , int *y , int xcamera , int ycamera , string barbaros_stat , Uint32 süre)
+void Player :: drawPlayer(SDL_Renderer* render_barbaros , string barbaros_gun , double x , double y , double xcamera , double ycamera , string barbaros_stat , Uint32 süre)
 {
-	
-	player_barbaros.x=(*x)+xcamera;
-	player_barbaros.y=(*y)+ycamera;
-	player_barbaros.w=100;
-	player_barbaros.h=100;
+
+	player_barbaros.x = int (x) + (int) xcamera;
+	player_barbaros.y = int (y) + (int) ycamera;
+	player_barbaros.w = 100;
+	player_barbaros.h = 100;
 	
 	
 	// Y EKSENİ İÇİN SINIR BELİRLEME
@@ -582,10 +576,9 @@ void Player :: barbaros_çiz(SDL_Renderer* render_barbaros , string barbaros_gun
 			SDL_RenderCopyEx(render_barbaros , barbaros_weapon["idle_rifle_0"] , NULL , &player_barbaros , angle , &playerPoint , SDL_FLIP_NONE);
 		}
 	}
-
 }
 
-void Player :: barbaros_güncelle(SDL_Renderer* render , Uint32 time_barbaros)
+void Player :: updatePLayer(SDL_Renderer* render , Uint32 time_barbaros)
 {
 	if(health <= 0)
 	{
@@ -672,66 +665,66 @@ void Player :: barbaros_güncelle(SDL_Renderer* render , Uint32 time_barbaros)
 void Player :: load_barbaros(SDL_Renderer* renderer)
 {
 
-	barbaros_yukle_weapon("assets/barbaros/flashlight/move/survivor-move_flashlight_0.png" ,renderer, "move_flashlight_0");
-	barbaros_yukle_weapon("assets/barbaros/flashlight/move/survivor-move_flashlight_5.png" ,renderer, "move_flashlight_1");
-	barbaros_yukle_weapon("assets/barbaros/flashlight/move/survivor-move_flashlight_10.png" ,renderer, "move_flashlight_2");
-	barbaros_yukle_weapon("assets/barbaros/flashlight/move/survivor-move_flashlight_15.png" ,renderer, "move_flashlight_3");
-	barbaros_yukle_weapon("assets/barbaros/flashlight/move/survivor-move_flashlight_19.png" ,renderer, "move_flashlight_4");
+	loadPlayerWeapon("assets/barbaros/flashlight/move/survivor-move_flashlight_0.png" ,renderer, "move_flashlight_0");
+	loadPlayerWeapon("assets/barbaros/flashlight/move/survivor-move_flashlight_5.png" ,renderer, "move_flashlight_1");
+	loadPlayerWeapon("assets/barbaros/flashlight/move/survivor-move_flashlight_10.png" ,renderer, "move_flashlight_2");
+	loadPlayerWeapon("assets/barbaros/flashlight/move/survivor-move_flashlight_15.png" ,renderer, "move_flashlight_3");
+	loadPlayerWeapon("assets/barbaros/flashlight/move/survivor-move_flashlight_19.png" ,renderer, "move_flashlight_4");
 
-	barbaros_yukle_weapon("assets/barbaros/handgun/shoot/handgun_1.png" ,renderer, "handgun1");
-	barbaros_yukle_weapon("assets/barbaros/handgun/shoot/handgun_2.png" ,renderer, "handgun2");
-	barbaros_yukle_weapon("assets/barbaros/handgun/shoot/handgun_3.png" ,renderer, "handgun3");
+	loadPlayerWeapon("assets/barbaros/handgun/shoot/handgun_1.png" ,renderer, "handgun1");
+	loadPlayerWeapon("assets/barbaros/handgun/shoot/handgun_2.png" ,renderer, "handgun2");
+	loadPlayerWeapon("assets/barbaros/handgun/shoot/handgun_3.png" ,renderer, "handgun3");
 
-	barbaros_yukle_weapon("assets/barbaros/handgun/idle/idle_handgun_0.png" ,renderer, "idle_handgun_0");
-	barbaros_yukle_weapon("assets/barbaros/handgun/idle/idle_handgun_5.png" ,renderer, "idle_handgun_1");
-	barbaros_yukle_weapon("assets/barbaros/handgun/idle/idle_handgun_10.png" ,renderer, "idle_handgun_2");
-	barbaros_yukle_weapon("assets/barbaros/handgun/idle/idle_handgun_15.png" ,renderer, "idle_handgun_3");
-	barbaros_yukle_weapon("assets/barbaros/handgun/idle/idle_handgun_19.png" ,renderer, "idle_handgun_4");
+	loadPlayerWeapon("assets/barbaros/handgun/idle/idle_handgun_0.png" ,renderer, "idle_handgun_0");
+	loadPlayerWeapon("assets/barbaros/handgun/idle/idle_handgun_5.png" ,renderer, "idle_handgun_1");
+	loadPlayerWeapon("assets/barbaros/handgun/idle/idle_handgun_10.png" ,renderer, "idle_handgun_2");
+	loadPlayerWeapon("assets/barbaros/handgun/idle/idle_handgun_15.png" ,renderer, "idle_handgun_3");
+	loadPlayerWeapon("assets/barbaros/handgun/idle/idle_handgun_19.png" ,renderer, "idle_handgun_4");
 	
-	barbaros_yukle_weapon("assets/barbaros/shotgun/shoot/shoot_shotgun_0.png" ,renderer, "shotgun1");
-	barbaros_yukle_weapon("assets/barbaros/shotgun/shoot/shoot_shotgun_1.png" ,renderer, "shotgun2");
-	barbaros_yukle_weapon("assets/barbaros/shotgun/shoot/shoot_shotgun_2.png" ,renderer, "shotgun3");
+	loadPlayerWeapon("assets/barbaros/shotgun/shoot/shoot_shotgun_0.png" ,renderer, "shotgun1");
+	loadPlayerWeapon("assets/barbaros/shotgun/shoot/shoot_shotgun_1.png" ,renderer, "shotgun2");
+	loadPlayerWeapon("assets/barbaros/shotgun/shoot/shoot_shotgun_2.png" ,renderer, "shotgun3");
 
-	barbaros_yukle_weapon("assets/barbaros/shotgun/idle/idle_shotgun_0.png" ,renderer, "idle_shotgun_0");
-	barbaros_yukle_weapon("assets/barbaros/shotgun/idle/idle_shotgun_5.png" ,renderer, "idle_shotgun_1");
-	barbaros_yukle_weapon("assets/barbaros/shotgun/idle/idle_shotgun_10.png" ,renderer, "idle_shotgun_2");
-	barbaros_yukle_weapon("assets/barbaros/shotgun/idle/idle_shotgun_15.png" ,renderer, "idle_shotgun_3");
-	barbaros_yukle_weapon("assets/barbaros/shotgun/idle/idle_shotgun_19.png" ,renderer, "idle_shotgun_4");
+	loadPlayerWeapon("assets/barbaros/shotgun/idle/idle_shotgun_0.png" ,renderer, "idle_shotgun_0");
+	loadPlayerWeapon("assets/barbaros/shotgun/idle/idle_shotgun_5.png" ,renderer, "idle_shotgun_1");
+	loadPlayerWeapon("assets/barbaros/shotgun/idle/idle_shotgun_10.png" ,renderer, "idle_shotgun_2");
+	loadPlayerWeapon("assets/barbaros/shotgun/idle/idle_shotgun_15.png" ,renderer, "idle_shotgun_3");
+	loadPlayerWeapon("assets/barbaros/shotgun/idle/idle_shotgun_19.png" ,renderer, "idle_shotgun_4");
 
-	barbaros_yukle_weapon("assets/barbaros/rifle/shoot/shoot_rifle_0.png" ,renderer, "rifle1");
-	barbaros_yukle_weapon("assets/barbaros/rifle/shoot/shoot_rifle_1.png" ,renderer, "rifle2");
-	barbaros_yukle_weapon("assets/barbaros/rifle/shoot/shoot_rifle_2.png" ,renderer, "rifle3");
+	loadPlayerWeapon("assets/barbaros/rifle/shoot/shoot_rifle_0.png" ,renderer, "rifle1");
+	loadPlayerWeapon("assets/barbaros/rifle/shoot/shoot_rifle_1.png" ,renderer, "rifle2");
+	loadPlayerWeapon("assets/barbaros/rifle/shoot/shoot_rifle_2.png" ,renderer, "rifle3");
 
-	barbaros_yukle_weapon("assets/barbaros/rifle/idle/idle_rifle_0.png" ,renderer, "idle_rifle_0");
-	barbaros_yukle_weapon("assets/barbaros/rifle/idle/idle_rifle_5.png" ,renderer, "idle_rifle_1");
-	barbaros_yukle_weapon("assets/barbaros/rifle/idle/idle_rifle_10.png" ,renderer, "idle_rifle_2");
-	barbaros_yukle_weapon("assets/barbaros/rifle/idle/idle_rifle_15.png" ,renderer, "idle_rifle_3");
-	barbaros_yukle_weapon("assets/barbaros/rifle/idle/idle_rifle_19.png" ,renderer, "idle_rifle_4");
+	loadPlayerWeapon("assets/barbaros/rifle/idle/idle_rifle_0.png" ,renderer, "idle_rifle_0");
+	loadPlayerWeapon("assets/barbaros/rifle/idle/idle_rifle_5.png" ,renderer, "idle_rifle_1");
+	loadPlayerWeapon("assets/barbaros/rifle/idle/idle_rifle_10.png" ,renderer, "idle_rifle_2");
+	loadPlayerWeapon("assets/barbaros/rifle/idle/idle_rifle_15.png" ,renderer, "idle_rifle_3");
+	loadPlayerWeapon("assets/barbaros/rifle/idle/idle_rifle_19.png" ,renderer, "idle_rifle_4");
 
-	barbaros_yukle_weapon("assets/barbaros/knife/meleeattack/meleeattack_knife_0.png" ,renderer, "knife1");
-	barbaros_yukle_weapon("assets/barbaros/knife/meleeattack/meleeattack_knife_3.png" ,renderer, "knife2");
-	barbaros_yukle_weapon("assets/barbaros/knife/meleeattack/meleeattack_knife_6.png" ,renderer, "knife3");
-	barbaros_yukle_weapon("assets/barbaros/knife/meleeattack/meleeattack_knife_9.png" ,renderer, "knife4");
-	barbaros_yukle_weapon("assets/barbaros/knife/meleeattack/meleeattack_knife_12.png" ,renderer, "knife5");
+	loadPlayerWeapon("assets/barbaros/knife/meleeattack/meleeattack_knife_0.png" ,renderer, "knife1");
+	loadPlayerWeapon("assets/barbaros/knife/meleeattack/meleeattack_knife_3.png" ,renderer, "knife2");
+	loadPlayerWeapon("assets/barbaros/knife/meleeattack/meleeattack_knife_6.png" ,renderer, "knife3");
+	loadPlayerWeapon("assets/barbaros/knife/meleeattack/meleeattack_knife_9.png" ,renderer, "knife4");
+	loadPlayerWeapon("assets/barbaros/knife/meleeattack/meleeattack_knife_12.png" ,renderer, "knife5");
 
-	barbaros_yukle_weapon("assets/barbaros/knife/idle/idle_knife_0.png" ,renderer, "idle_knife_0");
-	barbaros_yukle_weapon("assets/barbaros/knife/idle/idle_knife_1.png" ,renderer, "idle_knife_1");
-	barbaros_yukle_weapon("assets/barbaros/knife/idle/idle_knife_2.png" ,renderer, "idle_knife_2");
-	barbaros_yukle_weapon("assets/barbaros/knife/idle/idle_knife_3.png" ,renderer, "idle_knife_3");
-	barbaros_yukle_weapon("assets/barbaros/knife/idle/idle_knife_4.png" ,renderer, "idle_knife_4");
-	barbaros_yukle_weapon("assets/barbaros/knife/idle/idle_knife_5.png" ,renderer, "idle_knife_5");
-	barbaros_yukle_weapon("assets/barbaros/knife/idle/idle_knife_6.png" ,renderer, "idle_knife_6");
-	barbaros_yukle_weapon("assets/barbaros/knife/idle/idle_knife_7.png" ,renderer, "idle_knife_7");
-	barbaros_yukle_weapon("assets/barbaros/knife/idle/idle_knife_8.png" ,renderer, "idle_knife_8");
-	barbaros_yukle_weapon("assets/barbaros/knife/idle/idle_knife_9.png" ,renderer, "idle_knife_9");
-	barbaros_yukle_weapon("assets/barbaros/knife/idle/idle_knife_10.png" ,renderer, "idle_knife_10");
-	barbaros_yukle_weapon("assets/barbaros/knife/idle/idle_knife_11.png" ,renderer, "idle_knife_11");
-	barbaros_yukle_weapon("assets/barbaros/knife/idle/idle_knife_12.png" ,renderer, "idle_knife_12");
-	barbaros_yukle_weapon("assets/barbaros/knife/idle/idle_knife_13.png" ,renderer, "idle_knife_13");
-	barbaros_yukle_weapon("assets/barbaros/knife/idle/idle_knife_14.png" ,renderer, "idle_knife_14");
-	barbaros_yukle_weapon("assets/barbaros/knife/idle/idle_knife_15.png" ,renderer, "idle_knife_15");
-	barbaros_yukle_weapon("assets/barbaros/knife/idle/idle_knife_16.png" ,renderer, "idle_knife_16");
-	barbaros_yukle_weapon("assets/barbaros/knife/idle/idle_knife_17.png" ,renderer, "idle_knife_17");
-	barbaros_yukle_weapon("assets/barbaros/knife/idle/idle_knife_18.png" ,renderer, "idle_knife_18");
-	barbaros_yukle_weapon("assets/barbaros/knife/idle/idle_knife_19.png" ,renderer, "idle_knife_19");
+	loadPlayerWeapon("assets/barbaros/knife/idle/idle_knife_0.png" ,renderer, "idle_knife_0");
+	loadPlayerWeapon("assets/barbaros/knife/idle/idle_knife_1.png" ,renderer, "idle_knife_1");
+	loadPlayerWeapon("assets/barbaros/knife/idle/idle_knife_2.png" ,renderer, "idle_knife_2");
+	loadPlayerWeapon("assets/barbaros/knife/idle/idle_knife_3.png" ,renderer, "idle_knife_3");
+	loadPlayerWeapon("assets/barbaros/knife/idle/idle_knife_4.png" ,renderer, "idle_knife_4");
+	loadPlayerWeapon("assets/barbaros/knife/idle/idle_knife_5.png" ,renderer, "idle_knife_5");
+	loadPlayerWeapon("assets/barbaros/knife/idle/idle_knife_6.png" ,renderer, "idle_knife_6");
+	loadPlayerWeapon("assets/barbaros/knife/idle/idle_knife_7.png" ,renderer, "idle_knife_7");
+	loadPlayerWeapon("assets/barbaros/knife/idle/idle_knife_8.png" ,renderer, "idle_knife_8");
+	loadPlayerWeapon("assets/barbaros/knife/idle/idle_knife_9.png" ,renderer, "idle_knife_9");
+	loadPlayerWeapon("assets/barbaros/knife/idle/idle_knife_10.png" ,renderer, "idle_knife_10");
+	loadPlayerWeapon("assets/barbaros/knife/idle/idle_knife_11.png" ,renderer, "idle_knife_11");
+	loadPlayerWeapon("assets/barbaros/knife/idle/idle_knife_12.png" ,renderer, "idle_knife_12");
+	loadPlayerWeapon("assets/barbaros/knife/idle/idle_knife_13.png" ,renderer, "idle_knife_13");
+	loadPlayerWeapon("assets/barbaros/knife/idle/idle_knife_14.png" ,renderer, "idle_knife_14");
+	loadPlayerWeapon("assets/barbaros/knife/idle/idle_knife_15.png" ,renderer, "idle_knife_15");
+	loadPlayerWeapon("assets/barbaros/knife/idle/idle_knife_16.png" ,renderer, "idle_knife_16");
+	loadPlayerWeapon("assets/barbaros/knife/idle/idle_knife_17.png" ,renderer, "idle_knife_17");
+	loadPlayerWeapon("assets/barbaros/knife/idle/idle_knife_18.png" ,renderer, "idle_knife_18");
+	loadPlayerWeapon("assets/barbaros/knife/idle/idle_knife_19.png" ,renderer, "idle_knife_19");
 }

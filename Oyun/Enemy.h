@@ -3,32 +3,38 @@
 #include "SDL/SDL_mixer.h"
 #include <map>
 #include <string>
+#include <SDL/SDL_image.h>
+#include <iostream>
+#include <ctime>
+#include "GameObject.h"
 
 using namespace std;
 
-class Enemy
+class Enemy : public GameObject
 {
 public:
-
 	Enemy();
+	Enemy(const Enemy& pEnemy);
+	Enemy& operator = (const Enemy& pEnemy);
 	~Enemy();
 
-	Uint32 airplane_time;
-	SDL_Rect airplane_rect;
+	void drawAirplane(SDL_Renderer* pRenderer, int , int , Uint32);
+	void drawCreature(SDL_Renderer* pRenderer, int , int , SDL_Rect , Uint32);
 
-	Uint32 creature_time;
-	SDL_Rect creature_rect;
-	Uint32 move_time;
-
-	int creature_health;
-	void drawHelicopter(SDL_Renderer*);
+	void loadEnemy(SDL_Renderer* pRenderer);
+	void loadEnemyItems(char* mPathFile, char* , SDL_Renderer* pRenderer);
 	
-	void drawAirplane(SDL_Renderer* , int , int , Uint32);
-	void drawCreature(SDL_Renderer* , int , int , SDL_Rect , Uint32);
-
-	void enemy_load(SDL_Renderer*);
-	void load_enemy(char* , char* , SDL_Renderer*);
-	
+	static Enemy* getInstanceEnemy();
 private:
-	map<string , SDL_Texture*> enemy_map;
+	static Enemy* mInstanceEnemy;
+
+	map<string , SDL_Texture*> mEnemyMap;
+	Uint32 mAirplaneTime;
+	SDL_Rect mAirplaneRect;
+
+	Uint32 mCreatureTime;
+	SDL_Rect mCreatureRect;
+	Uint32 mMoveTime;
+
+	int mCreatureHealth;
 };

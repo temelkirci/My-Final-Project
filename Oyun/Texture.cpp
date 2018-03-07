@@ -1,8 +1,4 @@
-﻿#include <iostream>
-#include <vector>
-#include "Texture.h"
-#include <string>
-#include <SDL/SDL.h>
+﻿#include "Texture.h"
 
 #define PI 3.14159265 // Radyan dan dereceye çevirmek için kullanacağız
 
@@ -57,13 +53,12 @@ bool Texture :: load(char* dosya_adi , string texture_adi , SDL_Renderer* textur
 	if(load_texture != 0)
 	{
 		map_texture[texture_adi] = load_texture; // Tüm textureleri saklayacağımız yer
-		all_textures[texture_adi] = load_texture;
 		return true;
 	}
 	return false;
 }
 
-void Texture :: draw_camera(SDL_Renderer* ren , int* pozx, int* pozy, int genislik , int yukseklik)
+void Texture :: draw_camera(SDL_Renderer* ren , double pozx, double pozy, int genislik , int yukseklik)
 {
 	// barbaros genislik 100
 			// barbaros yukseklik 100
@@ -72,41 +67,41 @@ void Texture :: draw_camera(SDL_Renderer* ren , int* pozx, int* pozy, int genisl
 			// arkaplan genislik 6000
 			// arkaplan yukseklik 3000
 			
-			if((*pozy) < 300)
+			if((int)pozy < 300)
 			{
 				camera.y = 0;
 			}
 
-			if((*pozx) < 625)
+			if((int)pozx < 625)
 			{
 				camera.x = 0;
 			}
 
-			if((*pozy) >= 1100)
+			if((int)pozy >= 1100)
 			{
 				camera.y = -800;
-				if((*pozy) >= 1400)
-					(*pozy) = 1400;
+				if((int)pozy >= 1400)
+					pozy = 1400;
 			}
 
-			if((((*pozy) >= 300) && ((*pozy) < 1100)))
+			if((((int)pozy >= 300) && ((int)pozy < 1100)))
 			{
-				camera.y = -((*pozy) - 300);
+				camera.y = -((int)pozy - 300);
 			}
 
-			if((*pozx) >= 5275)
+			if((int)pozx >= 5275)
 			{
 				camera.x = -4650;
 			}
 
-			if((*pozx) >= 5900) // haritanýn en saðýndan çýkmamasý için kontrol yapýlýyor
+			if((int)pozx >= 5900) // haritanýn en saðýndan çýkmamasý için kontrol yapýlýyor
 			{
-				(*pozx) = 5900;
+				pozx = 5900;
 			}
 
-			if(((625 <= (*pozx)) && ((*pozx) < 5275)))
+			if(((625 <= (int)pozx) && ((int)pozx < 5275)))
 			{
-				camera.x = -((*pozx) - 625);
+				camera.x = -((int)pozx - 625);
 			}
 			
 			//SDL_RenderCopyEx(ren, texture_background , NULL , &camera , 0 , 0 , SDL_FLIP_NONE);
@@ -161,7 +156,7 @@ void Texture :: draw_object(SDL_Renderer* texture_render , Uint32 collectible_ti
 {
 	SDL_Rect temp;
 
-	SDL_Rect barbaros_rect = {xpoz , ypoz , 100 , 100};
+	SDL_Rect barbaros_rect = {(int)xpoz , (int)ypoz , 100 , 100};
 
 	for(vector<Item>::iterator i = col.begin() ; i != col.end(); ++i)
 	{
@@ -225,31 +220,31 @@ void Texture :: draw_solid_texture(SDL_Renderer* texture_render)
 					
 				SDL_RenderCopyEx(texture_render , map_texture[(*t).item_name] , NULL , &hedef_texture , 0 , 0 , SDL_FLIP_NONE);
 				
-				SDL_Rect barbaros_rect = {xpoz , ypoz , 100 , 100};
+				SDL_Rect barbaros_rect = {(int)xpoz , (int)ypoz , 100 , 100};
 
 				SDL_Rect temp = (*t).item_rect;
 			
 				if(((*t).item_active) == true)
 				{
-							if( (SDL_HasIntersection(&barbaros_rect , &temp)) && ((mevcut_resim == "yukari" )))
-							{
-								ypoz = (temp.y + temp.h);
-							}
+					if( (SDL_HasIntersection(&barbaros_rect , &temp)) && ((mevcut_resim == "yukari" )))
+					{
+						ypoz = (temp.y + temp.h);
+					}
 
-							if((SDL_HasIntersection(&barbaros_rect , &temp)) && ((mevcut_resim =="asagi" )))
-							{
-								ypoz = (temp.y - barbaros_rect.h);
-							}
+					if((SDL_HasIntersection(&barbaros_rect , &temp)) && ((mevcut_resim =="asagi" )))
+					{
+						ypoz = (temp.y - barbaros_rect.h);
+					}
 
-							if( (SDL_HasIntersection(&barbaros_rect , &temp)) && ( (mevcut_resim =="sag" )))
-							{
-								xpoz = (temp.x - barbaros_rect.w);
-							}
+					if( (SDL_HasIntersection(&barbaros_rect , &temp)) && ( (mevcut_resim =="sag" )))
+					{
+						xpoz = (temp.x - barbaros_rect.w);
+					}
 
-							if((SDL_HasIntersection(&barbaros_rect , &temp)) && ((mevcut_resim =="sol" )))
-							{
-								xpoz = (temp.x + temp.w);			
-							}
+					if((SDL_HasIntersection(&barbaros_rect , &temp)) && ((mevcut_resim =="sol" )))
+					{
+						xpoz = (temp.x + temp.w);			
+					}
 				}
 					
 			}
@@ -266,7 +261,7 @@ void Texture :: draw_texture(SDL_Renderer* texture_render)
 		{
 			SDL_Rect hedef_texture = {(*i).item_rect.x + camera.x , (*i).item_rect.y + camera.y , (*i).item_rect.w , (*i).item_rect.h};
 	
-			SDL_Rect barbaros_rect = {xpoz , ypoz , 100 , 100};
+			SDL_Rect barbaros_rect = {(int)xpoz , (int)ypoz , 100 , 100};
 
 				if((SDL_HasIntersection(&creature_rect , &(*i).item_rect)))
 				{
@@ -297,7 +292,7 @@ void Texture :: arkaplan_yükle(char* dosya_yolu , SDL_Renderer* render_arkaplan
 	SDL_FreeSurface(surface_background);
 }
 
-void Texture :: draw_bullet(SDL_Renderer* rend , int camx , int camy)
+void Texture :: draw_bullet(SDL_Renderer* rend , double camx , double camy)
 {
 	if(active_bullet)
 	{
@@ -305,8 +300,6 @@ void Texture :: draw_bullet(SDL_Renderer* rend , int camx , int camy)
 		{		
 			if(barbaros_guns == "rifle")
 			{
-				bullet_rifle.bullet_rect.x = bullet_rifle.bullet_rect.x + camx;
-				bullet_rifle.bullet_rect.y = bullet_rifle.bullet_rect.y + camy;
 
 				if(z == 0)
 					{	
@@ -314,23 +307,23 @@ void Texture :: draw_bullet(SDL_Renderer* rend , int camx , int camy)
 
 						if(bullet_angle >= 0 && bullet_angle <90)
 						{
-							bullet_rifle.bullet_rect.x = xpoz + 90 - (int)(30*cos((bullet_angle*PI)/180));
-							bullet_rifle.bullet_rect.y = ypoz + 70 - (int)(30*sin((bullet_angle*PI)/180));
+							bullet_rifle.bullet_rect.x = (int)xpoz + 90 - (int)(30*cos((bullet_angle*PI)/180));
+							bullet_rifle.bullet_rect.y = (int)ypoz + 70 - (int)(30*sin((bullet_angle*PI)/180));
 						}
 						else if(bullet_angle >= 90 && bullet_angle <180)
 						{
-							bullet_rifle.bullet_rect.x = xpoz + 20 + (int)(30*cos((90-bullet_angle*PI)/180));
-							bullet_rifle.bullet_rect.y = ypoz + 70 - (int)(30*sin((90-bullet_angle*PI)/180));
+							bullet_rifle.bullet_rect.x = (int)xpoz + 20 + (int)(30*cos((90-bullet_angle*PI)/180));
+							bullet_rifle.bullet_rect.y = (int)ypoz + 70 - (int)(30*sin((90-bullet_angle*PI)/180));
 						}
 						else if(bullet_angle >= 180 && bullet_angle <270)
 						{
-							bullet_rifle.bullet_rect.x = xpoz + 20 + (int)(30*cos((180-bullet_angle*PI)/180));
-							bullet_rifle.bullet_rect.y = ypoz + 25 + (int)(30*sin((180-bullet_angle*PI)/180));
+							bullet_rifle.bullet_rect.x = (int)xpoz + 20 + (int)(30*cos((180-bullet_angle*PI)/180));
+							bullet_rifle.bullet_rect.y = (int)ypoz + 25 + (int)(30*sin((180-bullet_angle*PI)/180));
 						}
 						else if(bullet_angle >= 270 && bullet_angle <360)
 						{
-							bullet_rifle.bullet_rect.x = xpoz + 70 - (int)(30*cos((270-bullet_angle*PI)/180));
-							bullet_rifle.bullet_rect.y = ypoz + 20 + (int)(30*sin((270-bullet_angle*PI)/180));
+							bullet_rifle.bullet_rect.x = (int)xpoz + 70 - (int)(30*cos((270-bullet_angle*PI)/180));
+							bullet_rifle.bullet_rect.y = (int)ypoz + 20 + (int)(30*sin((270-bullet_angle*PI)/180));
 						}
 						
 						bullet_rifle.bullet_rect.w = 20;
@@ -367,15 +360,19 @@ void Texture :: draw_bullet(SDL_Renderer* rend , int camx , int camy)
 						bullet_rifle.bullet_rect.y = (bullet_rifle.bullet_rect.y) + (int)(10*sin(((bullet_angle)*PI)/180));
 					}
 
+					SDL_Rect bul;
+					bul.x = bullet_rifle.bullet_rect.x + (int)camx;
+					bul.y = bullet_rifle.bullet_rect.y + (int)camy;
+					bul.w = bullet_rifle.bullet_rect.w;
+					bul.h = bullet_rifle.bullet_rect.h;
+
 					if(bullet_rifle.bullet_active)
-						SDL_RenderCopyEx(rend , map_texture[bullet_rifle.bullet_name] , NULL , &bullet_rifle.bullet_rect , bullet_angle , 0 , SDL_FLIP_NONE);
+						SDL_RenderCopyEx(rend , map_texture[bullet_rifle.bullet_name] , NULL , &bul , bullet_angle , 0 , SDL_FLIP_NONE);
 					z++;		
 			
 				}
 				else if(barbaros_guns == "handgun")
 				{
-					bullet_handgun.bullet_rect.x = bullet_handgun.bullet_rect.x + camx;
-					bullet_handgun.bullet_rect.y = bullet_handgun.bullet_rect.y + camy;
 
 					if(z == 0)
 					{	
@@ -383,23 +380,23 @@ void Texture :: draw_bullet(SDL_Renderer* rend , int camx , int camy)
 
 						if(bullet_angle >= 0 && bullet_angle <90)
 						{
-							bullet_handgun.bullet_rect.x = xpoz + 90 - (int)(30*cos((bullet_angle*PI)/180));
-							bullet_handgun.bullet_rect.y = ypoz + 70 - (int)(30*sin((bullet_angle*PI)/180));
+							bullet_handgun.bullet_rect.x = (int)xpoz + 90 - (int)(30*cos((bullet_angle*PI)/180));
+							bullet_handgun.bullet_rect.y = (int)ypoz + 70 - (int)(30*sin((bullet_angle*PI)/180));
 						}
 						else if(bullet_angle >= 90 && bullet_angle <180)
 						{
-							bullet_handgun.bullet_rect.x = xpoz + 20 + (int)(30*cos((90-bullet_angle*PI)/180));
-							bullet_handgun.bullet_rect.y = ypoz + 70 - (int)(30*sin((90-bullet_angle*PI)/180));
+							bullet_handgun.bullet_rect.x = (int)xpoz + 20 + (int)(30*cos((90-bullet_angle*PI)/180));
+							bullet_handgun.bullet_rect.y = (int)ypoz + 70 - (int)(30*sin((90-bullet_angle*PI)/180));
 						}
 						else if(bullet_angle >= 180 && bullet_angle <270)
 						{
-							bullet_handgun.bullet_rect.x = xpoz + 20 + (int)(30*cos((180-bullet_angle*PI)/180));
-							bullet_handgun.bullet_rect.y = ypoz + 25 + (int)(30*sin((180-bullet_angle*PI)/180));
+							bullet_handgun.bullet_rect.x = (int)xpoz + 20 + (int)(30*cos((180-bullet_angle*PI)/180));
+							bullet_handgun.bullet_rect.y = (int)ypoz + 25 + (int)(30*sin((180-bullet_angle*PI)/180));
 						}
 						else if(bullet_angle >= 270 && bullet_angle <360)
 						{
-							bullet_handgun.bullet_rect.x = xpoz + 70 - (int)(30*cos((270-bullet_angle*PI)/180));
-							bullet_handgun.bullet_rect.y = ypoz + 20 + (int)(30*sin((270-bullet_angle*PI)/180));
+							bullet_handgun.bullet_rect.x = (int)xpoz + 70 - (int)(30*cos((270-bullet_angle*PI)/180));
+							bullet_handgun.bullet_rect.y = (int)ypoz + 20 + (int)(30*sin((270-bullet_angle*PI)/180));
 						}
 						
 						bullet_handgun.bullet_rect.w = 20;
@@ -435,15 +432,19 @@ void Texture :: draw_bullet(SDL_Renderer* rend , int camx , int camy)
 						bullet_handgun.bullet_rect.y = (bullet_handgun.bullet_rect.y) + (int)(10*sin(((bullet_angle)*PI)/180));
 					}
 
+					SDL_Rect bul;
+					bul.x = bullet_handgun.bullet_rect.x + (int)camx;
+					bul.y = bullet_handgun.bullet_rect.y + (int)camy;
+					bul.w = bullet_handgun.bullet_rect.w;
+					bul.h = bullet_handgun.bullet_rect.h;
+
 					if(bullet_handgun.bullet_active)
-						SDL_RenderCopyEx(rend , map_texture[bullet_handgun.bullet_name] , NULL , &bullet_handgun.bullet_rect , bullet_angle , 0 , SDL_FLIP_NONE);
+						SDL_RenderCopyEx(rend , map_texture[bullet_handgun.bullet_name] , NULL , &bul , bullet_angle , 0 , SDL_FLIP_NONE);
 					z++;	
 					
 				}
 				else if(barbaros_guns == "shotgun")
 				{
-					bullet_shotgun.bullet_rect.x = bullet_shotgun.bullet_rect.x + camx;
-					bullet_shotgun.bullet_rect.y = bullet_shotgun.bullet_rect.y + camy;
 
 					if(z == 0)
 					{	
@@ -451,23 +452,23 @@ void Texture :: draw_bullet(SDL_Renderer* rend , int camx , int camy)
 
 						if(bullet_angle >= 0 && bullet_angle <90)
 						{
-							bullet_shotgun.bullet_rect.x = xpoz + 90 - (int)(30*cos((bullet_angle*PI)/180));
-							bullet_shotgun.bullet_rect.y = ypoz + 70 - (int)(30*sin((bullet_angle*PI)/180));
+							bullet_shotgun.bullet_rect.x = (int)xpoz + 90 - (int)(30*cos((bullet_angle*PI)/180));
+							bullet_shotgun.bullet_rect.y = (int)ypoz + 70 - (int)(30*sin((bullet_angle*PI)/180));
 						}
 						else if(bullet_angle >= 90 && bullet_angle <180)
 						{
-							bullet_shotgun.bullet_rect.x = xpoz + 20 + (int)(30*cos((90-bullet_angle*PI)/180));
-							bullet_shotgun.bullet_rect.y = ypoz + 70 - (int)(30*sin((90-bullet_angle*PI)/180));
+							bullet_shotgun.bullet_rect.x = (int)xpoz + 20 + (int)(30*cos((90-bullet_angle*PI)/180));
+							bullet_shotgun.bullet_rect.y = (int)ypoz + 70 - (int)(30*sin((90-bullet_angle*PI)/180));
 						}
 						else if(bullet_angle >= 180 && bullet_angle <270)
 						{
-							bullet_shotgun.bullet_rect.x = xpoz + 20 + (int)(30*cos((180-bullet_angle*PI)/180));
-							bullet_shotgun.bullet_rect.y = ypoz + 25 + (int)(30*sin((180-bullet_angle*PI)/180));
+							bullet_shotgun.bullet_rect.x = (int)xpoz + 20 + (int)(30*cos((180-bullet_angle*PI)/180));
+							bullet_shotgun.bullet_rect.y = (int)ypoz + 25 + (int)(30*sin((180-bullet_angle*PI)/180));
 						}
 						else if(bullet_angle >= 270 && bullet_angle <360)
 						{
-							bullet_shotgun.bullet_rect.x = xpoz + 70 - (int)(30*cos((270-bullet_angle*PI)/180));
-							bullet_shotgun.bullet_rect.y = ypoz + 20 + (int)(30*sin((270-bullet_angle*PI)/180));
+							bullet_shotgun.bullet_rect.x = (int)xpoz + 70 - (int)(30*cos((270-bullet_angle*PI)/180));
+							bullet_shotgun.bullet_rect.y = (int)ypoz + 20 + (int)(30*sin((270-bullet_angle*PI)/180));
 						}
 						
 						bullet_shotgun.bullet_rect.w = 20;
@@ -503,8 +504,14 @@ void Texture :: draw_bullet(SDL_Renderer* rend , int camx , int camy)
 						bullet_shotgun.bullet_rect.y = (bullet_shotgun.bullet_rect.y) + (int)(10*sin(((bullet_angle)*PI)/180));
 					}
 
+					SDL_Rect bul;
+					bul.x = bullet_shotgun.bullet_rect.x + (int)camx;
+					bul.y = bullet_shotgun.bullet_rect.y + (int)camy;
+					bul.w = bullet_shotgun.bullet_rect.w;
+					bul.h = bullet_shotgun.bullet_rect.h;
+
 					if(bullet_shotgun.bullet_active)
-						SDL_RenderCopyEx(rend , map_texture[bullet_shotgun.bullet_name] , NULL , &bullet_shotgun.bullet_rect , bullet_angle , 0 , SDL_FLIP_NONE);
+						SDL_RenderCopyEx(rend , map_texture[bullet_shotgun.bullet_name] , NULL , &bul , bullet_angle , 0 , SDL_FLIP_NONE);
 					z++;	
 				}
 					
@@ -525,7 +532,7 @@ void Texture :: draw_bullet(SDL_Renderer* rend , int camx , int camy)
 
 bool Texture :: randomPosition(int w , int h , Item &p)
 {
-	SDL_Rect temp = {rand()%1000 , rand()%500 , w , h};
+	SDL_Rect temp = {rand()%6000 , rand()%1500 , w , h};
 
 	for(vector<SDL_Rect>::iterator i = rect.begin() ; i != rect.end(); ++i)
 	{
@@ -543,6 +550,7 @@ bool Texture :: randomPosition(int w , int h , Item &p)
 
 void Texture :: load_textures(SDL_Renderer* renderer)
 {	
+	// toplanabilir nesneler
 	load("assets/guns/health_bag.png", "health_bag", renderer);
 	load("assets/guns/full_bag.png", "full_bag", renderer);
 	load("assets/guns/12_bag.png", "12_bag", renderer);
@@ -556,6 +564,8 @@ void Texture :: load_textures(SDL_Renderer* renderer)
 
 	load("assets/cursor.png", "shoot", renderer);
 	load("assets/Sepia.png", "sepia", renderer);
+
+	// Arkaplan nesnelerini yükle
 	load("assets/guns/soup.png", "soup", renderer);
 	load("assets/huge_box.jpg", "huge_box", renderer);
 	load("assets/guns/rifle.png", "rifle", renderer);

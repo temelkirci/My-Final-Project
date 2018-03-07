@@ -1,142 +1,115 @@
-#include <iostream>
 #include "Menu.h"
-#include <SDL/SDL_image.h>
-#include <string>
-#include "SDL/SDL_mixer.h"
-#include "SDL/SDL.h"
-#include "SDL/SDL_ttf.h"
 
 using namespace std;
 
 Menu :: Menu()
 {
-	back = Mix_LoadMUS("assets/sounds/menu.ogg");
+	mMenuMusic = Mix_LoadMUS("assets/sounds/menu.ogg");
 	
 	SDL_ShowCursor(SDL_DISABLE);
 
-	text_color.r = 0;
-	text_color.g = 0;
-	text_color.b = 0;
-	text_color.a = 100;
+	mMenuBackgroundRect.x = 0;
+	mMenuBackgroundRect.y = 0;
+	mMenuBackgroundRect.w = 1360;
+	mMenuBackgroundRect.h = 750;
 
-	start_button.x = 550;
-	start_button.y = 200;
-	start_button.w = 200;
-	start_button.h = 50;
+	mTextColor.r = 0;
+	mTextColor.g = 0;
+	mTextColor.b = 0;
+	mTextColor.a = 100;
 
-	save_button.x = 550;
-	save_button.y = 280;
-	save_button.w = 200;
-	save_button.h = 50;
+	mStartButton.x = 550;
+	mStartButton.y = 200;
+	mStartButton.w = 200;
+	mStartButton.h = 50;
 
-	load_button.x = 550;
-	load_button.y = 360;
-	load_button.w = 200;
-	load_button.h = 50;
+	mSaveButton.x = 550;
+	mSaveButton.y = 280;
+	mSaveButton.w = 200;
+	mSaveButton.h = 50;
 
-	credits_button.x = 550;
-	credits_button.y = 440;
-	credits_button.w = 200;
-	credits_button.h = 50;
+	mLoadButton.x = 550;
+	mLoadButton.y = 360;
+	mLoadButton.w = 200;
+	mLoadButton.h = 50;
 
-	exit_button.x = 550;
-	exit_button.y = 520;
-	exit_button.w = 200;
-	exit_button.h = 50;
+	mCreditsButton.x = 550;
+	mCreditsButton.y = 440;
+	mCreditsButton.w = 200;
+	mCreditsButton.h = 50;
 
-	menü_mouse.x = 675;
-	menü_mouse.y = 345;
+	mExitButton.x = 550;
+	mExitButton.y = 520;
+	mExitButton.w = 200;
+	mExitButton.h = 50;
 
-	button_array[0] = "START";
-	button_array[1] = "SAVE";
-	button_array[2] = "LOAD";
-	button_array[3] = "CREDITS";
-	button_array[4] = "EXIT";
+	mMouseCoord.x = 675;
+	mMouseCoord.y = 345;
 
-	menu_surface = NULL ;
-	menu_texture = NULL ;
+	mButtonArray[0] = "START";
+	mButtonArray[1] = "SAVE";
+	mButtonArray[2] = "LOAD";
+	mButtonArray[3] = "CREDITS";
+	mButtonArray[4] = "EXIT";
+
+	mMenuTexture = NULL ;
+}
+
+Menu::Menu(const Menu& pMenu)
+{
+
+}
+
+Menu& Menu::operator = (const Menu& pMenu)
+{
+	return *this;
 }
 
 Menu :: ~Menu()
 {
-	SDL_DestroyTexture(menu_texture);
-	SDL_FreeSurface(menu_surface);
+	SDL_DestroyTexture(mMenuTexture);
 	
-	menu_surface = NULL ;
-	menu_texture = NULL ;
+	mMenuTexture = NULL ;
 }
 
-void Menu :: menu_yukle(char* menü_yolu,SDL_Renderer* menu_render )
+Menu* Menu::getInstanceMenu()
 {
-	menu_font = TTF_OpenFont("fonts/fontss.ttf", 100);
+	if (mInstanceMenu == 0)
+		mInstanceMenu = new Menu();
 
-	menu_surface = IMG_Load(menü_yolu);
-	if(menu_surface == 0)
-	{
-		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR , "Menu" , "Menü yuklenemedi..!" , NULL);
-		exit(0);
-	}
-	menu_texture = SDL_CreateTextureFromSurface(menu_render , menu_surface);
-	SDL_FreeSurface(menu_surface);
+	return mInstanceMenu;
 }
 
-bool Menu :: loadPathMenu(char* dosya_adi , string texture_adi , SDL_Renderer* texture_render)
-{
-	surface_buttons = IMG_Load(dosya_adi);
-	
-	if(surface_buttons == 0)
-	{
-		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR , "Menu" , "Menu :: load_buttons (surface_buttons yuklenemedi..!)" , NULL);
-		cout<<texture_adi<<endl;
-		//exit(0);
-	}
-
-	texture_buttons = SDL_CreateTextureFromSurface(texture_render , surface_buttons);	// yüzeyi renderleyerek texture oluþtur	
-	SDL_FreeSurface(surface_buttons);
-	if(texture_buttons != 0)
-	{
-		map_button[texture_adi] = texture_buttons; // Tüm textureleri saklayacaðýmýz yer
-		
-		return true;
-	}
-	return false;
-}
-
-void Menu :: menu_goster(SDL_Renderer* render_menu , int x , int y , int genislik , int yukseklik )
+void Menu :: renderMenu(SDL_Renderer* pRender)
 {
 	SDL_ShowCursor(SDL_DISABLE);
-	SDL_RenderClear(render_menu); // renderi temizle
+	SDL_RenderClear(pRender); // renderi temizle
 
-	SDL_Rect menu_background;
-	menu_background.x=x;
-	menu_background.y=y;
-	menu_background.w=genislik;
-	menu_background.h=yukseklik;
+	SDL_RenderCopyEx(pRender, mMenuTexture , NULL , &mMenuBackgroundRect, 0 , 0 , SDL_FLIP_NONE);
 
-	SDL_RenderCopyEx(render_menu , menu_texture , NULL , &menu_background , 0 , 0 , SDL_FLIP_NONE);
+	SDL_RenderCopyEx(pRender, mButtonMap["START"] , NULL , &mStartButton, 0 , 0 , SDL_FLIP_NONE);
+	SDL_RenderCopyEx(pRender, mButtonMap["SAVE"] , NULL , &mSaveButton, 0 , 0 , SDL_FLIP_NONE);
+	SDL_RenderCopyEx(pRender, mButtonMap["LOAD"] , NULL , &mLoadButton, 0 , 0 , SDL_FLIP_NONE);
+	SDL_RenderCopyEx(pRender, mButtonMap["CREDITS"] , NULL , &mCreditsButton, 0 , 0 , SDL_FLIP_NONE);
+	SDL_RenderCopyEx(pRender, mButtonMap["EXIT"] , NULL , &mExitButton, 0 , 0 , SDL_FLIP_NONE);
 
-	SDL_RenderCopyEx(render_menu , map_button["START"] , NULL , &start_button , 0 , 0 , SDL_FLIP_NONE);
-	SDL_RenderCopyEx(render_menu , map_button["SAVE"] , NULL , &save_button , 0 , 0 , SDL_FLIP_NONE);
-	SDL_RenderCopyEx(render_menu , map_button["LOAD"] , NULL , &load_button , 0 , 0 , SDL_FLIP_NONE);
-	SDL_RenderCopyEx(render_menu , map_button["CREDITS"] , NULL , &credits_button , 0 , 0 , SDL_FLIP_NONE);
-	SDL_RenderCopyEx(render_menu , map_button["EXIT"] , NULL , &exit_button , 0 , 0 , SDL_FLIP_NONE);
+	SDL_RenderCopyEx(pRender, mButtonMap["sepia"] , NULL , &mMouseCoord, 0 , 0 , SDL_FLIP_NONE);
 
-	SDL_RenderCopyEx(render_menu, map_button["sepia"] , NULL , &menü_mouse , 0 , 0 , SDL_FLIP_NONE);
-
-	SDL_RenderPresent(render_menu);
+	SDL_RenderPresent(pRender);
 }
 
-bool Menu :: klavye_mouse(bool baslat)
+void Menu :: eventHandling()
 {
-	ev;
+	SDL_Event ev;
+
 	int x , y;	
 
 	SDL_GetMouseState(&x,&y);
 
-	menü_mouse.x=x;
-	menü_mouse.y=y;
-	menü_mouse.w=30;
-	menü_mouse.h=30;
+	mMouseCoord.x=x;
+	mMouseCoord.y=y;
+	mMouseCoord.w=30;
+	mMouseCoord.h=30;
 
 	while(SDL_PollEvent(&ev) != 0)
 	{
@@ -144,23 +117,24 @@ bool Menu :: klavye_mouse(bool baslat)
 		{
 			case SDL_QUIT :// sað üstteki çarpýya basarsa oyunu kapat
 				
-				exit(0);
+				GameState = GAME_STATE::EXIT;
 				break;
 			case SDL_MOUSEBUTTONDOWN:
 
 				// Play tuþuna basýlýrsa
-				if((ev.button.button == SDL_BUTTON_LEFT) && (SDL_HasIntersection(&menü_mouse , &start_button)))
+				if((ev.button.button == SDL_BUTTON_LEFT) && (SDL_HasIntersection(&mMouseCoord, &mStartButton)))
 				{
 					Mix_HaltMusic(); // Arkaplan müziðini durdur
-					Mix_PlayMusic(back,-1); // oyun müziðini baþlat
-					baslat = true;
+					Mix_PlayMusic(mMenuMusic, -1); // oyun müziðini baþlat
+					
 					SDL_ShowCursor(SDL_DISABLE);
-					return baslat; // Oyunu baþlat
+					
+					GameState = GAME_STATE::STARTING;
 					break;					
 					
 				}
 				// Credits tuþuna basýlýrsa
-				else if((ev.button.button == SDL_BUTTON_LEFT) && (SDL_HasIntersection(&menü_mouse , &save_button)))
+				else if((ev.button.button == SDL_BUTTON_LEFT) && (SDL_HasIntersection(&menü_mouse , &mSaveButton)))
 				{	
 					char* data_path = NULL;
 					char* base_path = SDL_GetBasePath();
@@ -190,37 +164,69 @@ bool Menu :: klavye_mouse(bool baslat)
 					*/
 					break;
 				}
-				else if((ev.button.button == SDL_BUTTON_LEFT) && (SDL_HasIntersection(&menü_mouse , &load_button)))
+				else if((ev.button.button == SDL_BUTTON_LEFT) && (SDL_HasIntersection(&menü_mouse , &mLoadButton)))
 				{
 					cout<<"Oyun Yükleniyor"<<endl;
 					break;
 				}
-				else if((ev.button.button == SDL_BUTTON_LEFT) && (SDL_HasIntersection(&menü_mouse , &credits_button)))
+				else if((ev.button.button == SDL_BUTTON_LEFT) && (SDL_HasIntersection(&menü_mouse , &mCreditsButton)))
 				{
 					cout<<"Oyun Hakkinda"<<endl;
 					break;
 				}
-				else if((ev.button.button == SDL_BUTTON_LEFT) && (SDL_HasIntersection(&menü_mouse , &exit_button)))
+				else if((ev.button.button == SDL_BUTTON_LEFT) && (SDL_HasIntersection(&menü_mouse , &mExitButton)))
 				{
-					exit(0);
-					SDL_Quit();
+					GameState = GAME_STATE::EXIT;					
 					break;
 				}
 				break;
 		}
 	}
-		
-	return baslat;
 }
 
-void Menu :: loadMenu(SDL_Renderer* renderer)
+void Menu::loadMenu(char* pPathFile, SDL_Renderer* pRenderer)
 {
-	menu_yukle("assets/menu.jpg", renderer);
+	mMenuFont = TTF_OpenFont("fonts/fontss.ttf", 100);
+
+	SDL_Surface* tMenuSurface = IMG_Load(pPathFile);
+	if (tMenuSurface == 0)
+	{
+		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Menu", "Menü yuklenemedi..!", NULL);
+		exit(0);
+	}
+	mMenuTexture = SDL_CreateTextureFromSurface(pRenderer, tMenuSurface);
+	SDL_FreeSurface(tMenuSurface);
+}
+
+bool Menu::loadPathMenu(char* pFileName, string pTextureName, SDL_Renderer* pRender)
+{
+	SDL_Surface* mButtonSurface = IMG_Load(pFileName);
+
+	if (mButtonSurface == 0)
+	{
+		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Menu", "Menu :: load_buttons (surface_buttons yuklenemedi..!)", NULL);
+		exit(0);
+	}
+
+	mButtonTexture = SDL_CreateTextureFromSurface(pRender, mButtonSurface);	// yüzeyi renderleyerek texture oluþtur	
+	SDL_FreeSurface(mButtonSurface);
+
+	if (mButtonTexture != 0)
+	{
+		mButtonMap[pTextureName] = mButtonTexture; // Tüm textureleri saklayacaðýmýz yer
+
+		return true;
+	}
+	return false;
+}
+
+void Menu :: loadMenuItems(SDL_Renderer* renderer)
+{
+	loadMenu("assets/menu.jpg", renderer);
 	loadPathMenu("assets/buttons/START.png", "START",renderer);
 	loadPathMenu("assets/buttons/SAVE.png", "SAVE",renderer);
 	loadPathMenu("assets/buttons/LOAD.png", "LOAD",renderer);
 	loadPathMenu("assets/buttons/CREDITS.png", "CREDITS",renderer);
 	loadPathMenu("assets/buttons/EXIT.png", "EXIT",renderer);
 	loadPathMenu("assets/Sepia.png", "sepia", renderer);
-	
 }

@@ -1,38 +1,42 @@
 #pragma once
 #include "SDL/SDL.h"
 #include "SDL/SDL_ttf.h"
-#include "Enemy.h"
+#include "GameObject.h"
 #include <chrono>
+#include <string>
 
-class Timer : public Enemy
+using namespace std::chrono;
+using namespace std;
+
+class Timer : public GameObject
 {
 public:
 	Timer();
+	Timer(const Timer& pTimer);
+	Timer& operator = (const Timer& pTimer);
 	~Timer();
-	SDL_Rect tank_rect;
-	bool emel;
-	Uint32 süre_hesapla(Uint32,Uint32);
-	void Write(SDL_Renderer*  , Uint32 , string , Uint32);
-	void loadFonts();
-	void gece_gündüz(SDL_Renderer* , Uint32);
-	void calculateTime(int);
-	int day;
-	Uint8 real_time;
-	bool night;
-	Uint32 toplam_time;
-	Uint32 first_time;
-	Uint32 oldTime;
-	SDL_Texture* yazii_texture;
-	TTF_Font* timer_font;
-	SDL_Color timer_textColor;
-	SDL_Color textColor;
-	bool active;
-	SDL_Texture* texture_background;
-	SDL_Rect world;
-	int saat;
-	bool startTime;
-	std::chrono::steady_clock::time_point start;
-private:
-	Uint32 gecen_süre;
 	
+	void writeText(SDL_Renderer* pRenderer , Uint32 pTime , string pText, Uint32 pDelayTime);
+	void loadFonts();
+	void dayLoop(SDL_Renderer* pRenderer, Uint32 pCurrentTime);
+	bool calculateTime(int pTime);
+
+	static Timer* getInstanceTimer();
+private:
+	static Timer* mInstanceTimer;
+
+	Uint32 mElaspedTime;
+	int mDay;
+	Uint32 mCurrentTime;
+	bool mNight;
+	Uint32 mTotalTime;
+	SDL_Texture* mTextTexture;
+	TTF_Font* mTimerFont;
+	SDL_Color mTimerTextColor;
+	SDL_Color mTextColor;
+	bool mTextActive;
+	SDL_Rect mWorldRect;
+	int mHour;
+	bool mStartTime;
+	steady_clock::time_point mStartTimePoint;
 };

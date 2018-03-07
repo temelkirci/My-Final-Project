@@ -1,10 +1,4 @@
-#include <iostream>
-#include "SDL/SDL.h"
 #include "Enemy.h"
-#include <cstdlib>
-#include <ctime>
-#include <SDL/SDL_image.h>
-#include "SDL/SDL_mixer.h"
 
 #define PI 3.14159265
 
@@ -12,10 +6,11 @@ Enemy :: Enemy()
 {
 	srand ((unsigned int)time(0));
 
-	airplane_time = 0;
-	creature_time = 0;
-	creature_health = 100;
-	move_time = 0;
+	mAirplaneTime = 0;
+	mCreatureTime = 0;
+	mCreatureHealth = 100;
+	mMoveTime = 0;
+
 	if(Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, 3072) < 0 )
 						cout<<"Mix_OpenAudio yüklenemedi "<<Mix_GetError()<<endl;
 
@@ -26,138 +21,154 @@ Enemy :: ~Enemy()
 
 }
 
-void Enemy :: load_enemy(char* file_path, char* enemy_picture , SDL_Renderer* render)
+Enemy::Enemy(const Enemy& pEnemy)
 {
-	SDL_Surface* surface_enemy = IMG_Load(file_path);
-	if(surface_enemy == 0)
+
+}
+
+Enemy& Enemy::operator = (const Enemy& pEnemy)
+{
+	return *this;
+}
+
+Enemy* Enemy::getInstanceEnemy()
+{
+	if (mInstanceEnemy == 0)
+		mInstanceEnemy = new Enemy();
+
+	return mInstanceEnemy;
+}
+
+void Enemy :: loadEnemyItems(char* pPathFile, char* pEnemyImage , SDL_Renderer* pRenderer)
+{
+	SDL_Surface* tEnemySurface = IMG_Load(pPathFile);
+	if(tEnemySurface == 0)
 	{
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR , "Enemy" , "Enemy yuklenemedi..!" , NULL);
 		exit(0);
 	}
 
-	SDL_Texture* texture_enemy = SDL_CreateTextureFromSurface(render , surface_enemy);
-	SDL_FreeSurface(surface_enemy);
+	SDL_Texture* tEnemyTexture = SDL_CreateTextureFromSurface(pRenderer, tEnemySurface);
+	SDL_FreeSurface(tEnemySurface);
 
-	if(texture_enemy != 0)
+	if(tEnemyTexture != 0)
 	{
-		enemy_map[enemy_picture] = texture_enemy; 
+		mEnemyMap[pEnemyImage] = tEnemyTexture;
 	}
 }
 
-void Enemy :: drawAirplane(SDL_Renderer* render , int camerax , int cameray , Uint32 current_time)
+void Enemy :: drawAirplane(SDL_Renderer* pRender , int pCamerax , int pCameray , Uint32 pCurrentTime)
 {
-	airplane_rect.x = 100 + camerax;
-	airplane_rect.y = 100 + cameray;
-	airplane_rect.w = 300;
-	airplane_rect.h = 300;
+	mAirplaneRect.x = 100 + pCamerax;
+	mAirplaneRect.y = 100 + pCameray;
+	mAirplaneRect.w = 300;
+	mAirplaneRect.h = 300;
 
 	
 
-		if(airplane_time == 0)
+		if(mAirplaneTime == 0)
 		{
-			airplane_time = 300 + current_time;
+			mAirplaneTime = 300 + pCurrentTime;
 		}
 		
-		if(current_time <= airplane_time) // 50 ms sayarsa
+		if(pCurrentTime <= mAirplaneTime) // 50 ms sayarsa
 		{			
-			SDL_RenderCopyEx(render , enemy_map["airplane1"] , NULL , &airplane_rect , 0 , 0 , SDL_FLIP_NONE);
+			SDL_RenderCopyEx(pRender, mEnemyMap["airplane1"] , NULL , &mAirplaneRect, 0 , 0 , SDL_FLIP_NONE);
 		}
-		else if((current_time > airplane_time) && (current_time <= (airplane_time + 300))) // 300 ms sayarsa
+		else if((pCurrentTime > mAirplaneTime) && (pCurrentTime <= (mAirplaneTime + 300))) // 300 ms sayarsa
 		{			
-			SDL_RenderCopyEx(render , enemy_map["airplane2"] , NULL , &airplane_rect , 0 , 0 , SDL_FLIP_NONE);
+			SDL_RenderCopyEx(pRender, mEnemyMap["airplane2"] , NULL , &mAirplaneRect, 0 , 0 , SDL_FLIP_NONE);
 		}
-		else if((current_time > (airplane_time + 300)) && (current_time <= (airplane_time + 600))) // 300 ms sayarsa
+		else if((pCurrentTime > (mAirplaneTime + 300)) && (pCurrentTime <= (mAirplaneTime + 600))) // 300 ms sayarsa
 		{			
-			SDL_RenderCopyEx(render , enemy_map["airplane3"] , NULL , &airplane_rect , 0 , 0 , SDL_FLIP_NONE);
+			SDL_RenderCopyEx(pRender, mEnemyMap["airplane3"] , NULL , &mAirplaneRect, 0 , 0 , SDL_FLIP_NONE);
 		}
-		else if((current_time > (airplane_time + 600)) && (current_time <= (airplane_time + 900))) // 300 ms sayarsa
+		else if((pCurrentTime > (mAirplaneTime + 600)) && (pCurrentTime <= (mAirplaneTime + 900))) // 300 ms sayarsa
 		{			
-			SDL_RenderCopyEx(render , enemy_map["airplane4"] , NULL , &airplane_rect , 0 , 0 , SDL_FLIP_NONE);
+			SDL_RenderCopyEx(pRender, mEnemyMap["airplane4"] , NULL , &mAirplaneRect, 0 , 0 , SDL_FLIP_NONE);
 		}
 		else
 		{
-			airplane_time = 0;
-			SDL_RenderCopyEx(render , enemy_map["airplane1"] , NULL , &airplane_rect , 0 , 0 , SDL_FLIP_NONE);
+			mAirplaneTime = 0;
+			SDL_RenderCopyEx(pRender, mEnemyMap["airplane1"] , NULL , &mAirplaneRect, 0 , 0 , SDL_FLIP_NONE);
 		}	
 }
 
-void Enemy :: drawCreature(SDL_Renderer* render , int camerax , int cameray , SDL_Rect Barbarosrect , Uint32 currentt_time)
+void Enemy :: drawCreature(SDL_Renderer* pRender , int pCamerax , int pCameray , SDL_Rect pPlayerRect , Uint32 pCurrentTime)
 {
-	creature_rect.x = 1000 + camerax;
-	creature_rect.y = 100 + cameray;
-	creature_rect.w = 100;
-	creature_rect.h = 100;
+	mCreatureRect.x = 1000 + pCamerax;
+	mCreatureRect.y = 100 + pCameray;
+	mCreatureRect.w = 100;
+	mCreatureRect.h = 100;
 
-		if(creature_time == 0)
+		if(mCreatureTime == 0)
 		{
-			creature_time = 300 + currentt_time;
+			mCreatureTime = 300 + pCurrentTime;
 		}
 		
-		if(currentt_time <= creature_time) // 300 ms sayarsa
+		if(pCurrentTime <= mCreatureTime) // 300 ms sayarsa
 		{		
-			SDL_RenderCopyEx(render , enemy_map["creature0"] , NULL , &creature_rect , 0 , 0 , SDL_FLIP_NONE);		
+			SDL_RenderCopyEx(pRender, mEnemyMap["creature0"] , NULL , &mCreatureRect, 0 , 0 , SDL_FLIP_NONE);
 		}
 
-		else if((currentt_time > creature_time) && (currentt_time <= (creature_time + 300))) // 300 ms sayarsa
+		else if((pCurrentTime > mCreatureTime) && (pCurrentTime <= (mCreatureTime + 300))) // 300 ms sayarsa
 		{
-			SDL_RenderCopyEx(render , enemy_map["creature1"] , NULL , &creature_rect , 0 , 0 , SDL_FLIP_NONE);
+			SDL_RenderCopyEx(pRender, mEnemyMap["creature1"] , NULL , &mCreatureRect, 0 , 0 , SDL_FLIP_NONE);
 		}
-		else if((currentt_time > (creature_time + 300)) && (currentt_time <= (creature_time + 600))) // 300 ms sayarsa
+		else if((pCurrentTime > (mCreatureTime + 300)) && (pCurrentTime <= (mCreatureTime + 600))) // 300 ms sayarsa
 		{			
-			SDL_RenderCopyEx(render , enemy_map["creature2"] , NULL , &creature_rect , 0 , 0 , SDL_FLIP_NONE);
+			SDL_RenderCopyEx(pRender, mEnemyMap["creature2"] , NULL , &mCreatureRect, 0 , 0 , SDL_FLIP_NONE);
 		}
-		else if((currentt_time > (creature_time + 600)) && (currentt_time <= (creature_time + 900))) // 300 ms sayarsa
+		else if((pCurrentTime > (mCreatureTime + 600)) && (pCurrentTime <= (mCreatureTime + 900))) // 300 ms sayarsa
 		{			
-			SDL_RenderCopyEx(render , enemy_map["creature3"] , NULL , &creature_rect , 0 , 0 , SDL_FLIP_NONE);
+			SDL_RenderCopyEx(pRender, mEnemyMap["creature3"] , NULL , &mCreatureRect, 0 , 0 , SDL_FLIP_NONE);
 		}
-		else if((currentt_time > creature_time + 1200) && (currentt_time <= (creature_time + 1500))) // 300 ms sayarsa
+		else if((pCurrentTime > mCreatureTime + 1200) && (pCurrentTime <= (mCreatureTime + 1500))) // 300 ms sayarsa
 		{			
-			SDL_RenderCopyEx(render , enemy_map["creature4"] , NULL , &creature_rect , 0 , 0 , SDL_FLIP_NONE);
+			SDL_RenderCopyEx(pRender, mEnemyMap["creature4"] , NULL , &mCreatureRect, 0 , 0 , SDL_FLIP_NONE);
 		}
-		else if((currentt_time > (creature_time + 1800)) && (currentt_time <= (creature_time + 2100))) // 300 ms sayarsa
+		else if((pCurrentTime > (mCreatureTime + 1800)) && (pCurrentTime <= (mCreatureTime + 2100))) // 300 ms sayarsa
 		{		
-			SDL_RenderCopyEx(render , enemy_map["creature5"] , NULL , &creature_rect , 0 , 0 , SDL_FLIP_NONE);
+			SDL_RenderCopyEx(pRender, mEnemyMap["creature5"] , NULL , &mCreatureRect, 0 , 0 , SDL_FLIP_NONE);
 		}
-		else if((currentt_time > (creature_time + 2400)) && (currentt_time <= (creature_time + 2700))) // 300 ms sayarsa
+		else if((pCurrentTime > (mCreatureTime + 2400)) && (pCurrentTime <= (mCreatureTime + 2700))) // 300 ms sayarsa
 		{		
-			SDL_RenderCopyEx(render , enemy_map["creature6"] , NULL , &creature_rect , 0 , 0 , SDL_FLIP_NONE);
+			SDL_RenderCopyEx(pRender, mEnemyMap["creature6"] , NULL , &mCreatureRect, 0 , 0 , SDL_FLIP_NONE);
 		}
-		else if((currentt_time > creature_time + 3000) && (currentt_time <= (creature_time + 3300))) // 300 ms sayarsa
+		else if((pCurrentTime > mCreatureTime + 3000) && (pCurrentTime <= (mCreatureTime + 3300))) // 300 ms sayarsa
 		{		
-			SDL_RenderCopyEx(render , enemy_map["creature7"] , NULL , &creature_rect , 0 , 0 , SDL_FLIP_NONE);
+			SDL_RenderCopyEx(pRender, mEnemyMap["creature7"] , NULL , &mCreatureRect, 0 , 0 , SDL_FLIP_NONE);
 		}
-		else if((currentt_time > (creature_time + 3600)) && (currentt_time <= (creature_time + 3900))) // 300 ms sayarsa
+		else if((pCurrentTime > (mCreatureTime + 3600)) && (pCurrentTime <= (mCreatureTime + 3900))) // 300 ms sayarsa
 		{		
-			SDL_RenderCopyEx(render , enemy_map["creature8"] , NULL , &creature_rect , 0 , 0 , SDL_FLIP_NONE);
+			SDL_RenderCopyEx(pRender, mEnemyMap["creature8"] , NULL , &mCreatureRect, 0 , 0 , SDL_FLIP_NONE);
 		}
-		else if((currentt_time > (creature_time + 4200)) && (currentt_time <= (creature_time + 4500))) // 300 ms sayarsa
+		else if((pCurrentTime > (mCreatureTime + 4200)) && (pCurrentTime <= (mCreatureTime + 4500))) // 300 ms sayarsa
 		{			
-			SDL_RenderCopyEx(render , enemy_map["creature9"] , NULL , &creature_rect , 0 , 0 , SDL_FLIP_NONE);
+			SDL_RenderCopyEx(pRender, mEnemyMap["creature9"] , NULL , &mCreatureRect, 0 , 0 , SDL_FLIP_NONE);
 		}
 		else
 		{
-			creature_time = 0;
-			SDL_RenderCopyEx(render , enemy_map["creature0"] , NULL , &creature_rect , 0 , 0 , SDL_FLIP_NONE);
+			mCreatureTime = 0;
+			SDL_RenderCopyEx(pRender, mEnemyMap["creature0"] , NULL , &mCreatureRect , 0 , 0 , SDL_FLIP_NONE);
 		}	
 }
 
-void Enemy :: enemy_load(SDL_Renderer* renderer)
+void Enemy :: loadEnemy(SDL_Renderer* pRenderer)
 {
-	load_enemy("assets/enemies/airplane/1.png" , "airplane1" , renderer);
-	load_enemy("assets/enemies/airplane/2.png" , "airplane2" , renderer);
-	load_enemy("assets/enemies/airplane/3.png" , "airplane3" , renderer);
-	load_enemy("assets/enemies/airplane/4.png" , "airplane4" , renderer);
+	loadEnemyItems("assets/enemies/airplane/1.png" , "airplane1" , pRenderer);
+	loadEnemyItems("assets/enemies/airplane/2.png" , "airplane2" , pRenderer);
+	loadEnemyItems("assets/enemies/airplane/3.png" , "airplane3" , pRenderer);
+	loadEnemyItems("assets/enemies/airplane/4.png" , "airplane4" , pRenderer);
 
-	load_enemy("assets/enemies/creature/0.png" , "creature0" , renderer);
-	load_enemy("assets/enemies/creature/1.png" , "creature1" , renderer);
-	load_enemy("assets/enemies/creature/2.png" , "creature2" , renderer);
-	load_enemy("assets/enemies/creature/3.png" , "creature3" , renderer);
-	load_enemy("assets/enemies/creature/4.png" , "creature4" , renderer);
-	load_enemy("assets/enemies/creature/5.png" , "creature5" , renderer);
-	load_enemy("assets/enemies/creature/6.png" , "creature6" , renderer);
-	load_enemy("assets/enemies/creature/7.png" , "creature7" , renderer);
-	load_enemy("assets/enemies/creature/8.png" , "creature8" , renderer);
-	load_enemy("assets/enemies/creature/9.png" , "creature9" , renderer);
-
-	load_enemy("assets/mhouse.png" , "house" , renderer);
+	loadEnemyItems("assets/enemies/creature/0.png" , "creature0" , pRenderer);
+	loadEnemyItems("assets/enemies/creature/1.png" , "creature1" , pRenderer);
+	loadEnemyItems("assets/enemies/creature/2.png" , "creature2" , pRenderer);
+	loadEnemyItems("assets/enemies/creature/3.png" , "creature3" , pRenderer);
+	loadEnemyItems("assets/enemies/creature/4.png" , "creature4" , pRenderer);
+	loadEnemyItems("assets/enemies/creature/5.png" , "creature5" , pRenderer);
+	loadEnemyItems("assets/enemies/creature/6.png" , "creature6" , pRenderer);
+	loadEnemyItems("assets/enemies/creature/7.png" , "creature7" , pRenderer);
+	loadEnemyItems("assets/enemies/creature/8.png" , "creature8" , pRenderer);
+	loadEnemyItems("assets/enemies/creature/9.png" , "creature9" , pRenderer);
 }

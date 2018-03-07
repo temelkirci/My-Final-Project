@@ -4,28 +4,32 @@
 #include "SDL/SDL_mixer.h"
 #include <map>
 #include "SDL/SDL.h"
-#include "Items.h"
+#include "GameObject.h"
+#include <iostream>
 
 using namespace std;
 
-class Sounds : public Items
+class Sounds : public GameObject
 {
 public:
 
 	Sounds();
+	Sounds(const Sounds& pSounds);
+	Sounds& operator = (const Sounds& pSounds);
 	~Sounds();
 
-	Mix_Music *tap;
-	Mix_Chunk *walk;
-	Mix_Chunk *minigun_shot;
-	Mix_Chunk *shotgun_shot;
-	Mix_Chunk *rifle_shot;
-	Mix_Chunk *water_drink;
-	Mix_Chunk *soup;
-	Mix_Chunk *food;
+	void loadSounds(SDL_Renderer* pRenderer);
 
-	void loadSounds(SDL_Renderer*);
-
+	static Sounds* getInstanceSounds();
 private:
-	
+	static Sounds* mInstanceSounds;
+
+	Mix_Music* mMenuMusic;
+	Mix_Chunk* mWalkSound;
+	Mix_Chunk* mHandgunShotSound;
+	Mix_Chunk* mShotgunShotSound;
+	Mix_Chunk* mRifleShotSound;
+	Mix_Chunk* mWaterSound;
+	Mix_Chunk* mSoupSound;
+	Mix_Chunk* mFoodSound;
 };

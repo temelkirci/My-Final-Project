@@ -1,6 +1,4 @@
-﻿#include <iostream>
-#include "Sounds.h"
-#include "SDL/SDL.h"
+﻿#include "Sounds.h"
 
 using namespace std;
 
@@ -9,9 +7,27 @@ Sounds ::Sounds()
 	
 }
 
+Sounds::Sounds(const Sounds& pSounds)
+{
+
+}
+
+Sounds& Sounds::operator = (const Sounds& pSounds)
+{
+	return *this;
+}
+
 Sounds::~Sounds()
 {
 
+}
+
+Sounds* Sounds::getInstanceSounds()
+{
+	if (mInstanceSounds == 0)
+		mInstanceSounds = new Sounds();
+
+	return mInstanceSounds;
 }
 
 void Sounds :: loadSounds(SDL_Renderer* render)
@@ -20,15 +36,15 @@ void Sounds :: loadSounds(SDL_Renderer* render)
 						cout<<"Mix_OpenAudio yüklenemedi "<<Mix_GetError()<<endl;
 
 
-	tap = Mix_LoadMUS("assets/sounds/menu.ogg"); // menü müziði
+	mMenuMusic = Mix_LoadMUS("assets/sounds/menu.ogg"); // menü müziği
 					
 	Mix_VolumeMusic(100);	
-	Mix_PlayMusic(tap, -1 );
+	Mix_PlayMusic(mMenuMusic, -1 );
 					
-	minigun_shot = Mix_LoadWAV("assets/sounds/GunShot2.wav");
-	shotgun_shot = Mix_LoadWAV("assets/sounds/shotgun.wav");
-	rifle_shot = Mix_LoadWAV("assets/sounds/rifle.wav");
-	walk = Mix_LoadWAV("assets/sounds/walk.wav");
-	food = Mix_LoadWAV("assets/sounds/food.wav");
-	water_drink = Mix_LoadWAV("assets/sounds/drinking.wav");
+	mHandgunShotSound = Mix_LoadWAV("assets/sounds/GunShot2.wav");
+	mShotgunShotSound = Mix_LoadWAV("assets/sounds/shotgun.wav");
+	mRifleShotSound = Mix_LoadWAV("assets/sounds/rifle.wav");
+	mWalkSound = Mix_LoadWAV("assets/sounds/walk.wav");
+	mFoodSound = Mix_LoadWAV("assets/sounds/food.wav");
+	mWaterSound = Mix_LoadWAV("assets/sounds/drinking.wav");
 }

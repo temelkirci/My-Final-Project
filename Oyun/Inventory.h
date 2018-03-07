@@ -1,57 +1,48 @@
 #pragma once
-#include "SDL/SDL.h"
+#include <SDL/SDL.h>
+#include <SDL/SDL_image.h>
 #include <string>
+#include <iostream>
 #include <map>
-#include <tuple>
-#include "Fonts.h"
+#include <vector>
 
 using namespace std;
 
-class Inventory : public Fonts 
+class Inventory
 {
 public:
 	Inventory();
+	Inventory(const Inventory& pInventory); // Copy Constructor
+	Inventory& operator = (const Inventory& pInventory); // Copy assingment Operator
 	~Inventory();
 
-	void Envanter_Yukle(char* , string , SDL_Renderer*);
-	void Envanter_Çiz(string , int , int , int , int , SDL_Renderer*);
-	void Envanter_Güncelle(SDL_Renderer*);
-	void loadInventory(SDL_Renderer*);
-	void Esya_Ekle(string , int , SDL_Renderer* , SDL_Texture*);
-	void Envanter(SDL_Renderer*);
-	void informationItem(SDL_Renderer*);
-	void deleteItem(string , int);
+	void loadInventoryFiles(SDL_Renderer* pRenderer);
+	void loadInventory(const char* pPathFile, const char* pInventoryFiles , SDL_Renderer* pRenderer);
+	void updateInventory(SDL_Renderer* pRenderer);
+	void addItemtoInventory(string pItemName, int pItemNumber, SDL_Texture* pTexture);
+	void deleteItem(string pObjectName , int pItemNumber);
 
-	SDL_Rect box;
-	string infItem;
-	int inventory_size; // envanterdeki farklý eþya sayýsý
-	SDL_Color envanter_color;
-
-	SDL_Color inventory_color;
-
-	struct Envanter
-	{
-		SDL_Rect InventoryRect;
-		SDL_Texture* InventoryTexture;
-		bool OpenInventory;
-	}InventoryStore;
-
-	struct InventoryObjects
-	{
-		string objectName; // esyanýn adý
-		SDL_Texture* objectTexture; // esya texture
-		int objectNumber; // nesne sayýsý
-		int xCoord; // esya koordýnat
-		int yCoord;
-
-	}InventoryObject[18];
-	
-	map<string , SDL_Texture*> envanter_draw;
-	string envanter_durum ;
-	int max_envanter; // envanterin maksimum kapasitesi
-	SDL_Rect rect_inventory;
+	static Inventory* getInstanceInventory();
 
 private:
-	SDL_Texture* envanter_texture; // envanter resmi
-	SDL_Texture* adet_texture;
+	static Inventory* mInstanceInventory;
+	SDL_Texture * mInventoryTexture; // envanter resmi
+	int mInventoryItemNumber; // envanterdeki farklý eþya sayýsý
+	SDL_Color mInventoryColor;
+
+	struct InventoryItem
+	{
+		string nameItem; // eþyanýn adý
+		SDL_Texture* textureItem; // eþya texture
+		int numberItem; // eþya sayýsý
+		int xCoordItem; // esya çizim koordinatý x ekseni
+		int yCoordItem; // esya çizim koordinatý y ekseni
+	}mItemInventory;
+
+	vector <InventoryItem> ItemVector;
+
+	map<string, SDL_Texture*> envanter_draw;
+	string envanter_durum;
+	int mMaximumInventoryItemCapacity; // envanterin maksimum kapasitesi
+	SDL_Rect mRectInventory;
 };

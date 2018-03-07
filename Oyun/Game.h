@@ -3,24 +3,24 @@
 #include <SDL/SDL_image.h>
 #include "SDL/SDL_ttf.h"
 #include "SDL/SDL_mixer.h"
-#include "Render.h"
 #include "Menu.h"
 
-class Game : public Render , public Menu
+class Game : public Menu
 {
 public:
-	Game(); // Yapýcý fonksiyon
-	~Game();  // Yýkýcý fonksiyon
+	Game(); // Default Constructor
+	Game(const Game& pGame); // Copy Constructor
+	Game& operator = (const Game& pGame); // Copy assingment Operator
+	~Game();  // Destructor
 
-	// FONKSÝYONLAR
+	// Member Functions
+	bool initializeGame(const char*,int,int,int,int,int);
+	void startApplication();
 
-	bool init(const char*,int,int,int,int,int);
-	SDL_Renderer* renderer;
-	Mix_Music *back;
-	
+	static Game* getInstanceGame();
 private:
+	static Game* mInstanceGame;
 
-	SDL_Window* pencere ;
-	SDL_Texture* texture;
-	SDL_Surface* surface;
+	SDL_Renderer * mRenderer;
+	SDL_Window* mMainWindow ;
 };
