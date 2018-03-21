@@ -1,13 +1,14 @@
 #include "Inventory.h"
 
-Inventory* Inventory::mInstanceInventory = nullptr;
-
 Inventory::Inventory()
 {
 	envanter_durum = "9_envanter";
 	mMaximumInventoryItemCapacity = 9;
 	mInventoryItemNumber = 0; 
-	mRectInventory.y = 670;
+
+	mInventoryRect.y = 670;
+	mInventoryRect.h = 50;
+	mInventoryRect.w = 600;
 }
 
 Inventory::Inventory(const Inventory& pInventory)
@@ -25,12 +26,19 @@ Inventory :: ~Inventory()
 
 }
 
-Inventory* Inventory::getInstanceInventory()
+SDL_Rect Inventory::getInventoryRect()
 {
-	if (mInstanceInventory == 0)
-		mInstanceInventory = new Inventory();
+	return mInventoryRect;
+}
 
-	return mInstanceInventory;
+int Inventory::getInventoryMaxSize()
+{
+	return mMaximumInventoryItemCapacity;
+}
+
+int Inventory::getInventoryCurrentSize()
+{
+	return mInventoryItemNumber;
 }
 
 void Inventory::loadInventory(const char* pPathFile , const char* pInventoryName , SDL_Renderer* pRender)
@@ -46,7 +54,7 @@ void Inventory::loadInventory(const char* pPathFile , const char* pInventoryName
 	
 	if (mInventoryTexture != 0)
 	{
-		envanter_draw[pInventoryName] = mInventoryTexture; // Tüm textureleri saklayacaðýmýz yer
+		mInventoryMap[pInventoryName] = mInventoryTexture; // Tüm textureleri saklayacaðýmýz yer
 	}
 	
 }
@@ -88,7 +96,7 @@ void Inventory::addItemtoInventory(string pItemName, int pItemNumber, SDL_Textur
 
 }
 
-void Inventory::updateInventory(SDL_Renderer* pRenderer)
+void Inventory::drawInventory(SDL_Renderer* pRenderer)
 {
 	SDL_Rect esya;
 	SDL_Rect yazi;
@@ -99,61 +107,66 @@ void Inventory::updateInventory(SDL_Renderer* pRenderer)
 	if (mMaximumInventoryItemCapacity == 18)
 	{
 		x = 110;
-		mRectInventory.x = x;
+		mInventoryRect.x = x;
+		SDL_RenderCopyEx(pRenderer, mInventoryMap["full_envanter"], NULL, &mInventoryRect, 0, 0, SDL_FLIP_NONE);
 	}
 	else if (mMaximumInventoryItemCapacity == 12)
 	{
 		x = 302;
-		mRectInventory.x = x;
+		mInventoryRect.x = x;
+		SDL_RenderCopyEx(pRenderer, mInventoryMap["12_envanter"], NULL, &mInventoryRect, 0, 0, SDL_FLIP_NONE);
 	}
 	else if (mMaximumInventoryItemCapacity == 9)
 	{
 		x = 397;
-		mRectInventory.x = x;
+		mInventoryRect.x = x;
+		SDL_RenderCopyEx(pRenderer, mInventoryMap["9_envanter"], NULL, &mInventoryRect, 0, 0, SDL_FLIP_NONE);
 	}
 	// esyanin yuksekliði 30
 	// esyanin genisliði 40
-
-	for (int t = 0; t<mMaximumInventoryItemCapacity; t++)
+	
+	if (!ItemVector.empty())
 	{
-		esya.x = x + a;
-		esya.y = 685;
-		esya.w = 40;
-		esya.h = 30;
-
-		if (ItemVector[t].numberItem > 0) // eþya sayýsý 1 den fazlaysa
+		for (int t = 0; t < mMaximumInventoryItemCapacity; t++)
 		{
-			ItemVector[t].xCoordItem = esya.x; // esya x-koordinatý
-			ItemVector[t].yCoordItem = esya.y; // esya y-koordinatý
+			esya.x = x + a;
+			esya.y = 685;
+			esya.w = 40;
+			esya.h = 30;
 
-			SDL_SetTextureBlendMode(ItemVector[t].textureItem, SDL_BLENDMODE_BLEND);
-			SDL_RenderCopyEx(pRenderer, ItemVector[t].textureItem, NULL, &esya, 0, 0, SDL_FLIP_NONE);	// eþyayý çiz
+			if (ItemVector[t].numberItem > 0) // eþya sayýsý 1 den fazlaysa
+			{
+				ItemVector[t].itemPositionRect.x = esya.x; // esya x-koordinatý
+				ItemVector[t].itemPositionRect.y = esya.y; // esya y-koordinatý
+				ItemVector[t].itemPositionRect.w = 40; // esya x-koordinatý
+				ItemVector[t].itemPositionRect.h = 30; // esya y-koordinatý
 
-			yazi.x = esya.x - 7;
-			yazi.y = esya.y - 13;
-			yazi.w = 10;
-			yazi.h = 12;
+				SDL_SetTextureBlendMode(ItemVector[t].textureItem, SDL_BLENDMODE_BLEND);
+				SDL_RenderCopyEx(pRenderer, ItemVector[t].textureItem, NULL, &ItemVector[t].itemPositionRect, 0, 0, SDL_FLIP_NONE);	// eþyayý çiz
 
-			string adet_deger = to_string(ItemVector[t].numberItem);
-			char* adet_yaz = _strdup(adet_deger.c_str());
+				yazi.x = esya.x - 7;
+				yazi.y = esya.y - 13;
+				yazi.w = 10;
+				yazi.h = 12;
 
-			SDL_Surface* textSurface = TTF_RenderText_Blended(mFont , adet_yaz , mInventoryColor );
-			textTexture = SDL_CreateTextureFromSurface(pRenderer, textSurface);
-			SDL_FreeSurface(textSurface);
+				string adet_deger = to_string(ItemVector[t].numberItem);
+				char* adet_yaz = _strdup(adet_deger.c_str());
 
-			SDL_RenderCopyEx(pRenderer, textTexture, NULL, &yazi, 0, 0, SDL_FLIP_NONE);
-			SDL_DestroyTexture(textTexture);
+				SDL_Surface* tTextSurface = TTF_RenderText_Blended(mInventoryFont, adet_yaz, mInventoryColor);
+				tTextTexture = SDL_CreateTextureFromSurface(pRenderer, tTextSurface);
+				SDL_FreeSurface(tTextSurface);
 
-			a = a + 65;
-		}
+				SDL_RenderCopyEx(pRenderer, tTextTexture, NULL, &yazi, 0, 0, SDL_FLIP_NONE); // eþya sayýsýný yazdýrýr
 
-		else if (ItemVector[t].numberItem <= 0) // eþya yoksa
-		{
-			ItemVector[t].nameItem = ""; // eþya ismini sýfýrla
-			ItemVector[t].textureItem = NULL; // eþya textureyi sýfýrla
-			ItemVector[t].numberItem = 0; // eþya sayýsýný 0 yap
-			ItemVector[t].xCoordItem = NULL; // esya x-koordinatý
-			ItemVector[t].yCoordItem = NULL; // esya y-koordinatý
+				a = a + 65;
+			}
+
+			else if (ItemVector[t].numberItem <= 0) // eþya yoksa
+			{
+				ItemVector[t].nameItem = ""; // eþya ismini sýfýrla
+				ItemVector[t].textureItem = NULL; // eþya textureyi sýfýrla
+				ItemVector[t].numberItem = 0; // eþya sayýsýný 0 yap
+			}
 		}
 	}
 }
@@ -178,9 +191,9 @@ void Inventory::deleteItem(string object_name, int delete_number)
 void Inventory::loadInventoryFiles(SDL_Renderer* renderer)
 {
 	// font yükle
+	mInventoryFont = TTF_OpenFont("fonts/fontss.ttf", 140);
 
 	loadInventory("assets/18_envanter.png", "full_envanter", renderer);
 	loadInventory("assets/12_envanter.png", "12_envanter", renderer);
 	loadInventory("assets/9_envanter.png", "9_envanter", renderer);
-	loadInventory("assets/envanter1.jpg", "Inventory", renderer);
 }

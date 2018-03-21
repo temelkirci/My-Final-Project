@@ -22,15 +22,7 @@ Sounds::~Sounds()
 
 }
 
-Sounds* Sounds::getInstanceSounds()
-{
-	if (mInstanceSounds == 0)
-		mInstanceSounds = new Sounds();
-
-	return mInstanceSounds;
-}
-
-void Sounds :: loadSounds(SDL_Renderer* render)
+void Sounds :: loadSounds()
 {
 	if(Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, 3072) < 0 )
 						cout<<"Mix_OpenAudio yüklenemedi "<<Mix_GetError()<<endl;

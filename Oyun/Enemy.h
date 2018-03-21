@@ -6,11 +6,10 @@
 #include <SDL/SDL_image.h>
 #include <iostream>
 #include <ctime>
-#include "GameObject.h"
 
 using namespace std;
 
-class Enemy : public GameObject
+class Enemy 
 {
 public:
 	Enemy();
@@ -24,9 +23,7 @@ public:
 	void loadEnemy(SDL_Renderer* pRenderer);
 	void loadEnemyItems(char* mPathFile, char* , SDL_Renderer* pRenderer);
 	
-	static Enemy* getInstanceEnemy();
 private:
-	static Enemy* mInstanceEnemy;
 
 	map<string , SDL_Texture*> mEnemyMap;
 	Uint32 mAirplaneTime;

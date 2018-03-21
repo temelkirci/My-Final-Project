@@ -31,14 +31,6 @@ Enemy& Enemy::operator = (const Enemy& pEnemy)
 	return *this;
 }
 
-Enemy* Enemy::getInstanceEnemy()
-{
-	if (mInstanceEnemy == 0)
-		mInstanceEnemy = new Enemy();
-
-	return mInstanceEnemy;
-}
-
 void Enemy :: loadEnemyItems(char* pPathFile, char* pEnemyImage , SDL_Renderer* pRenderer)
 {
 	SDL_Surface* tEnemySurface = IMG_Load(pPathFile);

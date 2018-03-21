@@ -17,10 +17,7 @@ public:
 	bool initializeGame(const char*,int,int,int,int,int);
 	void startApplication();
 
-	static Game* getInstanceGame();
 private:
-	static Game* mInstanceGame;
-
-	SDL_Renderer * mRenderer;
+	SDL_Renderer* mRenderer; // do it static
 	SDL_Window* mMainWindow ;
 };

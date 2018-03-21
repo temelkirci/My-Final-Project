@@ -6,26 +6,16 @@ using namespace std;
 
 Events::Events()
 {
-    current_cursor = "shoot";
-	mevcut_resim = "sag";
-	drawing = "";
+	mCurrentPlayerImage = "sag";
+	mDrawing = "";
 
-	player_inf = false;
-	draw_apply = false;
-	yerlestirme = false;
-	cancel_draw = false;
-	collision = false;
+	mApplyDraw = false;
+	mPlacement = false;
+	mCancelDraw = false;
+	mIsCollision = false;
 
-	xpoz = 625;
-	ypoz = 300;
-	
-	arti_y_speed = speed;
-    arti_x_speed = speed;
-    eksi_y_speed = speed;
-    eksi_x_speed = speed;
-
-	pause = false;
-	move = false;
+	mPauseGame = false;
+	mIsMove = false;
 }
 
 Events::~Events()
@@ -33,204 +23,205 @@ Events::~Events()
 	
 }
 
-void Events :: mEvent(SDL_Renderer* rend , double camx , double camy)
+void Events :: event(SDL_Renderer* rend)
 {
-	tus;
-	int x , y;	
+	mKey;
+	int tPosX , tPosY;	
 
-	SDL_GetMouseState(&x,&y);
+	SDL_GetMouseState(&tPosX,&tPosY);
 
-	solid_mouse.x=x;
-	solid_mouse.y=y;
-	solid_mouse.w=30;
-	solid_mouse.h=30;
+	mSolidMouse.x = tPosX;
+	mSolidMouse.y = tPosY;
+	mSolidMouse.w = 30;
+	mSolidMouse.h = 30;
 
-	mouse.x = x - (int)camx;
-	mouse.y = y - (int)camy;
-	mouse.w = 30;
-	mouse.h = 30;
+	mMouseRect.x = tPosX - (int)getCameraPositionX();
+	mMouseRect.y = tPosY - (int)getCameraPositionY();
 
+
+	cout << mMouseRect.x << " , " << mMouseRect.y << endl;
 	
-	if(SDL_HasIntersection(&solid_mouse , &rect_inventory)) // mouse envanterin üzerineyse ok imleci gözüksün
+	
+	if(SDL_HasIntersection(&mSolidMouse , &(getInventoryRect()) )) // mouse envanterin üzerineyse ok imleci gözüksün
 	{
-		current_cursor = "sepia";
+		mCurrentCursor = "sepia";
 
-		for(int t=0;t<inventory_size;t++)
+		for(int t=0;t<getInventoryMaxSize();t++)
 		{
-			if((InventoryObject[t].xCoord <= x) && (InventoryObject[t].xCoord+50 >= x)) // kutucukların üzerindeyse
-			{			
-				infItem = InventoryObject[t].objectName;
+			if (SDL_HasIntersection(&mSolidMouse, &ItemVector[t].itemPositionRect))
+			{
+				cout << "Ben " + ItemVector[t].nameItem << endl;
 				break;
 			}
-			infItem = "";
 		}
 		
 	}
 	else
 	{	
-		current_cursor = "shoot";
-		infItem = "";	
+		mCurrentCursor = "shoot";
 	}
 	
+	
 	//// PLAYER DÖNME AÇISI VE YÖNÜ ////
-	if((xpoz+50) <= mouse.x) // mouse sağ tarafta ise
+	if((getPlayerXPos() + 50) <= mMouseRect.x) // mouse sağ tarafta ise
 	{
-		if((ypoz+50) <= mouse.y) // 1.bölge (sağ-alt)
+		if((getPlayerYPos() + 50) <= mMouseRect.y) // 1.bölge (sağ-alt)
 		{
-			 x_distance = abs(mouse.x - (xpoz + 50));
-			 y_distance = abs(mouse.y - (ypoz + 50));
+			 mDistanceX = abs(mMouseRect.x - (getPlayerXPos() + 50));
+			 mDistanceY = abs(mMouseRect.y - (getPlayerYPos() + 50));
 
-			if(x_distance == 0)
-				x_distance = 1;
-			if(y_distance == 0)
-				y_distance = 1;
+			if(mDistanceX == 0)
+				mDistanceX = 1;
+			if(mDistanceY == 0)
+				mDistanceY = 1;
 
-			tanjant = y_distance / x_distance ;
-			tanjant_angle = (atan(tanjant) * 180) / PI ;
-			angle = tanjant_angle ;
+			mTangent = mDistanceY / mDistanceX;
+			mTangentAngle = (atan(mTangent) * 180) / PI ;
+			mPlayerAngle = mTangentAngle;
 
 		}
 
 		else // 4.bölge (sağ-üst)
 		{
-			x_distance = abs(mouse.x - (xpoz + 50));
-			y_distance = abs(mouse.y - (ypoz + 50));
+			mDistanceX = abs(mMouseRect.x - (getPlayerXPos() + 50));
+			mDistanceY = abs(mMouseRect.y - (getPlayerYPos() + 50));
 
-			if(x_distance == 0)
-				x_distance = 1;
-			if(y_distance == 0)
-				y_distance = 1;
+			if(mDistanceX == 0)
+				mDistanceX = 1;
+			if(mDistanceY == 0)
+				mDistanceY = 1;
 
-			tanjant = y_distance / x_distance ;
-			tanjant_angle = (atan(tanjant) * 180) / PI ; // atan fonksiyonu ile y_distance / x_distance oranýna göre x eksenine göre açýyý hesaplýyoruz
-			angle = 360 - tanjant_angle ; 
+			mTangent = mDistanceY / mDistanceX;
+			mTangentAngle = (atan(mTangent) * 180) / PI ; // atan fonksiyonu ile y_distance / x_distance oranýna göre x eksenine göre açýyý hesaplýyoruz
+			mPlayerAngle = 360 - mTangentAngle;
 		
 		}
 	}
 
 	else // mouse sol tarafta ise
 	{
-		if(ypoz+50 <= mouse.y) // 2.bölge (sol-alt)
+		if(getPlayerYPos() +50 <= mMouseRect.y) // 2.bölge (sol-alt)
 		{
-			x_distance = abs((xpoz + 50) - mouse.x);
-			y_distance = abs(mouse.y - (ypoz + 50));
+			mDistanceX = abs((getPlayerXPos() + 50) - mMouseRect.x);
+			mDistanceY = abs(mMouseRect.y - (getPlayerYPos() + 50));
 
-			if(x_distance == 0)
-				x_distance = 1;
-			if(y_distance == 0)
-				y_distance = 1;
+			if(mDistanceX == 0)
+				mDistanceX = 1;
+			if(mDistanceY == 0)
+				mDistanceY = 1;
 
-			tanjant = y_distance / x_distance ;
-			tanjant_angle = (atan(tanjant) * 180) / PI ; // atan fonksiyonu ile y_distance / x_distance oranýna göre x eksenine göre açýyý hesaplýyoruz
-			angle = 180 - tanjant_angle ;	
+			mTangent = mDistanceY / mDistanceX;
+			mTangentAngle = (atan(mTangent) * 180) / PI ; // atan fonksiyonu ile y_distance / x_distance oranýna göre x eksenine göre açýyý hesaplýyoruz
+			mPlayerAngle = 180 - mTangentAngle;
 
 		}
 
 		else // 3.bölge (sol-üst)
 		{
-			x_distance = abs((xpoz + 50) - mouse.x);
-			y_distance = abs(mouse.y - (ypoz + 50));
+			mDistanceX = abs((getPlayerXPos() + 50) - mMouseRect.x);
+			mDistanceY = abs(mMouseRect.y - (getPlayerYPos() + 50));
 
-			if(x_distance == 0)
-				x_distance = 1;
-			if(y_distance == 0)
-				y_distance = 1;
+			if(mDistanceX == 0)
+				mDistanceX = 1;
+			if(mDistanceY == 0)
+				mDistanceY = 1;
 
-			tanjant = y_distance / x_distance ;
-			tanjant_angle = (atan(tanjant) * 180) / PI ;
-			angle = 180 + tanjant_angle ;	
+			mTangent = mDistanceY / mDistanceX;
+			mTangentAngle = (atan(mTangent) * 180) / PI ;
+			mPlayerAngle = 180 + mTangentAngle;
 
 		}
 	}
 	
 	/*
-	if(((int)xpoz+50) <= x_target && move) // mouse sağ tarafta ise
+	if(((int)mPlayerPositionX+50) <= mTargetX && mIsMove) // mouse sağ tarafta ise
 	{
-		if(((int)ypoz+50) <= y_target && move) // 1.bölge (sağ-alt)
+		if(((int)mPlayerPositionY+50) <= mTargetY && mIsMove) // 1.bölge (sağ-alt)
 		{
-			xpoz = xpoz + ( xpoz * cos(playerAngle) ); 
-			ypoz = ypoz + ( ypoz * sin(playerAngle) );
-
-			cout<<cos(playerAngle)<<endl<<sin(playerAngle)<<endl<<endl;
+			mPlayerPositionX = mPlayerPositionX + ( mPlayerPositionX * cos(mPlayerAngle) ); 
+			mPlayerPositionY = mPlayerPositionY + ( mPlayerPositionY * sin(mPlayerAngle) );
 		}
-		else if(((int)ypoz+50) > y_target && move) // sağ-üst
+		else if(((int)mPlayerPositionY+50) > mTargetY && mIsMove) // sağ-üst
 		{
-			xpoz = xpoz + ( xpoz * cos(playerAngle) ); 
-			ypoz = ypoz - ( ypoz * sin(playerAngle) );
-
-			cout<<cos(playerAngle)<<endl<<sin(playerAngle)<<endl<<endl;
+			mPlayerPositionX = mPlayerPositionX + ( mPlayerPositionX * cos(mPlayerAngle) );
+			mPlayerPositionY = mPlayerPositionY - ( mPlayerPositionY * sin(mPlayerAngle) );
 		}
 	}
 	else // mouse sol tarafta ise
 	{
-		if((int)ypoz+50 <= y_target && move) // 2.bölge (sol-alt)
+		if((int)mPlayerPositionY+50 <= mTargetY && mIsMove) // 2.bölge (sol-alt)
 		{
-			xpoz = xpoz - ( xpoz * cos(playerAngle) ); 
-			ypoz = ypoz + ( ypoz * sin(playerAngle) );
-
-			cout<<cos(playerAngle)<<endl<<sin(playerAngle)<<endl<<endl;
+			mPlayerPositionX = mPlayerPositionX - ( mPlayerPositionX * cos(mPlayerAngle) );
+			mPlayerPositionY = mPlayerPositionY + ( mPlayerPositionY * sin(mPlayerAngle) );
 		}
-		else if((int)ypoz+50 > y_target && move) // sol-üst
+		else if((int)mPlayerPositionY+50 > mTargetY && mIsMove) // sol-üst
 		{
-			xpoz = xpoz - ( xpoz * cos(playerAngle) ); 
-			ypoz = ypoz - ( ypoz * sin(playerAngle) );
-
-			cout<<xpoz<<endl<<ypoz<<endl<<endl;
+			mPlayerPositionX = mPlayerPositionX - ( mPlayerPositionX * cos(mPlayerAngle) );
+			mPlayerPositionY = mPlayerPositionY - ( mPlayerPositionY * sin(mPlayerAngle) );
 		}
 	}
 	*/
-	
-	///// MOUSE A GÖRE HAREKET ////
-	if(xpoz+50 > x_target && move) // sola git
+	if ((mKey.button.button == SDL_BUTTON_RIGHT))
 	{
-		xpoz = xpoz - speed;
-		mevcut_resim = "sol";
+		mCancelDraw = true;
+		mIsMove = true;
+		mTargetX = mMouseRect.x;
+		mTargetY = mMouseRect.y;
+
+		//mPlayerAngle = angle;
+	}
+	///// MOUSE A GÖRE HAREKET ////
+
+	if(mPlayerPositionX+50 > mTargetX && mIsMove) // sola git
+	{
+		mPlayerPositionX = mPlayerPositionX - getPlayerSpeed();
+		mPlayerDirection = "sol";
 		
-		if(!Mix_Playing(1) && speed != 0)
+		if(!Mix_Playing(1) && getPlayerSpeed() != 0)
 		{
-			Mix_PlayChannel(1 , walk , 0);
+			Mix_PlayChannel(1 , mWalkSound, 0);
 		}
 	}
-	else if(xpoz+50 < x_target && move) // sağa git
+	else if(mPlayerPositionX+50 < mTargetX && mIsMove) // sağa git
 	{
-		xpoz = xpoz + speed;
-		mevcut_resim = "sag";
+		mPlayerPositionX = mPlayerPositionX + getPlayerSpeed();
+		mPlayerDirection = "sag";
 
-		if(!Mix_Playing(1) && speed != 0)
+		if(!Mix_Playing(1) && getPlayerSpeed() != 0)
 		{
-			Mix_PlayChannel(1 , walk , 0);
+			Mix_PlayChannel(1 , mWalkSound, 0);
 		}
 	}
 	else
 	{
-		if(ypoz+50 > y_target && move) // yukarı git
+		if(mPlayerPositionY+50 > mTargetY && mIsMove) // yukarı git
 		{
-			ypoz = ypoz - speed;
-			mevcut_resim = "yukari";
+			mPlayerPositionY = mPlayerPositionY - getPlayerSpeed();
+			mPlayerDirection = "yukari";
 
-			if(!Mix_Playing(1) && speed != 0)
+			if(!Mix_Playing(1) && getPlayerSpeed() != 0)
 			{
-				Mix_PlayChannel(1 , walk , 0);
+				Mix_PlayChannel(1 , mWalkSound, 0);
 			}
 		}
-		else if(ypoz+50 < y_target && move) // aşağı git
+		else if(mPlayerPositionY+50 < mTargetY && mIsMove) // aşağı git
 		{
-			ypoz = ypoz + speed;
-			mevcut_resim = "asagi";
+			mPlayerPositionY = mPlayerPositionY + getPlayerSpeed();
+			mPlayerDirection = "asagi";
 		
-			if(!Mix_Playing(1) && speed != 0)
+			if(!Mix_Playing(1) && getPlayerSpeed() != 0)
 			{
-				Mix_PlayChannel(1 , walk , 0);
+				Mix_PlayChannel(1 , mWalkSound, 0);
 			}
 		}
 		else
 		{
-			move=false; // dont move
+			mIsMove = false; // dont move
 		}
 	}
 	
 	////////////////////////
-	
+	/*
 	if(drawing != "") // çizilecek eşya varsa
 	{
 		current_cursor = "sepia";
@@ -491,7 +482,7 @@ void Events :: mEvent(SDL_Renderer* rend , double camx , double camy)
 				{
 					oyun_baslat = false;
 				}
-
+				
 				if((tus.button.button == SDL_BUTTON_LEFT) && ( SDL_HasIntersection(&solid_mouse , &rect_inventory)) ) // envanterdeki herhangi bir nesneye sol tıklandığında
 				{
 					for(int t=0;t<inventory_size;t++)
@@ -664,12 +655,8 @@ void Events :: mEvent(SDL_Renderer* rend , double camx , double camy)
 						
 						break;
 
-					case SDLK_t:
-						for(vector<Item>::iterator i = col.begin() ; i != col.end(); ++i)
-						{
-							cout<<(*i).item_name<<endl;
-						}
-						cout<<endl;
+					case SDLK_i: // its open inventory
+						
 						break;
 
 					case SDLK_UP:
@@ -693,8 +680,8 @@ void Events :: mEvent(SDL_Renderer* rend , double camx , double camy)
 			}		
 		
 	} // while sonu
-	
-	if(SDL_PollEvent(&tus) == 0) // hiçbir tuşa basılmıyorsa
+	*/
+	if(SDL_PollEvent(&mKey) == 0) // hiçbir tuşa basılmıyorsa
 	{
 		
 	}

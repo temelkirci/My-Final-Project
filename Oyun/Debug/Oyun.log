@@ -1,16 +1,2 @@
-﻿  Menu.cpp
-c:\users\temel\documents\github\oyun-master\oyun\gameloop.h(5): error C2504: 'Inventory' : base class undefined
-  Main.cpp
-c:\users\temel\documents\github\oyun-master\oyun\gameloop.h(5): error C2504: 'Inventory' : base class undefined
-  Inventory.cpp
-  GameObject.cpp
-  GameLoop.cpp
-c:\users\temel\documents\github\oyun-master\oyun\gameloop.h(5): error C2504: 'Inventory' : base class undefined
-c:\users\temel\documents\github\oyun-master\oyun\gameloop.h(12): error C2061: syntax error : identifier 'SDL_Renderer'
-c:\users\temel\documents\github\oyun-master\oyun\gameloop.cpp(23): error C2065: 'SDL_Renderer' : undeclared identifier
-c:\users\temel\documents\github\oyun-master\oyun\gameloop.cpp(23): error C2065: 'pRenderer' : undeclared identifier
-c:\users\temel\documents\github\oyun-master\oyun\gameloop.cpp(24): error C2448: 'GameLoop::Loop' : function-style initializer appears to be a function definition
-  Game.cpp
-c:\users\temel\documents\github\oyun-master\oyun\gameloop.h(5): error C2504: 'Inventory' : base class undefined
-  Fonts.cpp
-  Generating Code...
+﻿  Events.cpp
+  Oyun.vcxproj -> C:\Users\TEMEL\Documents\GitHub\Oyun-master\Debug\My Final Project.exe

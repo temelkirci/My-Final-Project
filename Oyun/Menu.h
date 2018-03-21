@@ -6,10 +6,11 @@
 #include "SDL/SDL_ttf.h"
 #include <SDL/SDL_image.h>
 #include <iostream>
+#include "Events.h"
 
 using namespace std;
 
-class Menu 
+class Menu : public Events
 {
 public:
 	Menu(); // Default Constructor
@@ -19,19 +20,28 @@ public:
 
 	void loadMenu(char* , SDL_Renderer*);
 	bool loadPathMenu(char* , string , SDL_Renderer*);
-	void loadMenuItems(SDL_Renderer*);
+	void loadMenuFiles(SDL_Renderer*);
 	void eventHandling();	
 	void renderMenu(SDL_Renderer*);
 
-	static Menu* getInstanceMenu();
+	enum class GAME_STATE
+	{
+		OPENING,    // Application is preparing for Menu
+		MENU,       // In Menu
+		STARTING,   // Game Background is preparing
+		PLAYING,    // The game has started
+		WAITING,    // Pause
+		GAME_OVER,  // The game has finished
+		EXIT	    // Exit
+	}GameState;
+
 
 private:
-	static Menu* mInstanceMenu;
 
 	TTF_Font * mMenuFont;
 	Mix_Music* mMenuMusic;
 
-	SDL_Rect mMouseCoord;
+	SDL_Rect mMenuMouseCoord;
 	SDL_Rect mMenuBackgroundRect;
 
 	SDL_Color mMenuColor;

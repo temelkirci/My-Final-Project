@@ -2,43 +2,40 @@
 #include "SDL/SDL.h"
 #include <string>
 #include <iostream>
-#include "Core.h"
+#include "GameObjects.h"
+#include "Sounds.h"
 
-class Events : public Core
+using namespace std;
+
+class Events : public GameObjects , public Sounds
 {
 public:
 	Events();
 	~Events();
 	
-	void mEvent(SDL_Renderer* , double , double);
-	
+	void event(SDL_Renderer* pRenderer);
+
 private:
-	char* mevcut_resim;
-	char* mevcut_mermi;
-	bool pause;
-	double bullet_angle;
+	char* mCurrentPlayerImage;
+	char* mCurrentBullet;
+	bool mPauseGame;
+	double mAngleBullet;
 
-	bool collision;
-	SDL_Rect mouse;
-	SDL_Rect solid_mouse;
-	bool move;
-	string drawing;
-	bool draw_apply;
-	bool yerlestirme;
-	int indis_item;
-	bool cancel_draw;
+	bool mIsCollision;
+	bool mIsMove;
+	string mDrawing;
+	bool mApplyDraw;
+	bool mPlacement;
+	int mIndexItem;
+	bool mCancelDraw;
 
-	double x_target;
-	double y_target;
-	double x_distance;
-	double y_distance;
-	double tanjant_angle;
-	double tanjant;
+	double mTargetX;
+	double mTargetY;
+	double mDistanceX;
+	double mDistanceY;
+	double mTangentAngle;
+	double mTangent;
 
-	double playerAngle;
-
-	bool player_inf;
-	string current_cursor;
-	SDL_Event tus ;
+	SDL_Event mKey;
 };
 

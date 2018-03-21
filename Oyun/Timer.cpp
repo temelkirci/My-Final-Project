@@ -47,15 +47,7 @@ Timer :: ~Timer()
 
 }
 
-Timer* Timer::getInstanceTimer()
-{
-	if (mInstanceTimer == 0)
-		mInstanceTimer = new Timer();
-
-	return mInstanceTimer;
-}
-
-bool Timer :: calculateTime(int pTime) // saniye
+bool Timer::calculateTime(int pTime) // saniye
 {
 
 	if(!mStartTime)
@@ -69,24 +61,17 @@ bool Timer :: calculateTime(int pTime) // saniye
 
 	if(duration_cast<milliseconds>(tElapsedTimePoint).count() / 1000.0 >= pTime) // istenilen zaman ölçüldüyse
 	{
-		//auto zaman1 = duration_cast<milliseconds>(elapsed).count() / 1000.0;
 		mStartTime = false;
 		return true;
-		
-		//cout<<time<<" saniye gecti "<<endl;
 	}
 	else
 	{
-		//auto zaman = duration_cast<milliseconds>(elapsed).count() / 1000.0;
 		return false;
-		//cout<<"Time : "<< zaman <<endl;	
-	}
-	
+	}	
 }
 
 void Timer :: dayLoop(SDL_Renderer* pRenderer , Uint32 pCurrentTime)
 {
-	
 	if(mTotalTime == 0)
 	{
 		mTotalTime = pCurrentTime + 100;
@@ -133,6 +118,16 @@ void Timer :: dayLoop(SDL_Renderer* pRenderer , Uint32 pCurrentTime)
 		}
 	}
 	
+}
+
+int Timer::getDay()
+{
+	return mDay;
+}
+
+int Timer::getHour()
+{
+	return mHour;
 }
 
 void Timer :: writeText(SDL_Renderer* pRenderer, Uint32 pTime , string pText , Uint32 pDelayTime)

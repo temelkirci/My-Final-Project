@@ -4,12 +4,11 @@
 #include "SDL/SDL_mixer.h"
 #include <map>
 #include "SDL/SDL.h"
-#include "GameObject.h"
 #include <iostream>
 
 using namespace std;
 
-class Sounds : public GameObject
+class Sounds 
 {
 public:
 
@@ -18,11 +17,9 @@ public:
 	Sounds& operator = (const Sounds& pSounds);
 	~Sounds();
 
-	void loadSounds(SDL_Renderer* pRenderer);
+	void loadSounds();
 
-	static Sounds* getInstanceSounds();
-private:
-	static Sounds* mInstanceSounds;
+protected:
 
 	Mix_Music* mMenuMusic;
 	Mix_Chunk* mWalkSound;

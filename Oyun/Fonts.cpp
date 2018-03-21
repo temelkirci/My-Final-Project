@@ -43,14 +43,6 @@ Fonts :: ~Fonts()
 	TTF_CloseFont(mFont); // Yazi fontunu kapatýr
 }
 
-Fonts* Fonts::getInstanceFonts()
-{
-	if (mInstanceFonts == 0)
-		mInstanceFonts = new Fonts();
-
-	return mInstanceFonts;
-}
-
 int Fonts :: loadImage(char* pPathFile, string pImageName, SDL_Renderer* pRender)
 {
 	SDL_Surface* tImageSurface = IMG_Load(pPathFile);
@@ -179,10 +171,10 @@ void Fonts :: writeText(SDL_Renderer* pRender , Uint32 pTime , char* pText)
 			tText.h=30;
 
 			SDL_Surface* tTextSurface = TTF_RenderText_Blended( mFont , pText, mBackColor );
-			tTextTexture = SDL_CreateTextureFromSurface(pRender, tTextSurface);
+			mTextTexture = SDL_CreateTextureFromSurface(pRender, tTextSurface);
 			SDL_FreeSurface(tTextSurface);
 
-			SDL_RenderCopyEx(pRender, tTextTexture, NULL , &tText , 0 , 0 , SDL_FLIP_NONE);	
+			SDL_RenderCopyEx(pRender, mTextTexture, NULL , &tText , 0 , 0 , SDL_FLIP_NONE);	
 		}
 		else
 		{
@@ -199,10 +191,10 @@ void Fonts :: writeText(SDL_Renderer* pRender , Uint32 pTime , char* pText)
 		tText.h=30;
 			
 			SDL_Surface* tTextSurface = TTF_RenderText_Blended( mFont , pText, mBackColor );
-			tTextTexture = SDL_CreateTextureFromSurface(pRender, tTextSurface);
+			mTextTexture = SDL_CreateTextureFromSurface(pRender, tTextSurface);
 			SDL_FreeSurface(tTextSurface);
 
-			SDL_RenderCopyEx(pRender, tTextTexture, NULL , &tText, 0 , 0 , SDL_FLIP_NONE);
+			SDL_RenderCopyEx(pRender, mTextTexture, NULL , &tText, 0 , 0 , SDL_FLIP_NONE);
 	}
 }
 

@@ -81,14 +81,6 @@ Items :: ~Items()
 
 }
 
-Items* Items::getInstanceItems()
-{
-	if (mInstanceItems == 0)
-		mInstanceItems = new Items();
-
-	return mInstanceItems;
-}
-
 void Items :: setCollectibleItems(string pName , string pMode , int pNumber , int pHealth , bool pActive , SDL_Rect pPosition , SDL_Texture* pTexture)
 {
 	item.itemName = pName;

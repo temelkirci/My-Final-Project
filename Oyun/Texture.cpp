@@ -4,6 +4,7 @@
 
 Texture :: Texture()
 {
+	/*
 	object_collision = false;
 
 	map_column = 6;
@@ -21,10 +22,12 @@ Texture :: Texture()
 	camera.y = 0;
 	camera.w = 6000;
 	camera.h = 3000;
+	*/
 }
 
 Texture :: ~Texture()
 {
+	/*
 	SDL_FreeSurface(load_surface);
 	SDL_DestroyTexture(load_texture);
 	SDL_FreeSurface(surface_background);
@@ -34,9 +37,10 @@ Texture :: ~Texture()
 	load_texture = NULL ;
 	surface_background = NULL ;
 	texture_background = NULL ;
+	*/
 }
 
-
+/*
 bool Texture :: load(char* dosya_adi , string texture_adi , SDL_Renderer* texture_render)
 {
 	load_surface = IMG_Load(dosya_adi);
@@ -52,7 +56,7 @@ bool Texture :: load(char* dosya_adi , string texture_adi , SDL_Renderer* textur
 	SDL_FreeSurface(load_surface);
 	if(load_texture != 0)
 	{
-		map_texture[texture_adi] = load_texture; // Tüm textureleri saklayacağımız yer
+		mTextureMap[texture_adi] = load_texture; // Tüm textureleri saklayacağımız yer
 		return true;
 	}
 	return false;
@@ -60,90 +64,6 @@ bool Texture :: load(char* dosya_adi , string texture_adi , SDL_Renderer* textur
 
 void Texture :: draw_camera(SDL_Renderer* ren , double pozx, double pozy, int genislik , int yukseklik)
 {
-	// barbaros genislik 100
-			// barbaros yukseklik 100
-			// ekran yukseklik 700
-			// ekran genislik 1350
-			// arkaplan genislik 6000
-			// arkaplan yukseklik 3000
-			
-			if((int)pozy < 300)
-			{
-				camera.y = 0;
-			}
-
-			if((int)pozx < 625)
-			{
-				camera.x = 0;
-			}
-
-			if((int)pozy >= 1100)
-			{
-				camera.y = -800;
-				if((int)pozy >= 1400)
-					pozy = 1400;
-			}
-
-			if((((int)pozy >= 300) && ((int)pozy < 1100)))
-			{
-				camera.y = -((int)pozy - 300);
-			}
-
-			if((int)pozx >= 5275)
-			{
-				camera.x = -4650;
-			}
-
-			if((int)pozx >= 5900) // haritanýn en saðýndan çýkmamasý için kontrol yapýlýyor
-			{
-				pozx = 5900;
-			}
-
-			if(((625 <= (int)pozx) && ((int)pozx < 5275)))
-			{
-				camera.x = -((int)pozx - 625);
-			}
-			
-			//SDL_RenderCopyEx(ren, texture_background , NULL , &camera , 0 , 0 , SDL_FLIP_NONE);
-	
-	
-	if(camera.x >= 0 && camera.x <= 625)
-	{
-		map_x = -300;
-	}
-	else
-	{
-		map_x = ((-camera.x) / 300 - 1) * 300;
-	}
-	
-	if(camera.y >= 0 && camera.y <= 300)
-	{
-		map_y = 0;
-	}
-	else
-	{
-		map_y = ((-camera.y) / 200 ) * 200;
-	}
-	
-	//SDL_RenderSetClipRect(ren , &map);
-
-	for(int i=0;i<map_row;i++) // satır = 5
-	{
-		for(int j=0;j<map_column;j++) // sütun = 6
-		{
-			map_x = map_x + map.w;
-			
-			map.x = map_x + camera.x;
-			map.y = map_y + camera.y;
-
-			SDL_RenderCopyEx(ren, texture_background , NULL , &map , 0 , 0 , SDL_FLIP_NONE);
-		}
-		map_x = ((-camera.x) / 300 - 1) * 300;
-		map_y = map_y + map.h;
-	}
-	map_x = ((-camera.x) / 300 - 1) * 300;
-	map_y = ((-camera.y) / 200 ) * 200 ;
-	
 	
 }
 
@@ -263,13 +183,6 @@ void Texture :: draw_texture(SDL_Renderer* texture_render)
 	
 			SDL_Rect barbaros_rect = {(int)xpoz , (int)ypoz , 100 , 100};
 
-				if((SDL_HasIntersection(&creature_rect , &(*i).item_rect)))
-				{
-					creature_health -=20;
-					z = 0;
-					(*i).item_active = false;
-				}
-		
 				// SDL_BLENDMODE_NONE : nesneyi görünmez yapar ve çizer
 				// SDL_BLENDMODE_BLEND : nesneyi normal çizer
 				// SDL_BLENDMODE_ADD : nesneyi parlak çizer
@@ -291,6 +204,7 @@ void Texture :: arkaplan_yükle(char* dosya_yolu , SDL_Renderer* render_arkaplan
 	texture_background = SDL_CreateTextureFromSurface(render_arkaplan , surface_background);
 	SDL_FreeSurface(surface_background);
 }
+
 
 void Texture :: draw_bullet(SDL_Renderer* rend , double camx , double camy)
 {
@@ -548,7 +462,7 @@ bool Texture :: randomPosition(int w , int h , Item &p)
 	return true;
 }
 
-void Texture :: load_textures(SDL_Renderer* renderer)
+void Texture :: loadTextures(SDL_Renderer* renderer)
 {	
 	// toplanabilir nesneler
 	load("assets/guns/health_bag.png", "health_bag", renderer);
@@ -571,8 +485,9 @@ void Texture :: load_textures(SDL_Renderer* renderer)
 	load("assets/guns/rifle.png", "rifle", renderer);
 	load("assets/crater.png", "crater", renderer);
 
-	arkaplan_yükle("assets/desertt.jpg", renderer);
+	
 	load("assets/guns/bullet_handgun.png", "bullet_handgun", renderer);
 	load("assets/guns/bullet_shotgun.png", "bullet_shotgun", renderer);
 	load("assets/guns/bullet_rifle.png", "bullet_rifle", renderer);
 }
+*/

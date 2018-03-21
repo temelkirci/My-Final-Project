@@ -23,10 +23,7 @@ public:
 	void playerStatus(SDL_Renderer* pRenderer, int pX, int pY, int pWidth, int pHeight, int pHealth, int pBullet, int pHungry, int pThirtsy);
 	void writeText(SDL_Renderer* pRenderer, Uint32 pTime, char* pText);
 
-	static Fonts* getInstanceFonts();
-	
 private:
-	static Fonts* mInstanceFonts;
 
 	TTF_Font * mFont;
 	SDL_Texture* mTextTexture;

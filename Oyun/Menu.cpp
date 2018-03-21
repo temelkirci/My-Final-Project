@@ -43,8 +43,8 @@ Menu :: Menu()
 	mExitButton.w = 200;
 	mExitButton.h = 50;
 
-	mMouseCoord.x = 675;
-	mMouseCoord.y = 345;
+	mMenuMouseCoord.x = 675;
+	mMenuMouseCoord.y = 345;
 
 	mButtonArray[0] = "START";
 	mButtonArray[1] = "SAVE";
@@ -53,6 +53,8 @@ Menu :: Menu()
 	mButtonArray[4] = "EXIT";
 
 	mMenuTexture = NULL ;
+
+	loadSounds();
 }
 
 Menu::Menu(const Menu& pMenu)
@@ -72,14 +74,6 @@ Menu :: ~Menu()
 	mMenuTexture = NULL ;
 }
 
-Menu* Menu::getInstanceMenu()
-{
-	if (mInstanceMenu == 0)
-		mInstanceMenu = new Menu();
-
-	return mInstanceMenu;
-}
-
 void Menu :: renderMenu(SDL_Renderer* pRender)
 {
 	SDL_ShowCursor(SDL_DISABLE);
@@ -93,7 +87,7 @@ void Menu :: renderMenu(SDL_Renderer* pRender)
 	SDL_RenderCopyEx(pRender, mButtonMap["CREDITS"] , NULL , &mCreditsButton, 0 , 0 , SDL_FLIP_NONE);
 	SDL_RenderCopyEx(pRender, mButtonMap["EXIT"] , NULL , &mExitButton, 0 , 0 , SDL_FLIP_NONE);
 
-	SDL_RenderCopyEx(pRender, mButtonMap["sepia"] , NULL , &mMouseCoord, 0 , 0 , SDL_FLIP_NONE);
+	SDL_RenderCopyEx(pRender, mButtonMap["sepia"] , NULL , &mMenuMouseCoord, 0 , 0 , SDL_FLIP_NONE);
 
 	SDL_RenderPresent(pRender);
 }
@@ -106,10 +100,10 @@ void Menu :: eventHandling()
 
 	SDL_GetMouseState(&x,&y);
 
-	mMouseCoord.x=x;
-	mMouseCoord.y=y;
-	mMouseCoord.w=30;
-	mMouseCoord.h=30;
+	mMenuMouseCoord.x=x;
+	mMenuMouseCoord.y=y;
+	mMenuMouseCoord.w=30;
+	mMenuMouseCoord.h=30;
 
 	while(SDL_PollEvent(&ev) != 0)
 	{
@@ -122,19 +116,20 @@ void Menu :: eventHandling()
 			case SDL_MOUSEBUTTONDOWN:
 
 				// Play tuþuna basýlýrsa
-				if((ev.button.button == SDL_BUTTON_LEFT) && (SDL_HasIntersection(&mMouseCoord, &mStartButton)))
+				if((ev.button.button == SDL_BUTTON_LEFT) && (SDL_HasIntersection(&mMenuMouseCoord, &mStartButton)))
 				{
 					Mix_HaltMusic(); // Arkaplan müziðini durdur
 					Mix_PlayMusic(mMenuMusic, -1); // oyun müziðini baþlat
 					
 					SDL_ShowCursor(SDL_DISABLE);
-					
+
 					GameState = GAME_STATE::STARTING;
+
 					break;					
 					
 				}
 				// Credits tuþuna basýlýrsa
-				else if((ev.button.button == SDL_BUTTON_LEFT) && (SDL_HasIntersection(&menü_mouse , &mSaveButton)))
+				else if((ev.button.button == SDL_BUTTON_LEFT) && (SDL_HasIntersection(&mMenuMouseCoord, &mSaveButton)))
 				{	
 					char* data_path = NULL;
 					char* base_path = SDL_GetBasePath();
@@ -164,17 +159,17 @@ void Menu :: eventHandling()
 					*/
 					break;
 				}
-				else if((ev.button.button == SDL_BUTTON_LEFT) && (SDL_HasIntersection(&menü_mouse , &mLoadButton)))
+				else if((ev.button.button == SDL_BUTTON_LEFT) && (SDL_HasIntersection(&mMenuMouseCoord, &mLoadButton)))
 				{
 					cout<<"Oyun Yükleniyor"<<endl;
 					break;
 				}
-				else if((ev.button.button == SDL_BUTTON_LEFT) && (SDL_HasIntersection(&menü_mouse , &mCreditsButton)))
+				else if((ev.button.button == SDL_BUTTON_LEFT) && (SDL_HasIntersection(&mMenuMouseCoord, &mCreditsButton)))
 				{
 					cout<<"Oyun Hakkinda"<<endl;
 					break;
 				}
-				else if((ev.button.button == SDL_BUTTON_LEFT) && (SDL_HasIntersection(&menü_mouse , &mExitButton)))
+				else if((ev.button.button == SDL_BUTTON_LEFT) && (SDL_HasIntersection(&mMenuMouseCoord, &mExitButton)))
 				{
 					GameState = GAME_STATE::EXIT;					
 					break;
@@ -220,13 +215,13 @@ bool Menu::loadPathMenu(char* pFileName, string pTextureName, SDL_Renderer* pRen
 	return false;
 }
 
-void Menu :: loadMenuItems(SDL_Renderer* renderer)
+void Menu :: loadMenuFiles(SDL_Renderer* pRenderer)
 {
-	loadMenu("assets/menu.jpg", renderer);
-	loadPathMenu("assets/buttons/START.png", "START",renderer);
-	loadPathMenu("assets/buttons/SAVE.png", "SAVE",renderer);
-	loadPathMenu("assets/buttons/LOAD.png", "LOAD",renderer);
-	loadPathMenu("assets/buttons/CREDITS.png", "CREDITS",renderer);
-	loadPathMenu("assets/buttons/EXIT.png", "EXIT",renderer);
-	loadPathMenu("assets/Sepia.png", "sepia", renderer);
+	loadMenu("assets/menu.jpg", pRenderer);
+	loadPathMenu("assets/buttons/START.png", "START", pRenderer);
+	loadPathMenu("assets/buttons/SAVE.png", "SAVE", pRenderer);
+	loadPathMenu("assets/buttons/LOAD.png", "LOAD", pRenderer);
+	loadPathMenu("assets/buttons/CREDITS.png", "CREDITS", pRenderer);
+	loadPathMenu("assets/buttons/EXIT.png", "EXIT", pRenderer);
+	loadPathMenu("assets/Sepia.png", "sepia", pRenderer);
 }

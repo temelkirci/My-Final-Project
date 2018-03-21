@@ -30,14 +30,6 @@ Game::~Game()
 	SDL_Quit();
 }
 
-Game* Game::getInstanceGame()
-{
-	if (mInstanceGame == 0)
-		mInstanceGame = new Game();
-
-	return mInstanceGame;
-}
-
 bool Game::initializeGame(const char* pMenuTitle , int pX , int pY , int pHeight , int pLenght , int pFlags)
 {
 		if(SDL_Init(SDL_INIT_EVERYTHING) == 0) // SDL hatasýz yüklenirse
@@ -88,20 +80,29 @@ void Game::startApplication()
 {
 	if (GameState == GAME_STATE::OPENING)
 	{
-		LoadMenuItems(mRenderer);
+		loadMenuFiles(mRenderer);
 
 		GameState = GAME_STATE::MENU;
+
+		while (GameState == GAME_STATE::MENU) // Draw the Menu
+		{
+			renderMenu(mRenderer);
+			eventHandling();
+		}
 	}
 
-	while (GameState == GAME_STATE::MENU) // Draw the Menu
-	{
-		RenderMenu(mRenderer);
-		EventHandling();
-	}
-
+	
 	if (GameState == GAME_STATE::STARTING)
 	{
-		//Load(); // bütün renderlenecek nesneleri yükler
-		Loop(mRenderer); // Oyun döngüsüne baþla
+		// bütün renderlenecek nesneleri yükle
+		loadGameObjects(mRenderer);
+		GameState = GAME_STATE::PLAYING;
 	}
+	
+	while(GameState == GAME_STATE::PLAYING)
+	{
+		gameLoop(mRenderer); // Oyun döngüsüne baþla
+		event(mRenderer); // olaylarý dinle
+	}
+	
 }

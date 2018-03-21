@@ -40,9 +40,7 @@ public:
 		
 	}bulletHandgun , bulletRifle , bulletShotgun;
 
-	static Items* getInstanceItems();
 private:
-	static Items* mInstanceItems;
 
 	vector<ItemStruct> mSolidVector;
 	vector<ItemStruct> mCollectibleVector;

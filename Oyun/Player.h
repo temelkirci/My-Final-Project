@@ -2,82 +2,99 @@
 #include <SDL/SDL.h>
 #include <string>
 #include <map>
-#include "GameObject.h"
 #include <SDL/SDL_image.h>
+#include "SDL/SDL_ttf.h"
 #include <iostream>
+#include "Timer.h"
 
 using namespace std;
 const int MAX_HEALTH = 100;
 
-class Player : public GameObject 
+class Player : public Timer
 {
 public:
 	Player();
+	Player(const Player& pPlayer);
+	Player& operator = (const Player& pPlayer);
 	~Player();
 
 	bool loadPlayerWeapon(char* , SDL_Renderer* pRenderer, char*);
-	void drawPlayer(SDL_Renderer* pRenderer, string , double , double , double , double , string , Uint32);
+	void drawPlayer(SDL_Renderer* pRenderer, int pCameraX , int pCameraY);
 	void updatePLayer(SDL_Renderer* pRenderer, Uint32);
 	void loadPlayer(SDL_Renderer* pRenderer);
 	void playerInformation(SDL_Renderer* pRenderer);
 	void deathInformation(SDL_Renderer*pRenderer);
 
-	
+	// get fonksiyonlarý
+	const int getPlayerHealth();
+	SDL_Rect getPlayerPosition();
+	int getPlayerThirsty();
+	int getPlayerHunger();
+	int getPlayerAttackPower();
+
+	double getPlayerSpeed();
+	double getPlayerXPos();
+	double getPlayerYPos();
+
+protected:
+	double mPlayerPositionX;
+	double mPlayerPositionY;
+
+	double mPlayerAngle;
+	double mPlayerSpeed;
+
+	string mPlayerDirection;
 private:
-	Uint32 player_time;
-	Uint32 hunger_time;
-	Uint32 thirsty_time;
 
-	int x_hedef;
-	int y_hedef;
+	Uint32 pTime;
+	Uint32 mPlayerTime;
+	Uint32 mPlayerHungerTime;
+	Uint32 mPlayerThirstyTime;
+	Uint32 mPlayerHealthTime;
 
-	int thirtsy;
-	int hunger;
-	int attack_power;
-	int health;
+	// Karakterin mouse ile týklanan yere gideceði koordinatlar
+	int mPlayerTargetX;
+	int mPlayerTargetY;
 
-	int handgun_mermi;
-	int rifle_mermi;
-	int shotgun_mermi;
 
-	bool oyun_baslat;
-	bool trex_attack;
+	// Karakterin açlýk , susuzluk , saðlýk ve saldýrý gücü bilgileri
+	int mPlayerThirsty;
+	int mPlayerHunger;
+	int mPlayerAttackPower;
+	int mPlayerHealth;
 
+	// Karakterin mermi sayýlarý
+	int mPlayerHandgunBullet;
+	int mPlayerRifleBullet;
+	int mPlayerShotgunBullet;
+
+	// Karakterin eksenlere göre hýzlarý
 	double mPlayerPositiveSpeedX;
 	double mPlayerPositiveSpeedY;
 	double mPlayerNegativeSpeedX;
 	double mPlayerNegativeSpeedY;
 
-	string direction_bullet;
-	string barbaros_durum;
-	string barbaros_guns;
+	string mBulletDirection;
+	string mPlayerStatus;
+	string mPlayerGun;
 
-	double xpoz;
-	double ypoz;
-	double mPlayerAngle;
-	double mPlayerSpeed;
+	SDL_Texture* mPlayerDeadTexture;
+	SDL_Rect mPlayerDeadRect;
+	
+	//Öldükten sonra ekranda gösterilecek bilgiler
+	int mTotalSurvivalDay; // hayatta kalýnan gün sayýsý
+	int mNumberMeteor; // Parçalanmýþ meteor sayýsý
+	int mLastThirsty; // Ölmeden önceki susuzluk miktarý
+	int mLastHunger; // Ölmeden önceki açlýk miktarý
+	Uint32 mTotalGameDuration; // toplam oyun süresi (dakika cinsinden)
 
-	bool active_bullet;
-	SDL_Texture* dead_texture;
-	SDL_Rect death_rect;
-	Uint32 health_time;
-	//
-
-	int total_survival_day; // hayatta kalýnan gün sayýsý
-	int number_trex; // öldürülen t-rex sayýsý
-	int number_meteor; // parçalanmýþ meteor sayýsý
-	int last_thirtsy; // susuzluk miktarý
-	int last_hunger; // açlýk miktarý
-	Uint32 total_game_time; // toplam oyun süresi (dakika cinsinden)
-
-							//
 	int mKnifeTime;
-	Uint32 trex_attack_time;
 
+	TTF_Font* mPlayerFont;
+	string mPlayerWeapon;
 	SDL_Color mPlayerColor;
-	SDL_Rect mPlayerRect;
 	SDL_Rect mInformationRect;
-
+	SDL_Rect mPlayerRect;
 	SDL_Texture* mPlayerTexture;
 	SDL_Point mPlayerPoint;
 	map<string , SDL_Texture*> mPLayerWeaponMap;

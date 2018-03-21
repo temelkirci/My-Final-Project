@@ -73,29 +73,33 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="Events.cpp" />
     <ClCompile Include="Fonts.cpp" />
     <ClCompile Include="Game.cpp" />
-    <ClCompile Include="GameLoop.cpp" />
-    <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="GameObjects.cpp" />
     <ClCompile Include="Inventory.cpp" />
     <ClCompile Include="Items.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Maps.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Sounds.cpp" />
+    <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="Events.h" />
     <ClInclude Include="Fonts.h" />
     <ClInclude Include="Game.h" />
-    <ClInclude Include="GameLoop.h" />
-    <ClInclude Include="GameObject.h" />
+    <ClInclude Include="GameObjects.h" />
     <ClInclude Include="Inventory.h" />
     <ClInclude Include="Items.h" />
+    <ClInclude Include="Maps.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Sounds.h" />
+    <ClInclude Include="Texture.h" />
     <ClInclude Include="Timer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

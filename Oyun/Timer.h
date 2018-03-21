@@ -1,14 +1,13 @@
 #pragma once
 #include "SDL/SDL.h"
 #include "SDL/SDL_ttf.h"
-#include "GameObject.h"
 #include <chrono>
 #include <string>
 
 using namespace std::chrono;
 using namespace std;
 
-class Timer : public GameObject
+class Timer
 {
 public:
 	Timer();
@@ -21,9 +20,10 @@ public:
 	void dayLoop(SDL_Renderer* pRenderer, Uint32 pCurrentTime);
 	bool calculateTime(int pTime);
 
-	static Timer* getInstanceTimer();
+	int getDay();
+	int getHour();
+
 private:
-	static Timer* mInstanceTimer;
 
 	Uint32 mElaspedTime;
 	int mDay;
